@@ -1,0 +1,11 @@
+{
+    "guild": "your_guild_id",
+    "interactions": {
+        "receiveMessageComponents": true,
+        "receiveModals": true,
+        "replyOnError": true,
+        "splitCustomId": false,
+        "useGuildCommands": true
+  },
+    "restVersion": "10"
+}
