@@ -6,6 +6,9 @@
         "replyOnError": true,
         "splitCustomId": false,
         "useGuildCommands": true
-  },
+    },
+    "colors": {
+        "embed": "#2f3136"
+    },
     "restVersion": "10"
 }

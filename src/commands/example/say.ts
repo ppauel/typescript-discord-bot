@@ -1,4 +1,4 @@
-import { bold, SlashCommandBuilder } from 'discord.js';
+import { bold, EmbedBuilder, HexColorString, SlashCommandBuilder } from 'discord.js';
 import { Command } from '../../interfaces';
 
 // Example slash command with options
@@ -23,6 +23,10 @@ export const command: Command = {
             scream = interaction.options.getBoolean('scream', false), // optional
             content = scream ? bold(text.toUpperCase()) : text;
 
-        await interaction.reply({ content: content });
+        const embed = new EmbedBuilder()
+            .setColor(client.config.colors.embed as HexColorString)
+            .setDescription(content);
+
+        await interaction.reply({ embeds: [embed] });
     }
 };
