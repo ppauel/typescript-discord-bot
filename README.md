@@ -5,7 +5,7 @@
   </p>
 </div>
 
-# TypeScript Discod Bot Template
+# TypeScript Discord Bot Template
 
 A multi-purpose discord.js v14 bot template.
 This is the successor of the [djs-template](https://github.com/ppauel/djs-template) repository.
