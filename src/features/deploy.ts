@@ -25,7 +25,7 @@ export default async function deploy(client: ExtendedClient) {
 
     console.log(`Deployed ${applicationCommands.length} global commands`);
 
-    // Deploy guild Commands
+    // Deploy guild commands
     if (!client.config.interactions.useGuildCommands) return;
     if (client.config.guild === "your_guild_id") return console.log('Please specify a guild id in order to use guild commands')
     const guildId = client.config.guild;
