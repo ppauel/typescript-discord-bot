@@ -65,12 +65,12 @@ If you want to use global commands only, you can disable guild commands. The `gl
 **Done!** You can now experiment with some examples. For that, you just need to start your bot...
 ## Scripts
 
-To start your bot and deploy all commands, run the following command
+To start your bot and deploy all commands, run the following command.
 ```bash
 npm run start
 ```
 
-During development, it is a good idea not to deploy all commands every time you restart. You can use the following command for this
+During development, it is a good idea not to deploy all commands every time you restart. You can use the following command to disable automatic deployment.
 ```bash
 npm run dev
 ```
