@@ -1,3 +1,10 @@
+<div align="center">
+  <br />
+  <p>
+    <img src="https://i.imgur.com/LAV5caA.png" width="546" alt="Discord.js Bot Template" />
+  </p>
+</div>
+
 # TypeScript Discod Bot Template
 
 A multi-purpose discord.js v14 bot template.
