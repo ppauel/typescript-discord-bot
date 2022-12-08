@@ -1,4 +1,4 @@
-import { ActionRowBuilder, bold, ButtonBuilder, ButtonStyle, SlashCommandBuilder } from 'discord.js';
+import { ActionRowBuilder, bold, ButtonBuilder, ButtonStyle, ComponentType, SlashCommandBuilder } from 'discord.js';
 import { Command } from '../../interfaces';
 
 // Example slash command
@@ -20,5 +20,7 @@ export const command: Command = {
         );
 
         await interaction.reply({ content: `You rolled a ${bold(result.toString())}!`, components: [row], ephemeral: true });
+        
+        // You should probably use a collector to handle the button interaction - for demonstration purposes i use the interactionCreate listener
     }
 };
