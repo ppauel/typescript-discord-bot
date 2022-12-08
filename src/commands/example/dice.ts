@@ -1,4 +1,4 @@
-import { ActionRowBuilder, bold, ButtonBuilder, ButtonStyle, ComponentType, SlashCommandBuilder } from 'discord.js';
+import { ActionRowBuilder, bold, ButtonBuilder, ButtonStyle, SlashCommandBuilder } from 'discord.js';
 import { Command } from '../../interfaces';
 
 // Example slash command
