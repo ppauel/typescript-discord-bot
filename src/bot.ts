@@ -1,4 +1,4 @@
-import { GatewayIntentBits, Partials } from 'discord.js';
+import { GatewayIntentBits as Intents, Partials } from 'discord.js';
 import ExtendedClient from './classes/Client';
 import { config } from 'dotenv';
 
@@ -8,15 +8,15 @@ config();
 // Initialization (specify intents and partials)
 new ExtendedClient({
     intents: [
-        GatewayIntentBits.Guilds,
-        GatewayIntentBits.GuildMessages,
-        GatewayIntentBits.MessageContent,
-        GatewayIntentBits.GuildMembers,
+        Intents.Guilds,
+        Intents.GuildMessages,
+        Intents.MessageContent,
+        Intents.GuildMembers
     ],
     partials: [
         Partials.Message,
         Partials.Channel,
         Partials.Reaction,
-        Partials.GuildMember,
+        Partials.GuildMember
     ],
 }).init();
