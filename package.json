@@ -13,7 +13,7 @@
     "url": "git+https://github.com/ppauel/typescript-discord-bot.git"
   },
   "author": "pauel",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/ppauel/typescript-discord-bot/issues"
   },
