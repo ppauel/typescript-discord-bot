@@ -166,8 +166,12 @@ class ExtendedClient extends Client {
  * @param error unkowen object cought in a try block
  */
 function checkReaddirSyncError(error:unknown) {
-	if ((error instanceof Error) && (error as readdirSyncError).errno == -4058 && (error as readdirSyncError).syscall == 'scandir') {console.log(`Directory not found at ${(error as readdirSyncError).path}`);}
-	else {throw error;}
+	if ((error instanceof Error) && (error as readdirSyncError).errno == -4058 && (error as readdirSyncError).syscall == 'scandir') {
+		console.log(`Directory not found at ${(error as readdirSyncError).path}`);
+	}
+	else {
+		throw error;
+	}
 }
 
 export default ExtendedClient;
