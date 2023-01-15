@@ -48,12 +48,15 @@ class ExtendedClient extends Client {
             modalPath = path.join(__dirname, '..', 'interactions', 'modals'),
             eventPath = path.join(__dirname, '..', 'events');
 
+        let directoryPath: string;
         // Command Handler
         try {
-            readdirSync(commandPath).filter((file) => file.endsWith(tsNodeRun ? '.ts' : '.js')).forEach((file) => {
-                import(path.join(commandPath, file)).then((command:{ default:ChatInputCommand }) => {
-                    // console.log(command);
-                    this.commands.set(command.default.options.name, command.default);
+            readdirSync(commandPath).forEach((dir) => {
+                let directoryPath = `${commandPath}/${dir}`;
+                readdirSync(directoryPath).filter((file) => file.endsWith(tsNodeRun ? '.ts' : '.js')).forEach((file) => {
+                    import(path.join(directoryPath, file)).then((command: { default: ChatInputCommand }) => {
+                        this.commands.set(command.default.options.name, command.default);
+                    });
                 });
             });
         }
@@ -62,9 +65,12 @@ class ExtendedClient extends Client {
 
         // Context Menu Handler
         try {
-            readdirSync(contextMenuPath).filter((file) => file.endsWith(tsNodeRun ? '.ts' : '.js')).forEach((file) => {
-                import(path.join(contextMenuPath, file)).then((command:{ default:ContextMenu }) => {
-                    this.contextMenus.set(command.default.options.name, command.default);
+            readdirSync(contextMenuPath).forEach((dir) => {
+                let directoryPath = `${contextMenuPath}/${dir}`;
+                readdirSync(directoryPath).filter((file) => file.endsWith(tsNodeRun ? '.ts' : '.js')).forEach((file) => {
+                    import(path.join(directoryPath, file)).then((command: { default: ContextMenu }) => {
+                        this.contextMenus.set(command.default.options.name, command.default);
+                    });
                 });
             });
         }
@@ -74,9 +80,12 @@ class ExtendedClient extends Client {
         // Interaction Handlers
         // Button Handler
         try {
-            readdirSync(buttonPath).filter((file) => file.endsWith(tsNodeRun ? '.ts' : '.js')).forEach((file) => {
-                import(path.join(buttonPath, file)).then((interaction:{ default:Button }) => {
-                    this.buttons.set(interaction.default.name, interaction.default);
+            readdirSync(buttonPath).forEach((dir) => {
+                let directoryPath = `${buttonPath}/${dir}`;
+                readdirSync(directoryPath).filter((file) => file.endsWith(tsNodeRun ? '.ts' : '.js')).forEach((file) => {
+                    import(path.join(directoryPath, file)).then((interaction: { default: Button }) => {
+                        this.buttons.set(interaction.default.name, interaction.default);
+                    });
                 });
             });
         }
@@ -85,21 +94,27 @@ class ExtendedClient extends Client {
 
         // Select Menu Handler
         try {
-            readdirSync(selectMenuPath).filter((file) => file.endsWith(tsNodeRun ? '.ts' : '.js')).forEach((file) => {
-                import(path.join(selectMenuPath, file)).then((interaction:{ default:AnySelectMenu }) => {
-                    this.selectMenus.set(interaction.default.name, interaction.default);
+            readdirSync(selectMenuPath).forEach((dir) => {
+                let directoryPath = `${selectMenuPath}/${dir}`;
+                readdirSync(directoryPath).filter((file) => file.endsWith(tsNodeRun ? '.ts' : '.js')).forEach((file) => {
+                    import(path.join(directoryPath, file)).then((interaction: { default: AnySelectMenu }) => {
+                        this.selectMenus.set(interaction.default.name, interaction.default);
+                    });
                 });
             });
         }
-        catch (error) { 
+        catch (error) {
             checkReaddirSyncError(error);
         }
 
         // Modal Handler
         try {
-            readdirSync(modalPath).filter((file) => file.endsWith(tsNodeRun ? '.ts' : '.js')).forEach((file) => {
-                import(path.join(modalPath, file)).then((interaction:{ default:ModalSubmit }) => {
-                    this.modals.set(interaction.default.name, interaction.default);
+            readdirSync(modalPath).forEach((dir) => {
+                let directoryPath = `${modalPath}/${dir}`;
+                readdirSync(directoryPath).filter((file) => file.endsWith(tsNodeRun ? '.ts' : '.js')).forEach((file) => {
+                    import(path.join(directoryPath, file)).then((interaction: { default: ModalSubmit }) => {
+                        this.modals.set(interaction.default.name, interaction.default);
+                    });
                 });
             });
         }
@@ -107,12 +122,12 @@ class ExtendedClient extends Client {
 
         // Event Handler
         readdirSync(eventPath).filter((dir) => dir.endsWith(tsNodeRun ? '.ts' : '.js')).forEach((file) => import(path.join(eventPath, file))
-            .then((event:{ default:Event }) => {
+            .then((event: { default: Event }) => {
 
                 this.events.set(event.default.name, event.default);
 
-                if (event.default.once) {this.once(event.default.name, (...args) => event.default.execute(this, ...args));}
-                else {this.on(event.default.name, (...args) => event.default.execute(this, ...args));}
+                if (event.default.once) { this.once(event.default.name, (...args) => event.default.execute(this, ...args)); }
+                else { this.on(event.default.name, (...args) => event.default.execute(this, ...args)); }
             }),
         );
     }
@@ -164,8 +179,8 @@ class ExtendedClient extends Client {
     }
 }
 /**
- * logs out to consle if error is a director error
- * @param error unkowen object cought in a try block
+ * logs out to console if error is a directory error
+ * @param error unkown object caught in a try block
  */
 function checkReaddirSyncError(error:unknown) {
     if ((error instanceof Error) && (error as readdirSyncError).code == 'ENOENT' && (error as readdirSyncError).syscall == 'scandir') {
