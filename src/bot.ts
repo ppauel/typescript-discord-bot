@@ -7,16 +7,16 @@ config();
 
 // Initialization (specify intents and partials)
 new ExtendedClient({
-    intents: [
-        Intents.Guilds,
-        Intents.GuildMessages,
-        Intents.MessageContent,
-        Intents.GuildMembers
-    ],
-    partials: [
-        Partials.Message,
-        Partials.Channel,
-        Partials.Reaction,
-        Partials.GuildMember
-    ],
+	intents: [
+		Intents.Guilds,
+		Intents.GuildMessages,
+		Intents.MessageContent,
+		Intents.GuildMembers,
+	],
+	partials: [
+		Partials.Message,
+		Partials.Channel,
+		Partials.Reaction,
+		Partials.GuildMember,
+	],
 }).login(process.env.TOKEN);
