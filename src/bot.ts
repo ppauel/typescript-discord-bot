@@ -19,4 +19,4 @@ new ExtendedClient({
         Partials.Reaction,
         Partials.GuildMember
     ],
-}).init();
+}).login(process.env.TOKEN);
