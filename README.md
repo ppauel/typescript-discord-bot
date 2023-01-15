@@ -24,7 +24,7 @@ This is the successor of the [djs-template](https://github.com/ppauel/djs-templa
 Install the required `npm` modules.
 
 ```bash
-  npm install
+npm install
 ```
 
 Create a new file called `.env` in the root directory and insert your bot token as shown in the `.env.example` file.

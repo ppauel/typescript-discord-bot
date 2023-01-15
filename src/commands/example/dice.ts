@@ -23,7 +23,7 @@ const command: ChatInputCommand = {
 
         await interaction.reply({ content: `You rolled a ${bold(result.toString())}!`, components: [row], ephemeral: true });
 
-        // You should probably use a collector to handle the button interaction - for demonstration purposes i use the interactionCreate listener
+        // You could use a collector to handle the button interaction - for demonstration purposes I use the interactionCreate listener
     },
 };
 
