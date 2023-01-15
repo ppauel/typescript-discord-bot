@@ -70,7 +70,7 @@ const event: Event = {
             case InteractionType.ModalSubmit:
                 // Check if modal interactions are enabled
                 if (!client.config.interactions.receiveModals) return;
-                interactionName = interaction.customId.split(' ')[0];
+                interactionName = client.config.interactions.splitCustomId ? interaction.customId.split('_')[0] : interaction.customId;
                 client.modals.get(interactionName)?.execute(client, interaction);
                 break;
             default:
