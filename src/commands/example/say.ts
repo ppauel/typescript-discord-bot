@@ -1,9 +1,10 @@
+/* eslint-disable no-inline-comments */
 import { bold, EmbedBuilder, HexColorString, SlashCommandBuilder } from 'discord.js';
-import { Command } from '../../interfaces';
+import { ChatInputCommand } from '../../interfaces';
 
 // Example slash command with options
 
-export const command: Command = {
+const command: ChatInputCommand = {
     options: new SlashCommandBuilder()
         .setName('say')
         .setDescription('Let me say something')
@@ -11,11 +12,11 @@ export const command: Command = {
         .addStringOption(option => option
             .setName('text')
             .setDescription('What do you want me to say?')
-            .setRequired(true)
+            .setRequired(true),
         )
         .addBooleanOption(option => option
             .setName('scream')
-            .setDescription('Do you want me to scream it?')
+            .setDescription('Do you want me to scream it?'),
         ),
     global: false,
     execute: async (client, interaction) => {
@@ -28,5 +29,7 @@ export const command: Command = {
             .setDescription(content);
 
         await interaction.reply({ embeds: [embed] });
-    }
+    },
 };
+
+export default command;

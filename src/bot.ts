@@ -11,12 +11,12 @@ new ExtendedClient({
         Intents.Guilds,
         Intents.GuildMessages,
         Intents.MessageContent,
-        Intents.GuildMembers
+        Intents.GuildMembers,
     ],
     partials: [
         Partials.Message,
         Partials.Channel,
         Partials.Reaction,
-        Partials.GuildMember
+        Partials.GuildMember,
     ],
-}).init();
+}).login(process.env.TOKEN);

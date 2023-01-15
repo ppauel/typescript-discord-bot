@@ -1,5 +1,5 @@
-import { Client, Collection } from 'discord.js';
-import { Command, ContextMenu, Event, Interaction } from '../interfaces';
+import { ApplicationCommand, Client, ClientOptions, Collection, REST, RESTPostAPIApplicationCommandsJSONBody, Routes } from 'discord.js';
+import { AnySelectMenu, Button, ChatInputCommand, ContextMenu, Event, ModalSubmit } from '../interfaces';
 import configJSON from '../config.json';
 import path from 'path';
 import { readdirSync } from 'fs';
@@ -7,78 +7,170 @@ import { readdirSync } from 'fs';
 // TypeScript or JavaScript environment (thanks to https://github.com/stijnvdkolk)
 let tsNodeRun = false;
 try {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     if (process[Symbol.for('ts-node.register.instance')]) {
         tsNodeRun = true;
     }
-} catch (e) { }
+}
+catch (e) {
+    /* empty */
+}
 
+interface readdirSyncError extends Error {
+    errno:number,
+    syscall:string,
+    code:string,
+    path:string
+}
+/**
+ * ExtendedClient is extends frome `Discord.js`'s Client
+ */
 class ExtendedClient extends Client {
-    public commands: Collection<string, Command> = new Collection();
-    public contextMenus: Collection<string, ContextMenu> = new Collection();
-    public events: Collection<string, Event> = new Collection();
-    public interactions: Collection<string, Interaction> = new Collection();
-    public config = configJSON;
-    public async init() {
+    readonly commands: Collection<string, ChatInputCommand> = new Collection();
+    readonly contextMenus: Collection<string, ContextMenu> = new Collection();
+    readonly events: Collection<string, Event> = new Collection();
+    readonly buttons: Collection<string, Button> = new Collection();
+    readonly selectMenus: Collection<string, AnySelectMenu> = new Collection();
+    readonly modals: Collection<string, ModalSubmit> = new Collection();
+    readonly config = configJSON;
 
-        console.log('Starting up...')
+    constructor(options:ClientOptions) {
+        super(options);
+
+        console.log('Starting up...');
 
         // Paths
         const commandPath = path.join(__dirname, '..', 'commands'),
             contextMenuPath = path.join(__dirname, '..', 'context_menus'),
-            interactionPath = path.join(__dirname, '..', 'interactions'),
+            buttonPath = path.join(__dirname, '..', 'interactions', 'buttons'),
+            selectMenuPath = path.join(__dirname, '..', 'interactions', 'select_menus'),
+            modalPath = path.join(__dirname, '..', 'interactions', 'modals'),
             eventPath = path.join(__dirname, '..', 'events');
 
         // Command Handler
-        readdirSync(commandPath).forEach((dir) => {
-            const commands = readdirSync(`${commandPath}/${dir}`).filter((file) =>
-                file.endsWith(tsNodeRun ? '.ts' : '.js')
-            );
-            for (const file of commands) {
-                const { command } = require(`${commandPath}/${dir}/${file}`);
-                this.commands.set(command.options.name, command);
-            }
-        });
+        try {
+            readdirSync(commandPath).filter((file) => file.endsWith(tsNodeRun ? '.ts' : '.js')).forEach((file) => {
+                import(path.join(commandPath, file)).then((command:{ default:ChatInputCommand }) => {
+                    // console.log(command);
+                    this.commands.set(command.default.options.name, command.default);
+                });
+            });
+        }
+        catch (error) { checkReaddirSyncError(error); }
+
 
         // Context Menu Handler
-        readdirSync(contextMenuPath).forEach((dir) => {
-            const contextMenus = readdirSync(`${contextMenuPath}/${dir}`).filter((file) =>
-                file.endsWith(tsNodeRun ? '.ts' : '.js')
-            );
-            for (const file of contextMenus) {
-                const { contextMenu } = require(`${contextMenuPath}/${dir}/${file}`);
-                this.contextMenus.set(contextMenu.options.name, contextMenu);
-            }
-        });
+        try {
+            readdirSync(contextMenuPath).filter((file) => file.endsWith(tsNodeRun ? '.ts' : '.js')).forEach((file) => {
+                import(path.join(contextMenuPath, file)).then((command:{ default:ContextMenu }) => {
+                    this.contextMenus.set(command.default.options.name, command.default);
+                });
+            });
+        }
+        catch (error) { checkReaddirSyncError(error); }
 
-        // Interaction Handler
-        readdirSync(interactionPath).forEach((dir) => {
-            const interactions = readdirSync(`${interactionPath}/${dir}`).filter((file) =>
-                file.endsWith(tsNodeRun ? '.ts' : '.js')
-            );
-            for (const file of interactions) {
-                const { interaction } = require(`${interactionPath}/${dir}/${file}`);
-                this.interactions.set(interaction.name, interaction);
-            }
-        });
+
+        // Interaction Handlers
+        // Button Handler
+        try {
+            readdirSync(buttonPath).filter((file) => file.endsWith(tsNodeRun ? '.ts' : '.js')).forEach((file) => {
+                import(path.join(buttonPath, file)).then((interaction:{ default:Button }) => {
+                    this.buttons.set(interaction.default.name, interaction.default);
+                });
+            });
+        }
+        catch (error) { checkReaddirSyncError(error); }
+
+
+        // Select Menu Handler
+        try {
+            readdirSync(selectMenuPath).filter((file) => file.endsWith(tsNodeRun ? '.ts' : '.js')).forEach((file) => {
+                import(path.join(selectMenuPath, file)).then((interaction:{ default:AnySelectMenu }) => {
+                    this.selectMenus.set(interaction.default.name, interaction.default);
+                });
+            });
+        }
+        catch (error) { checkReaddirSyncError(error); }
+
+        // Modal Handler
+        try {
+            readdirSync(modalPath).filter((file) => file.endsWith(tsNodeRun ? '.ts' : '.js')).forEach((file) => {
+                import(path.join(modalPath, file)).then((interaction:{ default:ModalSubmit }) => {
+                    this.modals.set(interaction.default.name, interaction.default);
+                });
+            });
+        }
+        catch (error) { checkReaddirSyncError(error); }
 
         // Event Handler
-        const events = readdirSync(`${eventPath}`).filter((file) =>
-            file.endsWith(tsNodeRun ? '.ts' : '.js')
+        readdirSync(eventPath).filter((dir) => dir.endsWith(tsNodeRun ? '.ts' : '.js')).forEach((file) => import(path.join(eventPath, file))
+            .then((event:{ default:Event }) => {
+
+                this.events.set(event.default.name, event.default);
+
+                if (event.default.once) {this.once(event.default.name, (...args) => event.default.execute(this, ...args));}
+                else {this.on(event.default.name, (...args) => event.default.execute(this, ...args));}
+            }),
         );
-        for (const file of events) {
-            const { event } = require(`${eventPath}/${file}`);
-            this.events.set(event.name, event);
-            if (event.once) {
-                this.once(event.name, event.execute.bind(null, this));
-            } else {
-                this.on(event.name, event.execute.bind(null, this));
-            }
-        }
+    }
+    /**
+     * Logins in the client
+     */
+    public login(token?:string): Promise<string> {
 
         // Login
-        if (!process.env.TOKEN) return console.error('No token was specified. Did you create a .env file?');
-        this.login(process.env.TOKEN);
+        if (!token) {
+            console.error('\nNo token was specified. Did you create a .env file?\n');
+            return Promise.resolve('No token was specified. Did you create a .env file?');
+        }
+        else {return super.login(token);}
+    }
+    public async deploy() {
+        // Skip if no-deployment flag is set
+        if (process.argv.includes('--no-deployment')) return;
+
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        const rest = new REST({ version: this.config.restVersion }).setToken(this.token!),
+            globalDeploy:RESTPostAPIApplicationCommandsJSONBody[] = (Array.from(this.commands.filter(cmd => cmd.global === true).values()).map(m => m.options.toJSON()) as RESTPostAPIApplicationCommandsJSONBody[])
+                .concat(Array.from(this.contextMenus.filter(cmd => cmd.global === true).values()).map(m => m.options.toJSON()) as RESTPostAPIApplicationCommandsJSONBody[]),
+
+            guildDeploy:RESTPostAPIApplicationCommandsJSONBody[] = (Array.from(this.commands.filter(cmd => cmd.global === false).values()).map(m => m.options.toJSON()) as RESTPostAPIApplicationCommandsJSONBody[])
+                .concat(Array.from(this.contextMenus.filter(cmd => cmd.global === false).values()).map(m => m.options.toJSON()) as RESTPostAPIApplicationCommandsJSONBody[]);
+
+        console.log('Deploying commands...');
+
+        // Deploy global commands
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        const applicationCommands = await rest.put(Routes.applicationCommands(this.user!.id), { body: globalDeploy })
+            .catch(console.error) as ApplicationCommand[];
+
+        console.log(`Deployed ${applicationCommands.length} global commands`);
+
+        // Deploy guild commands
+        if (!this.config.interactions.useGuildCommands) return;
+        if (this.config.guild === 'your_guild_id') return console.log('Please specify a guild id in order to use guild commands');
+        const guildId = this.config.guild;
+        const guild = await this.guilds.fetch(guildId).catch(console.error);
+        if (!guild) return;
+
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        const applicationGuildCommands = await rest.put(Routes.applicationGuildCommands(this.user!.id, guildId), { body: guildDeploy })
+            .catch(console.error) as ApplicationCommand[];
+
+        console.log(`Deployed ${applicationGuildCommands?.length || 0} guild commands to ${guild.name}`);
+    }
+}
+/**
+ * logs out to consle if error is a director error
+ * @param error unkowen object cought in a try block
+ */
+function checkReaddirSyncError(error:unknown) {
+    if ((error instanceof Error) && (error as readdirSyncError).errno == -4058 && (error as readdirSyncError).syscall == 'scandir') {
+        console.log(`Directory not found at ${(error as readdirSyncError).path}`);
+    }
+    else {
+        throw error;
     }
 }
 

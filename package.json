@@ -5,7 +5,7 @@
   "main": "dist/bot.js",
   "scripts": {
     "start": "ts-node src/bot.ts",
-    "dev": "ts-node src/bot.ts --no-deployment",
+    "dev": "nodemon src/bot.ts --no-deployment",
     "build": "tsc && cp .env dist/"
   },
   "repository": {
@@ -13,7 +13,7 @@
     "url": "git+https://github.com/ppauel/typescript-discord-bot.git"
   },
   "author": "pauel",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/ppauel/typescript-discord-bot/issues"
   },
@@ -24,6 +24,10 @@
   },
   "devDependencies": {
     "@types/node": "^18.11.11",
+    "@typescript-eslint/eslint-plugin": "^5.48.1",
+    "@typescript-eslint/parser": "^5.48.1",
+    "eslint": "^8.31.0",
+    "nodemon": "^2.0.20",
     "ts-node": "^10.9.1",
     "typescript": "^4.9.3"
   }
