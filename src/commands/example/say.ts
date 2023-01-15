@@ -1,9 +1,9 @@
 import { bold, EmbedBuilder, HexColorString, SlashCommandBuilder } from 'discord.js';
-import { Command } from '../../interfaces';
+import { ChatInputCommand } from '../../interfaces';
 
 // Example slash command with options
 
-export const command: Command = {
+const command: ChatInputCommand = {
     options: new SlashCommandBuilder()
         .setName('say')
         .setDescription('Let me say something')
@@ -30,3 +30,5 @@ export const command: Command = {
         await interaction.reply({ embeds: [embed] });
     }
 };
+
+export default command;
