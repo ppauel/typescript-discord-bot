@@ -1,4 +1,4 @@
-import { ApplicationCommandType, ComponentType, Events, InteractionType, RepliableInteraction } from 'discord.js';
+import { ApplicationCommandType, ComponentType, Events, Interaction, InteractionType, RepliableInteraction } from 'discord.js';
 import ExtendedClient from '../classes/Client';
 import { Event } from '../interfaces';
 
@@ -21,7 +21,7 @@ async function replyError(error:unknown, client:ExtendedClient, interaction: Rep
 
 const event: Event = {
 	name: Events.InteractionCreate,
-	execute: async (client, interaction) => {
+	execute: async (client, interaction: Interaction) => {
 		let interactionName:string;
 		try {
 			switch (interaction.type) {
