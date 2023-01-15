@@ -50,6 +50,8 @@ const event: Event = {
 
 				switch (interaction.componentType) {
 				case ComponentType.Button:
+					// Check if message components are enabled
+					if (!client.config.interactions.receiveMessageComponents) return;
 					client.buttons.get(interactionName)?.execute(client, interaction);
 					break;
 
@@ -66,6 +68,8 @@ const event: Event = {
 				break;
 				// ModalSubmit
 			case InteractionType.ModalSubmit:
+				// Check if modal interactions are enabled
+				if (!client.config.interactions.receiveModals) return;
 				interactionName = interaction.customId.split(' ')[0];
 				client.modals.get(interactionName)?.execute(client, interaction);
 				break;
