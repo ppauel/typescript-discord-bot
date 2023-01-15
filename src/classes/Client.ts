@@ -52,7 +52,7 @@ class ExtendedClient extends Client {
         // Command Handler
         try {
             readdirSync(commandPath).forEach((dir) => {
-                let directoryPath = `${commandPath}/${dir}`;
+                directoryPath = `${commandPath}/${dir}`;
                 readdirSync(directoryPath).filter((file) => file.endsWith(tsNodeRun ? '.ts' : '.js')).forEach((file) => {
                     import(path.join(directoryPath, file)).then((command: { default: ChatInputCommand }) => {
                         this.commands.set(command.default.options.name, command.default);
@@ -66,7 +66,7 @@ class ExtendedClient extends Client {
         // Context Menu Handler
         try {
             readdirSync(contextMenuPath).forEach((dir) => {
-                let directoryPath = `${contextMenuPath}/${dir}`;
+                directoryPath = `${contextMenuPath}/${dir}`;
                 readdirSync(directoryPath).filter((file) => file.endsWith(tsNodeRun ? '.ts' : '.js')).forEach((file) => {
                     import(path.join(directoryPath, file)).then((command: { default: ContextMenu }) => {
                         this.contextMenus.set(command.default.options.name, command.default);
@@ -81,7 +81,7 @@ class ExtendedClient extends Client {
         // Button Handler
         try {
             readdirSync(buttonPath).forEach((dir) => {
-                let directoryPath = `${buttonPath}/${dir}`;
+                directoryPath = `${buttonPath}/${dir}`;
                 readdirSync(directoryPath).filter((file) => file.endsWith(tsNodeRun ? '.ts' : '.js')).forEach((file) => {
                     import(path.join(directoryPath, file)).then((interaction: { default: Button }) => {
                         this.buttons.set(interaction.default.name, interaction.default);
@@ -95,7 +95,7 @@ class ExtendedClient extends Client {
         // Select Menu Handler
         try {
             readdirSync(selectMenuPath).forEach((dir) => {
-                let directoryPath = `${selectMenuPath}/${dir}`;
+                directoryPath = `${selectMenuPath}/${dir}`;
                 readdirSync(directoryPath).filter((file) => file.endsWith(tsNodeRun ? '.ts' : '.js')).forEach((file) => {
                     import(path.join(directoryPath, file)).then((interaction: { default: AnySelectMenu }) => {
                         this.selectMenus.set(interaction.default.name, interaction.default);
@@ -110,7 +110,7 @@ class ExtendedClient extends Client {
         // Modal Handler
         try {
             readdirSync(modalPath).forEach((dir) => {
-                let directoryPath = `${modalPath}/${dir}`;
+                directoryPath = `${modalPath}/${dir}`;
                 readdirSync(directoryPath).filter((file) => file.endsWith(tsNodeRun ? '.ts' : '.js')).forEach((file) => {
                     import(path.join(directoryPath, file)).then((interaction: { default: ModalSubmit }) => {
                         this.modals.set(interaction.default.name, interaction.default);
