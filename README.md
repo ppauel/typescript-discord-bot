@@ -89,8 +89,11 @@ node .
 This template contains some sample commands and interactions so you understand how to use it:
 - `src/commands/example/say.ts`
 - `src/commands/example/dice.ts`
+- `src/commands/example/ping.ts`
 - `src/context_menus/example/count.ts`
-- `src/interactions/example/diceRollButton.ts`
+- `src/interactions/buttons/example/diceRollButton.ts`
+- `src/interactions/buttons/example/ping.ts`
+- `src/features/ping.ts`
 
 **Hint:** *Commands, Context Menus and interactions have to be located in a subfolder.*
 
