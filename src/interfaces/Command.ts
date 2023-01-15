@@ -8,10 +8,12 @@ export interface Command {
 }
 
 export interface ChatInputCommand extends Command {
+    options: SlashCommandBuilder | SlashCommandSubcommandsOnlyBuilder | Omit<SlashCommandBuilder, 'addSubcommand' | 'addSubcommandGroup'>
     execute(client: ExtendedClient, interaction: ChatInputCommandInteraction): Promise<void>
 }
 
 export interface ContextMenu extends Command {
+    options: ContextMenuCommandBuilder
     execute(client: ExtendedClient, interaction: ContextMenuCommandInteraction): Promise<void>
 }
 
