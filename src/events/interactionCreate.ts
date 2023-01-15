@@ -1,13 +1,13 @@
-import { ApplicationCommandType, ComponentType, Events, Interaction, InteractionType, RepliableInteraction } from 'discord.js';
+import { ApplicationCommandType, ComponentType, Events, InteractionType, RepliableInteraction } from 'discord.js';
+import ExtendedClient from '../classes/Client';
 import { Event } from '../interfaces';
-import configJSON from '../config.json';
 
 const errorMessage = 'There was an error while executing this interaction.';
 // Send a warning on error
-async function replyError(error:unknown, interaction: RepliableInteraction) {
+async function replyError(error:unknown, client:ExtendedClient, interaction: RepliableInteraction) {
 	if (error instanceof Error) {
 		console.error(error);
-		if (!configJSON.interactions.replyOnError) return;
+		if (client.config.interactions.replyOnError) return;
 
 		if (interaction.deferred) {
 			await interaction.followUp({ content: errorMessage }).catch(console.error);
@@ -21,7 +21,7 @@ async function replyError(error:unknown, interaction: RepliableInteraction) {
 
 const event: Event = {
 	name: Events.InteractionCreate,
-	execute: async (client, interaction: Interaction) => {
+	execute: async (client, interaction) => {
 		let interactionName:string;
 		try {
 			switch (interaction.type) {
@@ -78,7 +78,7 @@ const event: Event = {
 			}
 		}
 		catch (error) {
-			if (interaction.isRepliable()) replyError(error, interaction);
+			if (interaction.isRepliable()) replyError(error, client, interaction);
 			else console.error(error);
 		}
 	},
