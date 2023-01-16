@@ -27,7 +27,7 @@ Install the required `npm` modules.
 npm install
 ```
 
-Create a new file called `.env` in the root directory and insert your bot token as shown in the `.env.example` file.
+Create a new file called `.env` in the root directory and insert your bot token as shown in the `example.env` file.
 
 ### Configuration
 Apart from the token, the configuration takes place in the `config.json` file located in the `src/` folder.
