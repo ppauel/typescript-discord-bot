@@ -6,7 +6,7 @@ const event: Event = {
     once: true,
     execute: async (client) => {
         // eslint-disable-next-line no-inline-comments
-        client.deploy(); // Deploy commands
+        await client.deploy(); // Deploy commands
         console.log(`Ready! Logged in as ${client.user?.tag} (${client.user?.id})\n`);
     },
 };
