@@ -1,5 +1,5 @@
 import { ApplicationCommand, Client, ClientOptions, Collection, REST, RESTPostAPIApplicationCommandsJSONBody, Routes } from 'discord.js';
-import { AnySelectMenu, Button, ChatInputCommand, ContextMenu, Event, ModalSubmit } from '../interfaces';
+import { AnySelectMenu, Button, ChatInputCommand, Command, ContextMenu, Event, Interaction, ModalSubmit } from '../interfaces';
 import configJSON from '../config.json';
 import path from 'path';
 import { readdirSync } from 'fs';
@@ -16,25 +16,45 @@ try {
 catch (e) {
     /* empty */
 }
-
-interface readdirSyncError extends Error {
-    errno:number,
-    syscall:string,
-    code:string,
-    path:string
-}
 /**
  * ExtendedClient is extends frome `Discord.js`'s Client
  */
 class ExtendedClient extends Client {
-    readonly commands: Collection<string, ChatInputCommand> = new Collection();
-    readonly contextMenus: Collection<string, ContextMenu> = new Collection();
+
+    /**
+     * Collection of Chat Input Commands
+     */
+    readonly commands: Collection<string, ChatInputCommand>;
+    /**
+     * Collection of Context Menu Commands
+     */
+    readonly contextMenus: Collection<string, ContextMenu>;
+    /**
+     * Collection of Events
+     */
     readonly events: Collection<string, Event> = new Collection();
-    readonly buttons: Collection<string, Button> = new Collection();
-    readonly selectMenus: Collection<string, AnySelectMenu> = new Collection();
-    readonly modals: Collection<string, ModalSubmit> = new Collection();
+    /**
+     * Collection of Button Interactions
+     */
+    readonly buttons: Collection<string, Button>;
+    /**
+     * Collection of Select Menu Interactions
+     */
+    readonly selectMenus: Collection<string, AnySelectMenu>;
+    /**
+     * Collection of Modal Submit Interactions
+     */
+    readonly modals: Collection<string, ModalSubmit>;
+    /**
+     * Config File
+     */
     readonly config = configJSON;
 
+    /**
+     *
+     * @param options Options for the client
+     * @see https://discord.js.org/#/docs/discord.js/main/typedef/ClientOptions
+     */
     constructor(options:ClientOptions) {
         super(options);
 
@@ -48,77 +68,21 @@ class ExtendedClient extends Client {
             modalPath = path.join(__dirname, '..', 'interactions', 'modals'),
             eventPath = path.join(__dirname, '..', 'events');
 
-        let directoryPath: string;
         // Command Handler
-        try {
-            readdirSync(commandPath).forEach((dir) => {
-                directoryPath = `${commandPath}/${dir}`;
-                readdirSync(directoryPath).filter((file) => file.endsWith(tsNodeRun ? '.ts' : '.js')).forEach((file) => {
-                    import(path.join(directoryPath, file)).then((command: { default: ChatInputCommand }) => {
-                        this.commands.set(command.default.options.name, command.default);
-                    });
-                });
-            });
-        }
-        catch (error) { checkReaddirSyncError(error); }
-
+        this.commands = fileToCollection<ChatInputCommand>(commandPath);
 
         // Context Menu Handler
-        try {
-            readdirSync(contextMenuPath).forEach((dir) => {
-                directoryPath = `${contextMenuPath}/${dir}`;
-                readdirSync(directoryPath).filter((file) => file.endsWith(tsNodeRun ? '.ts' : '.js')).forEach((file) => {
-                    import(path.join(directoryPath, file)).then((command: { default: ContextMenu }) => {
-                        this.contextMenus.set(command.default.options.name, command.default);
-                    });
-                });
-            });
-        }
-        catch (error) { checkReaddirSyncError(error); }
-
+        this.contextMenus = fileToCollection<ContextMenu>(contextMenuPath);
 
         // Interaction Handlers
         // Button Handler
-        try {
-            readdirSync(buttonPath).forEach((dir) => {
-                directoryPath = `${buttonPath}/${dir}`;
-                readdirSync(directoryPath).filter((file) => file.endsWith(tsNodeRun ? '.ts' : '.js')).forEach((file) => {
-                    import(path.join(directoryPath, file)).then((interaction: { default: Button }) => {
-                        this.buttons.set(interaction.default.name, interaction.default);
-                    });
-                });
-            });
-        }
-        catch (error) { checkReaddirSyncError(error); }
-
+        this.buttons = fileToCollection<Button>(buttonPath);
 
         // Select Menu Handler
-        try {
-            readdirSync(selectMenuPath).forEach((dir) => {
-                directoryPath = `${selectMenuPath}/${dir}`;
-                readdirSync(directoryPath).filter((file) => file.endsWith(tsNodeRun ? '.ts' : '.js')).forEach((file) => {
-                    import(path.join(directoryPath, file)).then((interaction: { default: AnySelectMenu }) => {
-                        this.selectMenus.set(interaction.default.name, interaction.default);
-                    });
-                });
-            });
-        }
-        catch (error) {
-            checkReaddirSyncError(error);
-        }
+        this.selectMenus = fileToCollection<AnySelectMenu>(selectMenuPath);
 
         // Modal Handler
-        try {
-            readdirSync(modalPath).forEach((dir) => {
-                directoryPath = `${modalPath}/${dir}`;
-                readdirSync(directoryPath).filter((file) => file.endsWith(tsNodeRun ? '.ts' : '.js')).forEach((file) => {
-                    import(path.join(directoryPath, file)).then((interaction: { default: ModalSubmit }) => {
-                        this.modals.set(interaction.default.name, interaction.default);
-                    });
-                });
-            });
-        }
-        catch (error) { checkReaddirSyncError(error); }
+        this.modals = fileToCollection<ModalSubmit>(modalPath);
 
         // Event Handler
         readdirSync(eventPath).filter((dir) => dir.endsWith(tsNodeRun ? '.ts' : '.js')).forEach((file) => import(path.join(eventPath, file))
@@ -131,8 +95,12 @@ class ExtendedClient extends Client {
             }),
         );
     }
+
     /**
-     * Logins in the client
+     * Logs the client in, establishing a WebSocket connection to Discord.
+     * @param token Token of the account to log in with
+     * @returns Token of the account used
+     * @see https://discord.js.org/#/docs/discord.js/main/class/Client?scrollTo=login
      */
     public login(token?:string): Promise<string> {
 
@@ -143,10 +111,11 @@ class ExtendedClient extends Client {
         }
         else {return super.login(token);}
     }
+    /**
+     * Depolys Application Commands to Discord
+     * @see https://discord.com/developers/docs/interactions/application-commands
+     */
     public async deploy() {
-        // Skip if no-deployment flag is set
-        if (process.argv.includes('--no-deployment')) return;
-
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         const rest = new REST({ version: this.config.restVersion }).setToken(this.token!),
             globalDeploy:RESTPostAPIApplicationCommandsJSONBody[] = (Array.from(this.commands.filter(cmd => cmd.global === true).values()).map(m => m.options.toJSON()) as RESTPostAPIApplicationCommandsJSONBody[])
@@ -178,17 +147,51 @@ class ExtendedClient extends Client {
         console.log(`Deployed ${applicationGuildCommands?.length || 0} guild commands to ${guild.name}`);
     }
 }
+
 /**
- * logs out to console if error is a directory error
- * @param error unkown object caught in a try block
+ * Coverts Commands and Interactions in to Collection objects
+ * @param dirPath Root directory of object
+ * @returns Collection of Type
  */
-function checkReaddirSyncError(error:unknown) {
-    if ((error instanceof Error) && (error as readdirSyncError).code == 'ENOENT' && (error as readdirSyncError).syscall == 'scandir') {
-        console.log(`Directory not found at ${(error as readdirSyncError).path}`);
+function fileToCollection<Type extends Command | Interaction>(dirPath:string):Collection<string, Type> {
+
+    const collection:Collection<string, Type> = new Collection();
+
+    try {
+        const dirents = readdirSync(dirPath, { withFileTypes:true });
+
+        dirents.filter(dirent => dirent.isDirectory()).forEach((dir) => {
+            const directoryPath = path.join(dirPath, dir.name);
+            readdirSync(directoryPath).filter((file) => file.endsWith(tsNodeRun ? '.ts' : '.js')).forEach((file) => {
+                import(path.join(directoryPath, file)).then((resp: { default: Type }) => {
+                    collection.set(((resp.default as Command).options != undefined) ? (resp.default as Command).options.name : (resp.default as Interaction).name, resp.default);
+                });
+            });
+        });
+        dirents.filter(dirent => !dirent.isDirectory() && dirent.name.endsWith(tsNodeRun ? '.ts' : '.js')).forEach((file) => {
+            import(path.join(dirPath, file.name)).then((resp: { default: Type }) => {
+                collection.set(((resp.default as Command).options != undefined) ? (resp.default as Command).options.name : (resp.default as Interaction).name, resp.default);
+            });
+        });
     }
-    else {
-        throw error;
+    catch (error) {
+        if (isErrnoException(error) && error.code == 'ENOENT' && error.syscall == 'scandir') {
+            console.log(`Directory not found at ${error.path}`);
+        }
+        else {
+            throw error;
+        }
     }
+    return collection;
+}
+
+/**
+ * Returns a boolean and Types a unkown as ErrnoException if the object is an error
+ * @param error Any unkown object
+ * @returns A boolean value if the the object is a ErrnoException
+ */
+function isErrnoException(error: unknown): error is NodeJS.ErrnoException {
+    return error instanceof Error;
 }
 
 export default ExtendedClient;

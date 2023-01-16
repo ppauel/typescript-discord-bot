@@ -5,9 +5,9 @@ const event: Event = {
     name: Events.ClientReady,
     once: true,
     execute: async (client) => {
-        // eslint-disable-next-line no-inline-comments
-        client.deploy(); // Deploy commands
-        console.log(`Ready! Logged in as ${client.user?.tag} (${client.user?.id})\n`);
+        // Skip if no-deployment flag is set, else deploys commands
+        if (!process.argv.includes('--no-deployment')) await client.deploy();
+        console.log(`\nReady! Logged in as ${client.user?.tag} (${client.user?.id})\n`);
     },
 };
 
