@@ -151,7 +151,7 @@ class ExtendedClient extends Client {
 /**
  * Coverts Commands and Interactions in to Collection objects
  * @param dirPath Root directory of object
- * @returns colection of type
+ * @returns Collection of Type
  */
 function fileToCollection<Type extends Command | Interaction>(dirPath:string):Collection<string, Type> {
 
