@@ -16,25 +16,45 @@ try {
 catch (e) {
     /* empty */
 }
-
-interface readdirSyncError extends Error {
-    errno:number,
-    syscall:string,
-    code:string,
-    path:string
-}
 /**
  * ExtendedClient is extends frome `Discord.js`'s Client
  */
 class ExtendedClient extends Client {
+
+    /**
+     * Collection of Chat Input Commands
+     */
     readonly commands: Collection<string, ChatInputCommand>;
+    /**
+     * Collection of Context Menu Commands
+     */
     readonly contextMenus: Collection<string, ContextMenu>;
+    /**
+     * Collection of Events
+     */
     readonly events: Collection<string, Event> = new Collection();
+    /**
+     * Collection of Button Interactions
+     */
     readonly buttons: Collection<string, Button>;
+    /**
+     * Collection of Select Menu Interactions
+     */
     readonly selectMenus: Collection<string, AnySelectMenu>;
+    /**
+     * Collection of Modal Submit Interactions
+     */
     readonly modals: Collection<string, ModalSubmit>;
+    /**
+     * Config File
+     */
     readonly config = configJSON;
 
+    /**
+     *
+     * @param options Options for the client
+     * @see https://discord.js.org/#/docs/discord.js/main/typedef/ClientOptions
+     */
     constructor(options:ClientOptions) {
         super(options);
 
@@ -80,6 +100,7 @@ class ExtendedClient extends Client {
      * Logs the client in, establishing a WebSocket connection to Discord.
      * @param token Token of the account to log in with
      * @returns Token of the account used
+     * @see https://discord.js.org/#/docs/discord.js/main/class/Client?scrollTo=login
      */
     public login(token?:string): Promise<string> {
 
@@ -90,10 +111,11 @@ class ExtendedClient extends Client {
         }
         else {return super.login(token);}
     }
+    /**
+     * Depolys Application Commands to Discord
+     * @see https://discord.com/developers/docs/interactions/application-commands
+     */
     public async deploy() {
-        // Skip if no-deployment flag is set
-        if (process.argv.includes('--no-deployment')) return;
-
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         const rest = new REST({ version: this.config.restVersion }).setToken(this.token!),
             globalDeploy:RESTPostAPIApplicationCommandsJSONBody[] = (Array.from(this.commands.filter(cmd => cmd.global === true).values()).map(m => m.options.toJSON()) as RESTPostAPIApplicationCommandsJSONBody[])
@@ -153,15 +175,23 @@ function fileToCollection<Type extends Command | Interaction>(dirPath:string):Co
         });
     }
     catch (error) {
-
-        if ((error instanceof Error) && (error as readdirSyncError).code == 'ENOENT' && (error as readdirSyncError).syscall == 'scandir') {
-            console.log(`Directory not found at ${(error as readdirSyncError).path}`);
+        if (isErrnoException(error) && error.code == 'ENOENT' && error.syscall == 'scandir') {
+            console.log(`Directory not found at ${error.path}`);
         }
         else {
             throw error;
         }
     }
     return collection;
+}
+
+/**
+ * Returns a boolean and Types a unkown as ErrnoException if the object is an error
+ * @param error Any unkown object
+ * @returns A boolean value if the the object is a ErrnoException
+ */
+function isErrnoException(error: unknown): error is NodeJS.ErrnoException {
+    return error instanceof Error;
 }
 
 export default ExtendedClient;
