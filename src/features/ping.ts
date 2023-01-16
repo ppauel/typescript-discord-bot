@@ -1,5 +1,7 @@
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, MessageActionRowComponentBuilder } from 'discord.js';
 
+// Example button (related to the /ping command)
+
 export const pingButton = new ButtonBuilder()
     .setCustomId('ping')
     .setLabel('Ping')

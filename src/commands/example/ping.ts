@@ -2,7 +2,9 @@ import { PermissionsBitField, SlashCommandBuilder } from 'discord.js';
 import { pingActionRow } from '../../features/ping';
 import { ChatInputCommand } from '../../interfaces';
 
-const command:ChatInputCommand = {
+// Example slash command
+
+const command: ChatInputCommand = {
     options: new SlashCommandBuilder()
         .setName('ping')
         .setDescription('Replies with Pong')
@@ -10,7 +12,7 @@ const command:ChatInputCommand = {
         .setDefaultMemberPermissions(PermissionsBitField.Flags.SendMessages),
     global: true,
     execute: async (_client, interaction) => {
-        interaction.reply({ content:'Pong 🏓', components:[pingActionRow], ephemeral:true });
+        interaction.reply({ content: 'Pong 🏓', components: [pingActionRow], ephemeral: true });
     },
 };
 
