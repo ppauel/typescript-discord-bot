@@ -1,5 +1,5 @@
 /* eslint-disable no-inline-comments */
-import { bold, EmbedBuilder, HexColorString, SlashCommandBuilder } from 'discord.js';
+import { bold, EmbedBuilder, SlashCommandBuilder } from 'discord.js';
 import { ChatInputCommand } from '../../interfaces';
 
 // Example slash command with options
@@ -25,7 +25,7 @@ const command: ChatInputCommand = {
             content = scream ? bold(text.toUpperCase()) : text;
 
         const embed = new EmbedBuilder()
-            .setColor(client.config.colors.embed as HexColorString)
+            .setColor(client.config.colors.embed)
             .setDescription(content);
 
         await interaction.reply({ embeds: [embed] });

@@ -1,4 +1,4 @@
-import { ApplicationCommand, Client, ClientOptions, Collection, REST, RESTPostAPIApplicationCommandsJSONBody, Routes } from 'discord.js';
+import { ApplicationCommand, Client, ClientOptions, Collection, HexColorString, REST, RESTPostAPIApplicationCommandsJSONBody, Routes } from 'discord.js';
 import { AnySelectMenu, Button, ChatInputCommand, Command, ContextMenu, Event, Interaction, ModalSubmit } from '../interfaces';
 import configJSON from '../config.json';
 import path from 'path';
@@ -15,6 +15,23 @@ try {
 }
 catch (e) {
     /* empty */
+}
+/**
+ * Type Definitions for config
+ */
+interface Config {
+    guild: string | 'your_guild_id',
+    interactions: {
+        receiveMessageComponents: boolean,
+        receiveModals: boolean,
+        replyOnError: boolean,
+        splitCustomId: boolean,
+        useGuildCommands: boolean
+    },
+    colors: {
+        embed: HexColorString
+    },
+    restVersion: '10'
 }
 /**
  * ExtendedClient is extends frome `Discord.js`'s Client
@@ -48,7 +65,7 @@ class ExtendedClient extends Client {
     /**
      * Config File
      */
-    readonly config = configJSON;
+    readonly config:Config = configJSON as Config;
 
     /**
      *
