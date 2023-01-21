@@ -11,7 +11,7 @@
     "start:bot": "node ./dist/bot.js",
     "prestart:manager": "npm run build",
     "start:manager": "node ./dist/manger.js",
-    "dev:bot": "nodemon src/manager.ts",
+    "dev:bot": "nodemon src/bot.ts",
     "dev:manager": "nodemon src/manager.ts",
     "build": "npm ci --omit=dev && tsc --project tsconfig.json"
   },
