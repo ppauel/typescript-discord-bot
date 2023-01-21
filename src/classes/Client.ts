@@ -1,4 +1,4 @@
-import { ApplicationCommand, Client, ClientOptions, Collection, HexColorString, REST, RESTPostAPIApplicationCommandsJSONBody, Routes } from 'discord.js';
+import { ApplicationCommand, Client, ClientOptions, Collection, ColorResolvable, REST, RESTPostAPIApplicationCommandsJSONBody, Routes } from 'discord.js';
 import { AnySelectMenu, Button, ChatInputCommand, Command, ContextMenu, Event, Interaction, ModalSubmit } from '../interfaces';
 import configJSON from '../config.json';
 import path from 'path';
@@ -29,14 +29,14 @@ interface Config {
         useGuildCommands: boolean
     },
     colors: {
-        embed: HexColorString
+        embed: ColorResolvable
     },
     restVersion: '10'
 }
 /**
  * ExtendedClient is extends frome `Discord.js`'s Client
  */
-class ExtendedClient extends Client {
+export default class ExtendedClient extends Client {
 
     /**
      * Collection of Chat Input Commands
@@ -111,22 +111,6 @@ class ExtendedClient extends Client {
                 else { this.on(event.default.name, (...args) => event.default.execute(this, ...args)); }
             }),
         );
-    }
-
-    /**
-     * Logs the client in, establishing a WebSocket connection to Discord.
-     * @param token Token of the account to log in with
-     * @returns Token of the account used
-     * @see https://discord.js.org/#/docs/discord.js/main/class/Client?scrollTo=login
-     */
-    public login(token?:string): Promise<string> {
-
-        // Login
-        if (!token) {
-            console.error('\nNo token was specified. Did you create a .env file?\n');
-            return Promise.resolve('No token was specified. Did you create a .env file?');
-        }
-        else {return super.login(token);}
     }
     /**
      * Depolys Application Commands to Discord
@@ -210,5 +194,3 @@ function fileToCollection<Type extends Command | Interaction>(dirPath:string):Co
 function isErrnoException(error: unknown): error is NodeJS.ErrnoException {
     return error instanceof Error;
 }
-
-export default ExtendedClient;

@@ -1,4 +1,4 @@
-import { GatewayIntentBits as Intents, Partials } from 'discord.js';
+import { DiscordjsError, GatewayIntentBits as Intents, Partials } from 'discord.js';
 import ExtendedClient from './classes/Client';
 import { config } from 'dotenv';
 
@@ -19,4 +19,12 @@ new ExtendedClient({
         Partials.Reaction,
         Partials.GuildMember,
     ],
-}).login(process.env.TOKEN);
+}).login(process.env.TOKEN)
+.catch((err:unknown) => {
+    if (err instanceof DiscordjsError && err.code == 'TokenMissing') {
+        console.log(`\n${err.name}: ${err.message} Did you create a .env file?\n`);
+    }
+    else {
+        throw err;
+    }
+});
