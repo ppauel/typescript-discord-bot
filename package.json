@@ -4,8 +4,6 @@
   "description": "A TypeScript Discord bot template",
   "main": "dist/bot.js",
   "scripts": {
-    "lint": "eslint . --cache --ext .js,.jsx,.ts,.tsx",
-    "lint:fix": "eslint . --fix --cache --ext .js,.jsx,.ts,.tsx",
     "start": "npm run start:bot",
     "prestart:bot": "npm run build",
     "start:bot": "node ./dist/bot.js",
