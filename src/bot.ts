@@ -20,11 +20,11 @@ new ExtendedClient({
         Partials.GuildMember,
     ],
 }).login(process.env.TOKEN)
-.catch((err:unknown) => {
-    if (err instanceof DiscordjsError && err.code == 'TokenMissing') {
-        console.log(`\n${err.name}: ${err.message} Did you create a .env file?\n`);
-    }
-    else {
-        throw err;
-    }
-});
+    .catch((err:unknown) => {
+        if (err instanceof DiscordjsError && err.code == 'TokenMissing') {
+            console.log(`\n${err.name}: ${err.message} Did you create a .env file?\n`);
+        }
+        else {
+            throw err;
+        }
+    });
