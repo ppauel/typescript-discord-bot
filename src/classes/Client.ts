@@ -117,8 +117,10 @@ export default class ExtendedClient extends Client {
      * @see https://discord.com/developers/docs/interactions/application-commands
      */
     public async deploy() {
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        const rest = new REST({ version: this.config.restVersion }).setToken(this.token!),
+
+        if (!this.token) { return console.log('[Error] Token not present at command deployment'); }
+
+        const rest = new REST({ version: this.config.restVersion }).setToken(this.token),
             globalDeploy:RESTPostAPIApplicationCommandsJSONBody[] = (Array.from(this.commands.filter(cmd => cmd.global === true).values()).map(m => m.options.toJSON()) as RESTPostAPIApplicationCommandsJSONBody[])
                 .concat(Array.from(this.contextMenus.filter(cmd => cmd.global === true).values()).map(m => m.options.toJSON()) as RESTPostAPIApplicationCommandsJSONBody[]),
 
@@ -128,21 +130,21 @@ export default class ExtendedClient extends Client {
         console.log('Deploying commands...');
 
         // Deploy global commands
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        const applicationCommands = await rest.put(Routes.applicationCommands(this.user!.id), { body: globalDeploy })
+        if (!this.user?.id) return console.log('[Error] Application ID not present at command deployment');
+
+        const applicationCommands = await rest.put(Routes.applicationCommands(this.user?.id), { body: globalDeploy })
             .catch(console.error) as ApplicationCommand[];
 
         console.log(`Deployed ${applicationCommands.length} global commands`);
 
         // Deploy guild commands
         if (!this.config.interactions.useGuildCommands) return;
-        if (this.config.guild === 'your_guild_id') return console.log('Please specify a guild id in order to use guild commands');
-        const guildId = this.config.guild;
-        const guild = await this.guilds.fetch(guildId).catch(console.error);
-        if (!guild) return;
+        const guild = this.guilds.cache.get(this.config.guild);
+        if (!guild) {
+            return console.log('[WARNING] Please check a guild id in order to use guild commands');
+        }
 
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        const applicationGuildCommands = await rest.put(Routes.applicationGuildCommands(this.user!.id, guildId), { body: guildDeploy })
+        const applicationGuildCommands = await rest.put(Routes.applicationGuildCommands(this.user?.id, this.config.guild), { body: guildDeploy })
             .catch(console.error) as ApplicationCommand[];
 
         console.log(`Deployed ${applicationGuildCommands?.length || 0} guild commands to ${guild.name}`);
