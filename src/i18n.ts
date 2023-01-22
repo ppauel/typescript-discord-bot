@@ -3,7 +3,7 @@ import { FluentBundle, FluentResource, FluentVariable } from '@fluent/bundle';
 import path from 'path';
 import { Locale, LocaleString } from 'discord.js';
 
-const langDir = './lang',
+const langDir = '../lang',
     fallbackLang = Locale.EnglishUS,
     globalConf = new FluentResource(readFileSync(path.join(__dirname, langDir, 'resources', 'global.ftl'), { encoding: 'utf-8' })),
     langs : {
