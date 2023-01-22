@@ -23,6 +23,14 @@ supportedfiles.forEach(lang => {
     langs[lang.slice(0, -4)] = bundle;
 });
 
+/**
+ * gets key for the given locale
+ *
+ * @param lang langugage from wich to try and get the key from
+ * @param key value to resolved to string
+ * @param options veribales to insert in to the string
+ * @returns the desiered sting or fallback sting
+ */
 export default function i18n(lang:Locale | LocaleString, key:string, options?: Record<string, FluentVariable>): string {
 
     const bundle = langs[lang];
@@ -48,7 +56,12 @@ export default function i18n(lang:Locale | LocaleString, key:string, options?: R
 
     return res;
 }
-
+/**
+ * generates object from for command/context menu localization
+ * @param key value to resolve
+ * @param options veribales to insert in to the string
+ * @returns record mad of all supported languages
+ */
 export function localization(key: string, options?: Record<string, FluentVariable>):Partial<Record<LocaleString, string>> {
     const res:Partial<Record<LocaleString, string>> = {};
     supportedLang.forEach((lang) => {
