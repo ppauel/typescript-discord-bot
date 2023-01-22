@@ -1,19 +1,15 @@
-import { Locale, PermissionsBitField, SlashCommandBuilder } from 'discord.js';
+import { PermissionsBitField, SlashCommandBuilder } from 'discord.js';
 import { getPingButton } from '../../features/ping';
-import i18n from '../../i18n';
+import i18n, { localization } from '../../i18n';
 import { ChatInputCommand } from '../../interfaces';
 
 // Example slash command
 const command: ChatInputCommand = {
     options: new SlashCommandBuilder()
         .setName('ping')
-        .setNameLocalizations({
-            'en-US': i18n(Locale.EnglishUS, 'ping-name'),
-        })
+        .setNameLocalizations(localization('ping-name'))
         .setDescription('Replies with Pong')
-        .setDescriptionLocalizations({
-            'en-US': i18n(Locale.EnglishUS, 'ping-description'),
-        })
+        .setDescriptionLocalizations(localization('ping-description'))
         .setDMPermission(true)
         .setDefaultMemberPermissions(PermissionsBitField.Flags.SendMessages),
     global: true,

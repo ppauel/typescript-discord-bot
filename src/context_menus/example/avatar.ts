@@ -1,6 +1,6 @@
 /* eslint-disable no-inline-comments */
-import { ApplicationCommandType, ContextMenuCommandBuilder, EmbedBuilder, GuildMember, Locale } from 'discord.js';
-import i18n from '../../i18n';
+import { ApplicationCommandType, ContextMenuCommandBuilder, EmbedBuilder, GuildMember } from 'discord.js';
+import i18n, { localization } from '../../i18n';
 import { UserContextMenu } from '../../interfaces';
 
 // Example user context menu
@@ -8,9 +8,7 @@ import { UserContextMenu } from '../../interfaces';
 const contextMenu: UserContextMenu = {
     options: new ContextMenuCommandBuilder()
         .setName('Avatar')
-        .setNameLocalizations({
-            'en-US': i18n(Locale.EnglishUS, 'avatar-name'),
-        })
+        .setNameLocalizations(localization('avatar-name'))
         .setType(ApplicationCommandType.User) // Specify the context menu type
         .setDMPermission(false),
     global: true,
