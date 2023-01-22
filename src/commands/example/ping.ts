@@ -3,7 +3,6 @@ import { getPingButton } from '../../features/ping';
 import i18n from '../../i18n';
 import { ChatInputCommand } from '../../interfaces';
 
-console.log(i18n(Locale.German, 'ping-name'));
 // Example slash command
 const command: ChatInputCommand = {
     options: new SlashCommandBuilder()
