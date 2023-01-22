@@ -171,6 +171,7 @@ function fileToCollection<Type extends Command | Interaction>(dirPath:string):Co
                 });
             });
         });
+
         dirents.filter(dirent => !dirent.isDirectory() && dirent.name.endsWith(tsNodeRun ? '.ts' : '.js')).forEach((file) => {
             import(path.join(dirPath, file.name)).then((resp: { default: Type }) => {
                 collection.set(((resp.default as Command).options != undefined) ? (resp.default as Command).options.name : (resp.default as Interaction).name, resp.default);
@@ -179,7 +180,7 @@ function fileToCollection<Type extends Command | Interaction>(dirPath:string):Co
     }
     catch (error) {
         if (isErrnoException(error) && error.code == 'ENOENT' && error.syscall == 'scandir') {
-            console.log(`Directory not found at ${error.path}`);
+            console.log(`[WARNING] Directory not found at ${error.path}`);
         }
         else {
             throw error;

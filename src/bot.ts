@@ -4,6 +4,7 @@ import { config } from 'dotenv';
 
 // Load .env file contents
 config();
+import './i18n';
 
 // Initialization (specify intents and partials)
 new ExtendedClient({
