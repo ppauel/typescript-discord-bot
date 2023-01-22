@@ -8,11 +8,11 @@ const command: ChatInputCommand = {
     options: new SlashCommandBuilder()
         .setName('ping')
         .setNameLocalizations({
-            de: i18n(Locale.German, 'ping-name'),
+            'en-US': i18n(Locale.EnglishUS, 'ping-name'),
         })
         .setDescription('Replies with Pong')
         .setDescriptionLocalizations({
-            de: i18n(Locale.German, 'ping-description'),
+            'en-US': i18n(Locale.EnglishUS, 'ping-description'),
         })
         .setDMPermission(true)
         .setDefaultMemberPermissions(PermissionsBitField.Flags.SendMessages),

@@ -1,5 +1,6 @@
 /* eslint-disable no-inline-comments */
-import { ApplicationCommandType, bold, ContextMenuCommandBuilder, inlineCode } from 'discord.js';
+import { ApplicationCommandType, ContextMenuCommandBuilder, Locale } from 'discord.js';
+import i18n from '../../i18n';
 import { MessageContextMenu } from '../../interfaces';
 
 // Example message context menu
@@ -7,14 +8,16 @@ import { MessageContextMenu } from '../../interfaces';
 const contextMenu: MessageContextMenu = {
     options: new ContextMenuCommandBuilder()
         .setName('Count characters')
+        .setNameLocalizations({
+            'en-US':i18n(Locale.EnglishUS, 'count-name'),
+        })
         .setType(ApplicationCommandType.Message) // Specify the context menu type
         .setDMPermission(false),
     global: false,
     execute: async (_client, interaction) => {
         const message = interaction.targetMessage,
             length = message.content.length;
-        await interaction.reply({ content: `${bold(message.author.username)}'s message has ${inlineCode(length.toString())} characters.`, ephemeral: true });
+        await interaction.reply({ content: i18n(interaction.locale, 'count-reply', { 'username':message.author.username, 'length':length.toString() }), ephemeral: true });
     },
 };
-
 export default contextMenu;
