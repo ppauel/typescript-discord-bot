@@ -22,8 +22,10 @@ new ExtendedClient({
     ],
 }).login(process.env.TOKEN)
     .catch((err:unknown) => {
-        if (err instanceof DiscordjsError && err.code == 'TokenMissing') {
-            console.log(`\n${err.name}: ${err.message} Did you create a .env file?\n`);
+        if (err instanceof DiscordjsError) {
+            if (err.code == 'TokenMissing') console.log(`\n[Error] ${err.name}: ${err.message} Did you create a .env file?\n`);
+            else if (err.code == 'TokenInvalid') console.log(`\n[Error] ${err.name}: ${err.message} Check your .env file\n`);
+            else throw err;
         }
         else {
             throw err;
