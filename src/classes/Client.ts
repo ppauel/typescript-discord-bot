@@ -1,4 +1,4 @@
-import { ApplicationCommand, Client, ClientOptions, Collection, ColorResolvable, REST, RESTPostAPIApplicationCommandsJSONBody, Routes } from 'discord.js';
+import { ApplicationCommand, Client, ClientOptions, Collection, ColorResolvable, REST, RESTPostAPIApplicationCommandsJSONBody, Routes, Snowflake } from 'discord.js';
 import { AnySelectMenu, Button, ChatInputCommand, Command, ContextMenu, Event, Interaction, ModalSubmit } from '../interfaces';
 import configJSON from '../config.json';
 import path from 'path';
@@ -20,7 +20,7 @@ catch (e) {
  * Type Definitions for config
  */
 interface Config {
-    guild: string | 'your_guild_id',
+    guild: Snowflake | 'your_guild_id',
     interactions: {
         receiveMessageComponents: boolean,
         receiveModals: boolean,
