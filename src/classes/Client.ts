@@ -1,4 +1,4 @@
-import { ApplicationCommand, Client, ClientOptions, Collection, REST, RESTPostAPIApplicationCommandsJSONBody, Routes } from 'discord.js';
+import { ApplicationCommand, Client, ClientOptions, Collection, ColorResolvable, REST, RESTPostAPIApplicationCommandsJSONBody, Routes, Snowflake } from 'discord.js';
 import { AnySelectMenu, Button, ChatInputCommand, Command, ContextMenu, Event, Interaction, ModalSubmit } from '../interfaces';
 import configJSON from '../config.json';
 import path from 'path';
@@ -17,9 +17,26 @@ catch (e) {
     /* empty */
 }
 /**
+ * Type Definitions for config
+ */
+interface Config {
+    guild: Snowflake | 'your_guild_id',
+    interactions: {
+        receiveMessageComponents: boolean,
+        receiveModals: boolean,
+        replyOnError: boolean,
+        splitCustomId: boolean,
+        useGuildCommands: boolean
+    },
+    colors: {
+        embed: ColorResolvable
+    },
+    restVersion: '10'
+}
+/**
  * ExtendedClient is extends frome `Discord.js`'s Client
  */
-class ExtendedClient extends Client {
+export default class ExtendedClient extends Client {
 
     /**
      * Collection of Chat Input Commands
@@ -48,7 +65,7 @@ class ExtendedClient extends Client {
     /**
      * Config File
      */
-    readonly config = configJSON;
+    readonly config:Config = configJSON as Config;
 
     /**
      *
@@ -58,7 +75,7 @@ class ExtendedClient extends Client {
     constructor(options:ClientOptions) {
         super(options);
 
-        console.log('Starting up...');
+        console.log('\nStarting up...\n');
 
         // Paths
         const commandPath = path.join(__dirname, '..', 'commands'),
@@ -95,61 +112,48 @@ class ExtendedClient extends Client {
             }),
         );
     }
-
     /**
-     * Logs the client in, establishing a WebSocket connection to Discord.
-     * @param token Token of the account to log in with
-     * @returns Token of the account used
-     * @see https://discord.js.org/#/docs/discord.js/main/class/Client?scrollTo=login
-     */
-    public login(token?:string): Promise<string> {
-
-        // Login
-        if (!token) {
-            console.error('\nNo token was specified. Did you create a .env file?\n');
-            return Promise.resolve('No token was specified. Did you create a .env file?');
-        }
-        else {return super.login(token);}
-    }
-    /**
-     * Depolys Application Commands to Discord
+     * Deploy Application Commands to Discord
      * @see https://discord.com/developers/docs/interactions/application-commands
      */
     public async deploy() {
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        const rest = new REST({ version: this.config.restVersion }).setToken(this.token!),
+
+        if (!this.token) { return console.warn('[Error] Token not present at command deployment'); }
+
+        const rest = new REST({ version: this.config.restVersion }).setToken(this.token),
             globalDeploy:RESTPostAPIApplicationCommandsJSONBody[] = (Array.from(this.commands.filter(cmd => cmd.global === true).values()).map(m => m.options.toJSON()) as RESTPostAPIApplicationCommandsJSONBody[])
                 .concat(Array.from(this.contextMenus.filter(cmd => cmd.global === true).values()).map(m => m.options.toJSON()) as RESTPostAPIApplicationCommandsJSONBody[]),
 
             guildDeploy:RESTPostAPIApplicationCommandsJSONBody[] = (Array.from(this.commands.filter(cmd => cmd.global === false).values()).map(m => m.options.toJSON()) as RESTPostAPIApplicationCommandsJSONBody[])
                 .concat(Array.from(this.contextMenus.filter(cmd => cmd.global === false).values()).map(m => m.options.toJSON()) as RESTPostAPIApplicationCommandsJSONBody[]);
 
-        console.log('Deploying commands...');
+        console.log('[INFO] Deploying commands...');
 
         // Deploy global commands
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        const applicationCommands = await rest.put(Routes.applicationCommands(this.user!.id), { body: globalDeploy })
+        if (!this.user?.id) return console.warn('[Error] Application ID not present at command deployment');
+
+        const applicationCommands = await rest.put(Routes.applicationCommands(this.user?.id), { body: globalDeploy })
             .catch(console.error) as ApplicationCommand[];
 
-        console.log(`Deployed ${applicationCommands.length} global commands`);
+        console.log(`[INFO] Deployed ${applicationCommands.length} global command(s)`);
 
-        // Deploy guild commands
+        // Deploy Application Guild Commands to Discord
+        // TODO: This is not recommended for sharding
         if (!this.config.interactions.useGuildCommands) return;
-        if (this.config.guild === 'your_guild_id') return console.log('Please specify a guild id in order to use guild commands');
-        const guildId = this.config.guild;
-        const guild = await this.guilds.fetch(guildId).catch(console.error);
-        if (!guild) return;
+        const guild = this.guilds.cache.get(this.config.guild);
+        if (!guild) {
+            return console.warn('[Warning] Please specify a guild id in order to use guild command(s)');
+        }
 
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        const applicationGuildCommands = await rest.put(Routes.applicationGuildCommands(this.user!.id, guildId), { body: guildDeploy })
+        const applicationGuildCommands = await rest.put(Routes.applicationGuildCommands(this.user?.id, this.config.guild), { body: guildDeploy })
             .catch(console.error) as ApplicationCommand[];
 
-        console.log(`Deployed ${applicationGuildCommands?.length || 0} guild commands to ${guild.name}`);
+        console.log(`[INFO] Deployed ${applicationGuildCommands?.length || 0} guild commands to ${guild.name}`);
     }
 }
 
 /**
- * Coverts Commands and Interactions in to Collection objects
+ * Converts Commands and Interactions in to Collection objects
  * @param dirPath Root directory of object
  * @returns Collection of Type
  */
@@ -168,6 +172,7 @@ function fileToCollection<Type extends Command | Interaction>(dirPath:string):Co
                 });
             });
         });
+
         dirents.filter(dirent => !dirent.isDirectory() && dirent.name.endsWith(tsNodeRun ? '.ts' : '.js')).forEach((file) => {
             import(path.join(dirPath, file.name)).then((resp: { default: Type }) => {
                 collection.set(((resp.default as Command).options != undefined) ? (resp.default as Command).options.name : (resp.default as Interaction).name, resp.default);
@@ -176,7 +181,7 @@ function fileToCollection<Type extends Command | Interaction>(dirPath:string):Co
     }
     catch (error) {
         if (isErrnoException(error) && error.code == 'ENOENT' && error.syscall == 'scandir') {
-            console.log(`Directory not found at ${error.path}`);
+            console.warn(`[Warning] Directory not found at ${error.path}`);
         }
         else {
             throw error;
@@ -193,5 +198,3 @@ function fileToCollection<Type extends Command | Interaction>(dirPath:string):Co
 function isErrnoException(error: unknown): error is NodeJS.ErrnoException {
     return error instanceof Error;
 }
-
-export default ExtendedClient;

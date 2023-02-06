@@ -17,6 +17,8 @@ This is the successor of the [djs-template](https://github.com/ppauel/djs-templa
 - Context Menu Handler (global / guild)
 - Interaction Handler (Message Components, Modals)
 - Event Handler
+- Sharding
+- Localizations
 - Customizable configuration
 - [Examples](#demo-files)
 ## Installation
@@ -65,34 +67,50 @@ If you want to use global commands only, you can disable guild commands. The `gl
 **Done!** You can now experiment with some examples. For that, you just need to start your bot...
 ## Scripts
 
-To start your bot and deploy all commands, run the following command.
+The bot can be started as a single instance or in processes intended for sharding. For smaller bots, the first variant should be sufficient.
+
+To build & start the bot without sharding run
+
+```bash
+npm run start:bot
+```
+or just
 ```bash
 npm run start
 ```
 
-During development, it is a good idea not to deploy all commands every time you restart. You can use the following command to disable automatic deployment.
+To build & start the sharding manager run
+
 ```bash
-npm run dev
+npm run start:manager
 ```
 
-To compile a JavaScript build of your bot, run this command.
+During development, it is a good idea not to deploy all commands every time you restart. You can use the following command to disable automatic deployment and run the uncompiled bot / manager.
+```bash
+npm run dev:bot
+```
+```bash
+npm run dev:manager
+```
+
+To only compile a JavaScript build of your bot, run this command.
 ```bash
 npm run build
 ```
 
-The finished bot will be located in the `dist/` folder. You can then launch it via Node or a process manager of your choice.
-```bash
-node .
-```
+The finished build will be located in the `dist/` directory.
+
 ## Usage / Examples
 ### Demo files
 This template contains some sample commands and interactions so you understand how to use it:
 
-- `src/commands/example/ping.ts`
-- `src/interactions/buttons/example/ping.ts`
-- `src/features/ping.ts`
+- `src/commands/example/ping.ts` *Ping Command*
+- `src/features/ping.ts` *Ping Button Builder*
+- `src/interactions/buttons/example/ping.ts` *Ping Button Interaction*
 
-- `src/context_menus/example/count.ts`
+- `src/context_menus/example/countCharacters.ts` *Message Context Menu*
+
+- `src/context_menus/example/displayAvatar.ts` *User Context Menu*
 
 **Hint:** *Commands, Context Menus and Interactions have to be located in a subfolder.*
 
@@ -103,6 +121,9 @@ const client = new ExtendedClient();
 const guildId = client.config.guild;
 ```
 However, the `ExtendedClient` cannot be accessed through an API object such as message or an interaction. The included handlers pass the `client` as its own parameter, so you don't have to worry about that.
+
+### Localizations
+By default, this project supports translations. These are managed in the `lang/` folder. The configuration is located in `src/features/i18n.ts`. Examples of usage can be found in the demo files.
 
 ## About this template
 This template is still under development and will be constantly extended, for example when changes are made to the Discord API.
