@@ -4,7 +4,7 @@
 ping-name = ping
 ping-description = Replies with Pong
 ping-reply = Pong
-ping-Button = Ping
+ping-button = Ping
 
 ## Context Menus
 ### Avatar
