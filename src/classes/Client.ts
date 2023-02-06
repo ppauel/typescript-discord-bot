@@ -75,7 +75,7 @@ export default class ExtendedClient extends Client {
     constructor(options:ClientOptions) {
         super(options);
 
-        console.log('\n', 'Starting up...', '\n');
+        console.log('\nStarting up...\n');
 
         // Paths
         const commandPath = path.join(__dirname, '..', 'commands'),
@@ -113,7 +113,7 @@ export default class ExtendedClient extends Client {
         );
     }
     /**
-     * Depolys Application Commands to Discord
+     * Deploy Application Commands to Discord
      * @see https://discord.com/developers/docs/interactions/application-commands
      */
     public async deploy() {
@@ -137,7 +137,8 @@ export default class ExtendedClient extends Client {
 
         console.log(`[INFO] Deployed ${applicationCommands.length} global command(s)`);
 
-        // Deploy guild commands
+        // Deploy Application Guild Commands to Discord
+        // TODO: This is not recommended for sharding
         if (!this.config.interactions.useGuildCommands) return;
         const guild = this.guilds.cache.get(this.config.guild);
         if (!guild) {
@@ -152,7 +153,7 @@ export default class ExtendedClient extends Client {
 }
 
 /**
- * Coverts Commands and Interactions in to Collection objects
+ * Converts Commands and Interactions in to Collection objects
  * @param dirPath Root directory of object
  * @returns Collection of Type
  */

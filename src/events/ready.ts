@@ -7,7 +7,7 @@ const event: Event = {
     execute: async (client) => {
         // Skip if no-deployment flag is set, else deploys commands
         if (!process.argv.includes('--no-deployment')) await client.deploy();
-        console.log('\n', `Ready! Logged in as ${client.user?.tag} (${client.user?.id})`, '\n');
+        console.log(`\nReady! Logged in as ${client.user?.tag} (${client.user?.id})\n`);
     },
 };
 

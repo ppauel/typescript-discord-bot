@@ -29,7 +29,7 @@ if (tsNodeRun) {
     options.execArgv = ['-r', 'ts-node/register'];
 }
 
-// Create your ShardingManager instance then starts shard(s)  and catches Token Error
+// Create your ShardingManager instance then starts shard(s) and catches Token Error
 new ExtendedShardingManager(tsNodeRun ? './src/bot.ts' : './dist/bot.js', options)
     .spawn()
     .catch((err:unknown) => {
