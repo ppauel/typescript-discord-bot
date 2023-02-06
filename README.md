@@ -120,7 +120,7 @@ To make it easier to access the client's config and collections, the template in
 const client = new ExtendedClient();
 const guildId = client.config.guild;
 ```
-However, the `ExtendedClient` cannot be accessed through an API object such as message or an interaction. The included handlers pass the `client` as its own parameter, so you don't have to worry about that.
+However, the `ExtendedClient` cannot be accessed through an API object such as message or an interaction. The included handlers pass the `_client` as its own parameter, so you don't have to worry about that.
 
 ### Localizations
 By default, this project supports translations. These are managed in the `lang/` folder. The configuration is located in `src/features/i18n.ts`. Examples of usage can be found in the demo files.
