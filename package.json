@@ -8,7 +8,7 @@
     "prestart:bot": "npm run build",
     "start:bot": "node ./dist/bot.js",
     "prestart:manager": "npm run build",
-    "start:manager": "node ./dist/manger.js",
+    "start:manager": "node ./dist/manager.js",
     "dev:bot": "nodemon src/bot.ts",
     "dev:manager": "nodemon src/manager.ts",
     "build": "tsc --project tsconfig.json"
