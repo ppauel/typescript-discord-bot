@@ -4,7 +4,7 @@ import { config } from 'dotenv';
 
 // Load .env file contents
 config();
-import './i18n';
+import './features/i18n';
 
 // Initialization (specify intents and partials)
 new ExtendedClient({
@@ -23,8 +23,8 @@ new ExtendedClient({
 }).login(process.env.TOKEN)
     .catch((err:unknown) => {
         if (err instanceof DiscordjsError) {
-            if (err.code == 'TokenMissing') console.log(`\n[Error] ${err.name}: ${err.message} Did you create a .env file?\n`);
-            else if (err.code == 'TokenInvalid') console.log(`\n[Error] ${err.name}: ${err.message} Check your .env file\n`);
+            if (err.code == 'TokenMissing') console.warn(`\n[Error] ${err.name}: ${err.message} Did you create a .env file?\n`);
+            else if (err.code == 'TokenInvalid') console.warn(`\n[Error] ${err.name}: ${err.message} Check your .env file\n`);
             else throw err;
         }
         else {

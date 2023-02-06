@@ -3,7 +3,7 @@ import { FluentBundle, FluentResource, FluentVariable } from '@fluent/bundle';
 import path from 'path';
 import { Locale, LocaleString } from 'discord.js';
 
-const langDir = '../lang',
+const langDir = '../../lang',
     fallbackLang = Locale.EnglishUS,
     globalConf = new FluentResource(readFileSync(path.join(__dirname, langDir, 'resources', 'global.ftl'), { encoding: 'utf-8' })),
     langs : {
@@ -17,7 +17,7 @@ supportedfiles.forEach(lang => {
     bundle.addResource(globalConf);
     const errors = bundle.addResource(new FluentResource(readFileSync(path.join(__dirname, langDir, lang), { encoding: 'utf-8' })));
     if (errors.length) {
-        console.log(`Errors parsing language: ${lang}`);
+        console.warn(`[Error] Errors parsing language: ${lang}`);
         return console.error(errors);
     }
     langs[lang.slice(0, -4)] = bundle;
@@ -49,7 +49,7 @@ export default function i18n(lang:Locale | LocaleString, key:string, options?: R
     const errors : Error[] = [],
         res = bundle.formatPattern(msg.value, options, errors);
     if (errors.length) {
-        console.log(`i18n - Errors with ${key}`);
+        console.warn(`[Error] i18n - Errors with ${key}`);
         console.log(options);
         console.error(errors);
     }

@@ -4,7 +4,7 @@ import ExtendedShardingManager from './classes/ShardingManager';
 
 config();
 
-import './i18n';
+import './features/i18n';
 
 // TypeScript or JavaScript environment (thanks to https://github.com/stijnvdkolk)
 let tsNodeRun = false;
@@ -34,8 +34,8 @@ new ExtendedShardingManager(tsNodeRun ? './src/bot.ts' : './dist/bot.js', option
     .spawn()
     .catch((err:unknown) => {
         if (err instanceof DiscordjsError) {
-            if (err.code == 'TokenMissing') console.log(`\n[Error] ${err.name}: ${err.message} Did you create a .env file?\n`);
-            else if (err.code == 'TokenInvalid') console.log(`\n[Error] ${err.name}: ${err.message} Check your .env file\n`);
+            if (err.code == 'TokenMissing') console.warn(`\n[Error] ${err.name}: ${err.message} Did you create a .env file?\n`);
+            else if (err.code == 'TokenInvalid') console.warn(`\n[Error] ${err.name}: ${err.message} Check your .env file\n`);
             else throw err;
         }
         else {

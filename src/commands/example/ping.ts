@@ -1,6 +1,6 @@
 import { Locale, PermissionsBitField, SlashCommandBuilder } from 'discord.js';
 import { getPingButton } from '../../features/ping';
-import i18n, { localization } from '../../i18n';
+import i18n, { localization } from '../../features/i18n';
 import { ChatInputCommand } from '../../interfaces';
 
 // Example slash command

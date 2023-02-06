@@ -4,6 +4,6 @@ export default class ExtendedShardingManager extends ShardingManager {
         super(file, options);
 
         // Emitted when a shard is created
-        this.on('shardCreate', shard => console.log(`Launched shard ${shard.id}`));
+        this.on('shardCreate', shard => console.log(`[INFO] Launched shard ${shard.id}`));
     }
 }

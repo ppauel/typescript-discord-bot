@@ -1,6 +1,6 @@
 /* eslint-disable no-inline-comments */
 import { ApplicationCommandType, ContextMenuCommandBuilder, Locale } from 'discord.js';
-import i18n, { localization } from '../../i18n';
+import i18n, { localization } from '../../features/i18n';
 import { MessageContextMenu } from '../../interfaces';
 
 // Example message context menu

@@ -1,5 +1,5 @@
 import { getPingButton } from '../../../features/ping';
-import i18n from '../../../i18n';
+import i18n from '../../../features/i18n';
 import { Button } from '../../../interfaces';
 
 // Example interaction (related to the /ping command)

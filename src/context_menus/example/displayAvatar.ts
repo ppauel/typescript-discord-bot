@@ -1,6 +1,6 @@
 /* eslint-disable no-inline-comments */
 import { ApplicationCommandType, ContextMenuCommandBuilder, EmbedBuilder, GuildMember, Locale } from 'discord.js';
-import i18n, { localization } from '../../i18n';
+import i18n, { localization } from '../../features/i18n';
 import { UserContextMenu } from '../../interfaces';
 
 // Example user context menu
@@ -20,7 +20,6 @@ const contextMenu: UserContextMenu = {
                 .setImage(member.displayAvatarURL({ size:4096 }))
                 .setColor(client.config.colors.embed)
                 .setFooter({ text:`ID: ${member.id}` })
-                .setTimestamp();
         interaction.reply({ embeds:[embed] });
     },
 };
