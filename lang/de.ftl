@@ -8,7 +8,7 @@ ping-button = Ping
 
 ## Context Menus
 ### Avatar
-avatar-name = Avatar
+avatar-name = Avatar anzeigen
 avatar-embed = {$username}'s Avatar
 
 ### countcharacters
