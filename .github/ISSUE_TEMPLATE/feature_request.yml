@@ -34,5 +34,3 @@ body:
         - label: Features
         - label: Packages
         - label: Other
-      validations:
-        required: true
