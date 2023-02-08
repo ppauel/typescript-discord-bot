@@ -20,6 +20,7 @@ body:
       placeholder: Ex. I would like to see this libary added
     validations:
       required: true
+
   - type: checkboxes
     id: part
     attributes:
@@ -32,3 +33,6 @@ body:
         - label: Interactions
         - label: Fetures
         - label: Packages
+        - label: Other
+      validations:
+        required: ture
