@@ -29,6 +29,6 @@ body:
         - label: Client
         - label: Chat Commands
         - label: Context Commands
-        - label: interactions
+        - label: Interactions
         - label: Fetures
-        - label: packages
+        - label: Packages
