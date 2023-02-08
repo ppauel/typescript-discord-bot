@@ -29,10 +29,10 @@ body:
       options:
         - label: Client
         - label: Chat Commands
-        - label: Context Commands
+        - label: Context Menus
         - label: Interactions
-        - label: Fetures
+        - label: Features
         - label: Packages
         - label: Other
       validations:
-        required: ture
+        required: true
