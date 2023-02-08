@@ -25,7 +25,7 @@ body:
     id: part
     attributes:
       label: What part of the template does this apply to?
-      decription: Select all that apply to your request.
+      description: Select all that apply to your request.
       options:
         - label: Client
         - label: Chat Commands
