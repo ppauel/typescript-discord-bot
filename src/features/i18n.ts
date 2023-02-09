@@ -3,8 +3,9 @@ import { FluentBundle, FluentResource, FluentVariable } from '@fluent/bundle';
 import path from 'path';
 import { Locale, LocaleString } from 'discord.js';
 
+export const fallbackLang = Locale.EnglishUS;
+
 const langDir = '../../lang',
-    fallbackLang = Locale.EnglishUS,
     globalConf = new FluentResource(readFileSync(path.join(__dirname, langDir, 'resources', 'global.ftl'), { encoding: 'utf-8' })),
     langs : {
         [key:string]: FluentBundle
@@ -31,7 +32,7 @@ supportedfiles.forEach(lang => {
  * @param options veribales to insert in to the string
  * @returns the desiered sting or fallback sting
  */
-export default function i18n(lang:Locale | LocaleString, key:string, options?: Record<string, FluentVariable>): string {
+export function i18n(lang:Locale | LocaleString, key:string, options?: Record<string, FluentVariable>): string {
 
     const bundle = langs[lang];
     if (!bundle) {
@@ -60,7 +61,7 @@ export default function i18n(lang:Locale | LocaleString, key:string, options?: R
  * generates object from for command/context menu localization
  * @param key value to resolve
  * @param options veribales to insert in to the string
- * @returns record mad of all supported languages
+ * @returns record map of all supported languages
  */
 export function localization(key: string, options?: Record<string, FluentVariable>):Partial<Record<LocaleString, string>> {
     const res:Partial<Record<LocaleString, string>> = {};
@@ -70,3 +71,14 @@ export function localization(key: string, options?: Record<string, FluentVariabl
 
     return res;
 }
+/**
+ * gets the value of the key from the fallback Locle
+ * @param key value to resolve
+ * @param options veribales to insert in to the string
+ * @returns the desiered sting or fallback sting
+ */
+export function fallback(key:string, options?: Record<string, FluentVariable>) {
+    return i18n(fallbackLang, key, options);
+}
+
+export default i18n;

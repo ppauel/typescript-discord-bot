@@ -1,1 +1,3 @@
+# Modal Interaction folder
+
 Put Modal Interactions in a sub-directory of the ../modals folder.
