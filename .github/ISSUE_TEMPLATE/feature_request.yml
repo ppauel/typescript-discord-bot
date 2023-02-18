@@ -1,0 +1,36 @@
+name: Feature request
+description: Suggest an idea for this project
+title: "[Feature]: "
+labels: ["enhancement"]
+body:
+  - type: input
+    id: contact
+    attributes:
+      label: Contact Details
+      description: How can we get in touch with you if we need more info?
+      placeholder: ex. email@example.com
+    validations:
+      required: false
+
+  - type: textarea
+    id: desired-outcome
+    attributes:
+      label: What is the desired outcome?
+      description: A clear and concise description of what you would like?
+      placeholder: Ex. I would like to see this libary added
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: part
+    attributes:
+      label: What part of the template does this apply to?
+      description: Select all that apply to your request.
+      options:
+        - label: Client
+        - label: Chat Commands
+        - label: Context Menus
+        - label: Interactions
+        - label: Features
+        - label: Packages
+        - label: Other
