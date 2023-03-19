@@ -3,6 +3,7 @@
     "interactions": {
         "receiveMessageComponents": true,
         "receiveModals": true,
+        "receiveAutocomplete": true,
         "replyOnError": true,
         "splitCustomId": false,
         "useGuildCommands": true
