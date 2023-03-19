@@ -43,7 +43,7 @@ export function i18n(lang:Locale | LocaleString, key:string, options?: Record<st
     const msg = bundle.getMessage(key);
     if (!msg || !msg.value) {
         if (lang !== fallbackLang) return i18n(fallbackLang, key, options);
-        console.log(`i18n - Could not resolve key: ${key}`);
+        console.log(`[Error] i18n - Could not resolve key: ${key}`);
         return `{{${key}}}`;
     }
 
