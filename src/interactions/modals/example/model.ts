@@ -7,15 +7,15 @@ const modal: ModalSubmit = {
     async execute(client, interaction) {
         interaction.reply({
             embeds:[new EmbedBuilder()
-                .setTitle(i18n(interaction.locale, 'example-modal-embed-title'))
+                .setTitle(i18n(interaction.locale, 'modal-embed-title'))
                 .setColor(client.config.colors.embed)
                 .setFields(
                     {
-                        name: i18n(interaction.locale, 'example-modal-embed-short'),
+                        name: i18n(interaction.locale, 'modal-embed-short'),
                         value: interaction.fields.getTextInputValue('short'),
                     },
                     {
-                        name: i18n(interaction.locale, 'example-modal-embed-paragraph'),
+                        name: i18n(interaction.locale, 'modal-embed-paragraph'),
                         value: interaction.fields.getTextInputValue('paragraph') || '`N/A`',
                     },
                 )],

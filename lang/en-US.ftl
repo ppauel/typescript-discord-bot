@@ -6,20 +6,17 @@ ping-description = Replies with Pong
 ping-reply = Pong
 ping-button = Ping
 
-### Example
-example-name = example
-example-description = example of discord.js
-
 ### Example Modal
-example-modal-name = modal
-example-modal-description = Demonstration of modal
-example-modal-short-label = Short text feild
-example-modal-short-placeholder = Short text
-example-modal-paragraph-label = Paragraph text feild
-example-modal-paragraph-placeholder = Paragraph text
-example-modal-embed-title = Modal Response
-example-modal-embed-short = Short Text
-example-modal-embed-paragraph = Paragraph Text
+modal-name = modal
+modal-description = Demonstration of modal
+modal-title = Model Window
+modal-short-label = Short text feild
+modal-short-placeholder = Short text
+modal-paragraph-label = Paragraph text feild
+modal-paragraph-placeholder = Paragraph text
+modal-embed-title = Modal Response
+modal-embed-short = Short Text
+modal-embed-paragraph = Paragraph Text
 
 ### Example Autocomplete
 autocomplete-name = autocomplete
@@ -32,6 +29,7 @@ autocomplete-apples = Apples
 autocomplete-grapefruits = Grapefruits
 autocomplete-avocados = Avocados
 autocomplete-apricots = Apricots
+autocomplete-reply = You selected {-b}{$fruit}{-b}
 
 ## Context Menus
 ### Avatar
