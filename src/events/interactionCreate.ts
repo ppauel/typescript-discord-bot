@@ -57,6 +57,7 @@ const event: Event = {
 
                 case ComponentType.ChannelSelect:
                 case ComponentType.RoleSelect:
+                case ComponentType.UserSelect:
                 case ComponentType.MentionableSelect:
                 case ComponentType.StringSelect:
                     client.selectMenus.get(interactionName)?.execute(client, interaction);
