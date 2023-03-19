@@ -1,4 +1,4 @@
-import { DiscordjsError, ShardingManagerOptions } from 'discord.js';
+import { DiscordjsError, DiscordjsErrorCodes, ShardingManagerOptions } from 'discord.js';
 import { config } from 'dotenv';
 import ExtendedShardingManager from './classes/ShardingManager';
 
@@ -34,9 +34,15 @@ new ExtendedShardingManager(tsNodeRun ? './src/bot.ts' : './dist/bot.js', option
     .spawn()
     .catch((err:unknown) => {
         if (err instanceof DiscordjsError) {
-            if (err.code == 'TokenMissing') console.warn(`\n[Error] ${err.name}: ${err.message} Did you create a .env file?\n`);
-            else if (err.code == 'TokenInvalid') console.warn(`\n[Error] ${err.name}: ${err.message} Check your .env file\n`);
-            else throw err;
+            if (err.code == DiscordjsErrorCodes.TokenMissing) {
+                console.warn(`\n[Error] ${err.name}: ${err.message} Did you create a .env file?\n`);
+            }
+            else if (err.code == DiscordjsErrorCodes.TokenInvalid) {
+                console.warn(`\n[Error] ${err.name}: ${err.message} Check your .env file\n`);
+            }
+            else {
+                throw err;
+            }
         }
         else {
             throw err;
