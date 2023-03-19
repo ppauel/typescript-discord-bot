@@ -24,6 +24,7 @@ interface Config {
     interactions: {
         receiveMessageComponents: boolean,
         receiveModals: boolean,
+        receiveAutocomplete: boolean,
         replyOnError: boolean,
         splitCustomId: boolean,
         useGuildCommands: boolean
@@ -42,26 +43,32 @@ export default class ExtendedClient extends Client {
      * Collection of Chat Input Commands
      */
     readonly commands: Collection<string, ChatInputCommand>;
+
     /**
      * Collection of Context Menu Commands
      */
     readonly contextMenus: Collection<string, ContextMenu>;
+
     /**
      * Collection of Events
      */
     readonly events: Collection<string, Event> = new Collection();
+
     /**
      * Collection of Button Interactions
      */
     readonly buttons: Collection<string, Button>;
+
     /**
      * Collection of Select Menu Interactions
      */
     readonly selectMenus: Collection<string, AnySelectMenu>;
+
     /**
      * Collection of Modal Submit Interactions
      */
     readonly modals: Collection<string, ModalSubmit>;
+
     /**
      * Config File
      */

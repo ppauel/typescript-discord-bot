@@ -2,7 +2,7 @@ import { ApplicationCommandType, ComponentType, Events, Interaction, Interaction
 import ExtendedClient from '../classes/Client';
 import { Event } from '../interfaces';
 
-const errorMessage = 'There was an error while executing this interaction.';
+const errorMessage = '[Error] There was an error while executing this interaction.';
 // Send a warning on error
 async function replyError(error:unknown, client:ExtendedClient, interaction: RepliableInteraction) {
     if (error instanceof Error) {
@@ -72,6 +72,15 @@ const event: Event = {
                 if (!client.config.interactions.receiveModals) return;
                 interactionName = client.config.interactions.splitCustomId ? interaction.customId.split('_')[0] : interaction.customId;
                 client.modals.get(interactionName)?.execute(client, interaction);
+                break;
+            case InteractionType.ApplicationCommandAutocomplete:
+                // Check if autocomplete interactions are enabled
+                if (!client.config.interactions.receiveAutocomplete) return;
+                interactionName = interaction.commandName;
+                // eslint-disable-next-line no-case-declarations
+                const autocomplete = client.commands.get(interactionName)?.autocomplete;
+                if (!autocomplete) { console.warn(`[Warning] Autocomplete for ${interactionName} was not Setup`); }
+                else { autocomplete(interaction); }
                 break;
             default:
                 break;

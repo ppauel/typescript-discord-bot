@@ -1,5 +1,5 @@
 import ExtendedClient from '../classes/Client';
-import { ChatInputCommandInteraction, CommandInteraction, ContextMenuCommandBuilder, ContextMenuCommandInteraction, MessageContextMenuCommandInteraction, SlashCommandBuilder, SlashCommandSubcommandsOnlyBuilder, UserContextMenuCommandInteraction } from 'discord.js';
+import { AutocompleteInteraction, ChatInputCommandInteraction, CommandInteraction, ContextMenuCommandBuilder, ContextMenuCommandInteraction, MessageContextMenuCommandInteraction, SlashCommandBuilder, SlashCommandSubcommandsOnlyBuilder, UserContextMenuCommandInteraction } from 'discord.js';
 
 export interface Command {
     options: SlashCommandBuilder | SlashCommandSubcommandsOnlyBuilder | Omit<SlashCommandBuilder, 'addSubcommand' | 'addSubcommandGroup'> | ContextMenuCommandBuilder,
@@ -9,7 +9,8 @@ export interface Command {
 
 export interface ChatInputCommand extends Command {
     options: SlashCommandBuilder | SlashCommandSubcommandsOnlyBuilder | Omit<SlashCommandBuilder, 'addSubcommand' | 'addSubcommandGroup'>
-    execute(client: ExtendedClient, interaction: ChatInputCommandInteraction): Promise<void>
+    execute(client: ExtendedClient, interaction: ChatInputCommandInteraction): Promise<void>,
+    autocomplete?(interaction: AutocompleteInteraction): Promise<void>
 }
 
 export interface ContextMenu extends Command {

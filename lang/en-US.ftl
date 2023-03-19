@@ -21,6 +21,18 @@ example-modal-embed-title = Modal Response
 example-modal-embed-short = Short Text
 example-modal-embed-paragraph = Paragraph Text
 
+### Example Autocomplete
+autocomplete-name = autocomplete
+autocomplete-description = Demonstration of Autocomplete
+autocomplete-option1-name = option
+autocomplete-option1-description = Choose a Fruit
+autocomplete-oranges = Oranges
+autocomplete-bananas = Bananas 
+autocomplete-apples = Apples
+autocomplete-grapefruits = Grapefruits
+autocomplete-avocados = Avocados
+autocomplete-apricots = Apricots
+
 ## Context Menus
 ### Avatar
 avatar-name = Display Avatar
