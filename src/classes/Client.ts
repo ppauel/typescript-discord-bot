@@ -1,6 +1,5 @@
 import { ApplicationCommand, Client, ClientOptions, Collection, ColorResolvable, REST, RESTPostAPIApplicationCommandsJSONBody, Routes, Snowflake } from 'discord.js';
 import { AnySelectMenu, Button, ChatInputCommand, Command, ContextMenu, Event, Interaction, ModalSubmit } from '../interfaces';
-import configJSON from '../config.json';
 import path from 'path';
 import { readdirSync } from 'fs';
 
@@ -19,7 +18,7 @@ catch (e) {
 /**
  * Type Definitions for config
  */
-interface Config {
+export interface ClientConfig {
     guild: Snowflake | 'your_guild_id',
     interactions: {
         receiveMessageComponents: boolean,
@@ -34,6 +33,17 @@ interface Config {
     },
     restVersion: '10'
 }
+
+export interface ExtendedClientOptions extends ClientOptions {
+    commandPath?:string,
+    contextMenuPath?:string,
+    buttonPath?:string,
+    selectMenuPath?:string,
+    modalPath?:string,
+    eventPath:string,
+    clientConfig:ClientConfig,
+}
+
 /**
  * ExtendedClient is extends frome `Discord.js`'s Client
  */
@@ -72,41 +82,42 @@ export default class ExtendedClient extends Client {
     /**
      * Config File
      */
-    readonly config:Config = configJSON as Config;
+    readonly config:ClientConfig;
 
     /**
      *
      * @param options Options for the client
      * @see https://discord.js.org/#/docs/discord.js/main/typedef/ClientOptions
      */
-    constructor(options:ClientOptions) {
+    constructor(options:ExtendedClientOptions) {
         super(options);
 
         console.log('\nStarting up...\n');
 
         // Paths
-        const commandPath = path.join(__dirname, '..', 'commands'),
-            contextMenuPath = path.join(__dirname, '..', 'context_menus'),
-            buttonPath = path.join(__dirname, '..', 'interactions', 'buttons'),
-            selectMenuPath = path.join(__dirname, '..', 'interactions', 'select_menus'),
-            modalPath = path.join(__dirname, '..', 'interactions', 'modals'),
-            eventPath = path.join(__dirname, '..', 'events');
+        const commandPath = options.commandPath,
+            contextMenuPath = options.contextMenuPath,
+            buttonPath = options.buttonPath,
+            selectMenuPath = options.selectMenuPath,
+            modalPath = options.modalPath,
+            eventPath = options.eventPath;
+        this.config = options.clientConfig;
 
         // Command Handler
-        this.commands = fileToCollection<ChatInputCommand>(commandPath);
+        if (commandPath) this.commands = fileToCollection<ChatInputCommand>(commandPath);
 
         // Context Menu Handler
-        this.contextMenus = fileToCollection<ContextMenu>(contextMenuPath);
+        if (contextMenuPath) this.contextMenus = fileToCollection<ContextMenu>(contextMenuPath);
 
         // Interaction Handlers
         // Button Handler
-        this.buttons = fileToCollection<Button>(buttonPath);
+        if (buttonPath) this.buttons = fileToCollection<Button>(buttonPath);
 
         // Select Menu Handler
-        this.selectMenus = fileToCollection<AnySelectMenu>(selectMenuPath);
+        if (selectMenuPath) this.selectMenus = fileToCollection<AnySelectMenu>(selectMenuPath);
 
         // Modal Handler
-        this.modals = fileToCollection<ModalSubmit>(modalPath);
+        if (modalPath) this.modals = fileToCollection<ModalSubmit>(modalPath);
 
         // Event Handler
         readdirSync(eventPath).filter((dir) => dir.endsWith(tsNodeRun ? '.ts' : '.js')).forEach((file) => import(path.join(eventPath, file))
