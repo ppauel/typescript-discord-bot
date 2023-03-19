@@ -1,5 +1,4 @@
 import { PermissionsBitField, SlashCommandBuilder } from 'discord.js';
-import { getPingButton } from '../../features/ping';
 import { fallback, i18n, localization } from '../../features/i18n';
 import { ChatInputCommand } from '../../interfaces';
 
@@ -21,7 +20,10 @@ const command: ChatInputCommand = {
             .setAutocomplete(true)),
     global: true,
     async execute(_client, interaction) {
-        interaction.reply({ content: ` ${i18n(interaction.locale, 'ping-reply')} 🏓`, components: [getPingButton(interaction.locale)], ephemeral: true });
+        interaction.reply({
+            content: i18n(interaction.locale, 'autocomplete-reply', { fruit: interaction.options.getString(fallback('autocomplete-option1-name'), true) }),
+            ephemeral:true,
+        });
     },
     async autocomplete(interaction) {
         const focusedOption = interaction.options.getFocused(true);
@@ -42,7 +44,7 @@ const command: ChatInputCommand = {
         if (!choices) return;
         const filtered = choices.filter(choice => choice.toLowerCase().startsWith(focusedOption.value.toLowerCase()));
         interaction.respond(
-            filtered.map(choice => ({ name: choice, value:choice })),
+            filtered.map(choice => ({ name: choice, value:choice })).slice(0, 14),
         );
     },
 };
