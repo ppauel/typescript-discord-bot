@@ -26,12 +26,18 @@ autocomplete-option1-description = Choose a Fruit
 autocomplete-reply = You selected {-b}{$fruit}{-b}
 
 ### Example Select Menu
-selectmenu-name = selectmenu
-selectmenu-description = select Menu Example
-selectmenu-string-name = string
-selectmenu-string-description = Example of a String Select Menu
-selectmenu-user-name = user
-selectmenu-user-description = Example of a User Select Menu
+select-name = select
+select-description = Select Menu Example
+select-menu-name = menu
+select-menu-description = Select Menu Example
+select-menu-string-name = string
+select-menu-string-description = Example of a String Select Menu
+select-menu-string-placeholder = Nothing selected
+select-menu-string-first-label = Select me
+select-menu-string-first-description = This is a description
+select-menu-string-second-label = You can select me too
+select-menu-string-second-description = This is also a description
+select-menu-string-reply = Something was selected!
 
 ### Fruit
 oranges = Oranges
@@ -40,6 +46,7 @@ apples = Apples
 grapefruits = Grapefruits
 avocados = Avocados
 apricots = Apricots
+
 ## Context Menus
 ### Avatar
 avatar-name = Display Avatar
