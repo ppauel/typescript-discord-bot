@@ -1,4 +1,5 @@
 import { PermissionsBitField, SlashCommandBuilder } from 'discord.js';
+import { fruit } from '../../features/fruit';
 import { fallback, i18n, localization } from '../../features/i18n';
 import { ChatInputCommand } from '../../interfaces';
 
@@ -30,15 +31,7 @@ const command: ChatInputCommand = {
         let choices:string[] | undefined = undefined;
 
         if (focusedOption.name == fallback('autocomplete-option1-name')) {
-            choices = [
-                i18n(interaction.locale, 'autocomplete-oranges'),
-                i18n(interaction.locale, 'autocomplete-bananas'),
-                i18n(interaction.locale, 'autocomplete-apples'),
-                i18n(interaction.locale, 'autocomplete-grapefruits'),
-                i18n(interaction.locale, 'autocomplete-avocados'),
-                i18n(interaction.locale, 'autocomplete-apricots'),
-
-            ];
+            choices = fruit(interaction.locale);
         }
 
         if (!choices) return;
