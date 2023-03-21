@@ -1,13 +1,12 @@
 import { ApplicationCommandType, ComponentType, Events, Interaction, InteractionType, RepliableInteraction } from 'discord.js';
-import ExtendedClient from '../classes/Client';
 import { Event } from '../interfaces';
 
 const errorMessage = '[Error] There was an error while executing this interaction.';
 // Send a warning on error
-async function replyError(error:unknown, client:ExtendedClient, interaction: RepliableInteraction) {
+async function replyError(error:unknown, interaction: RepliableInteraction) {
     if (error instanceof Error) {
         console.error(error);
-        if (client.config.interactions.replyOnError) return;
+        if (interaction.client.config.interactions.replyOnError) return;
 
         if (interaction.deferred) {
             await interaction.followUp({ content: errorMessage }).catch(console.error);
@@ -21,22 +20,24 @@ async function replyError(error:unknown, client:ExtendedClient, interaction: Rep
 
 const event: Event = {
     name: Events.InteractionCreate,
-    execute: async (client, interaction: Interaction) => {
+    execute: async (interaction: Interaction) => {
         let interactionName:string;
         try {
+            console.log(interaction);
             switch (interaction.type) {
             case InteractionType.ApplicationCommand:
 
                 switch (interaction.commandType) {
                 // Chat Input Command
                 case ApplicationCommandType.ChatInput:
-                    client.commands.get(interaction.commandName)?.execute(client, interaction);
+                    console.log(interaction.client.commands);
+                    interaction.client.commands.get(interaction.commandName)?.execute(interaction);
                     break;
 
                     // Context Menu
                 case ApplicationCommandType.Message:
                 case ApplicationCommandType.User:
-                    client.contextMenus.get(interaction.commandName)?.execute(client, interaction);
+                    interaction.client.contextMenus.get(interaction.commandName)?.execute(interaction);
                     break;
                 default:
                     break;
@@ -45,14 +46,14 @@ const event: Event = {
                 // Component (Button | Select Menu)
             case InteractionType.MessageComponent:
 
-                if (!client.config.interactions.receiveMessageComponents) return;
-                interactionName = client.config.interactions.splitCustomId ? interaction.customId.split('_')[0] : interaction.customId;
+                if (!interaction.client.config.interactions.receiveMessageComponents) return;
+                interactionName = interaction.client.config.interactions.splitCustomId ? interaction.customId.split('_')[0] : interaction.customId;
 
                 switch (interaction.componentType) {
                 case ComponentType.Button:
                     // Check if message components are enabled
-                    if (!client.config.interactions.receiveMessageComponents) return;
-                    client.buttons.get(interactionName)?.execute(client, interaction);
+                    if (!interaction.client.config.interactions.receiveMessageComponents) return;
+                    interaction.client.buttons.get(interactionName)?.execute(interaction);
                     break;
 
                 case ComponentType.ChannelSelect:
@@ -60,7 +61,7 @@ const event: Event = {
                 case ComponentType.UserSelect:
                 case ComponentType.MentionableSelect:
                 case ComponentType.StringSelect:
-                    client.selectMenus.get(interactionName)?.execute(client, interaction);
+                    interaction.client.selectMenus.get(interactionName)?.execute(interaction);
                     break;
                 default:
                     break;
@@ -70,16 +71,16 @@ const event: Event = {
                 // ModalSubmit
             case InteractionType.ModalSubmit:
                 // Check if modal interactions are enabled
-                if (!client.config.interactions.receiveModals) return;
-                interactionName = client.config.interactions.splitCustomId ? interaction.customId.split('_')[0] : interaction.customId;
-                client.modals.get(interactionName)?.execute(client, interaction);
+                if (!interaction.client.config.interactions.receiveModals) return;
+                interactionName = interaction.client.config.interactions.splitCustomId ? interaction.customId.split('_')[0] : interaction.customId;
+                interaction.client.modals.get(interactionName)?.execute(interaction);
                 break;
             case InteractionType.ApplicationCommandAutocomplete:
                 // Check if autocomplete interactions are enabled
-                if (!client.config.interactions.receiveAutocomplete) return;
+                if (!interaction.client.config.interactions.receiveAutocomplete) return;
                 interactionName = interaction.commandName;
                 // eslint-disable-next-line no-case-declarations
-                const autocomplete = client.commands.get(interactionName)?.autocomplete;
+                const autocomplete = interaction.client.commands.get(interactionName)?.autocomplete;
                 if (!autocomplete) { console.warn(`[Warning] Autocomplete for ${interactionName} was not Setup`); }
                 else { autocomplete(interaction); }
                 break;
@@ -88,7 +89,7 @@ const event: Event = {
             }
         }
         catch (error) {
-            if (interaction.isRepliable()) replyError(error, client, interaction);
+            if (interaction.isRepliable()) replyError(error, interaction);
             else console.error(error);
         }
     },

@@ -12,7 +12,7 @@ const contextMenu: MessageContextMenu = {
         .setType(ApplicationCommandType.Message) // Specify the context menu type
         .setDMPermission(false),
     global: false,
-    async execute(_client, interaction) {
+    async execute(interaction) {
         const message = interaction.targetMessage,
             length = message.content.length;
         await interaction.reply(

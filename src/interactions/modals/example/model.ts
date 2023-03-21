@@ -4,11 +4,11 @@ import { ModalSubmit } from '../../../interfaces';
 
 const modal: ModalSubmit = {
     name: 'model',
-    async execute(client, interaction) {
+    async execute(interaction) {
         interaction.reply({
             embeds:[new EmbedBuilder()
                 .setTitle(i18n(interaction.locale, 'modal-embed-title'))
-                .setColor(client.config.colors.embed)
+                .setColor(interaction.client.config.colors.embed)
                 .setFields(
                     {
                         name: i18n(interaction.locale, 'modal-embed-short'),

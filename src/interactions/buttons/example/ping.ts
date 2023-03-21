@@ -6,7 +6,7 @@ import { Button } from '../../../interfaces';
 
 const button: Button = {
     name: 'ping',
-    async execute(_client, interaction) {
+    async execute(interaction) {
         interaction.reply({ content: `${i18n(interaction.locale, 'ping-button')} 🏓`, components: [getPingButton(interaction.locale)], ephemeral: true });
     },
 };

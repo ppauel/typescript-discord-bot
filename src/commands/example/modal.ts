@@ -12,7 +12,7 @@ const command: ChatInputCommand = {
         .setDMPermission(true)
         .setDefaultMemberPermissions(PermissionsBitField.Flags.SendMessages),
     global: true,
-    async execute(_client, interaction) {
+    async execute(interaction) {
         interaction.showModal(new ModalBuilder()
             .setCustomId('model')
             .setTitle(i18n(interaction.locale, 'modal-title'))

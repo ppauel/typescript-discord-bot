@@ -20,7 +20,7 @@ const command: ChatInputCommand = {
             .setRequired(true)
             .setAutocomplete(true)),
     global: true,
-    async execute(_client, interaction) {
+    async execute(interaction) {
         interaction.reply({
             content: i18n(interaction.locale, 'autocomplete-reply', { fruit: interaction.options.getString(fallback('autocomplete-option1-name'), true) }),
             ephemeral:true,
