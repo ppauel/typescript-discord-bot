@@ -22,7 +22,7 @@ const command: ChatInputCommand = {
                 .setDescription(fallback('select-menu-string-description'))
                 .setDescriptionLocalizations(localization('select-menu-string-description')))),
     global: true,
-    async execute(_client, interaction) {
+    async execute(interaction) {
         let row:ActionRowBuilder<MessageActionRowComponentBuilder>;
         switch (interaction.options.getSubcommand(true)) {
         case fallback('select-menu-string-name'):

@@ -15,6 +15,7 @@ try {
 catch (e) {
     /* empty */
 }
+
 /**
  * Type Definitions for config
  */
@@ -125,8 +126,8 @@ export default class ExtendedClient extends Client {
 
                 this.events.set(event.default.name, event.default);
 
-                if (event.default.once) { this.once(event.default.name, (...args) => event.default.execute(this, ...args)); }
-                else { this.on(event.default.name, (...args) => event.default.execute(this, ...args)); }
+                if (event.default.once) { this.once(event.default.name, (...args) => event.default.execute(...args)); }
+                else { this.on(event.default.name, (...args) => event.default.execute(...args)); }
             }),
         );
     }
@@ -215,4 +216,38 @@ function fileToCollection<Type extends Command | Interaction>(dirPath:string):Co
  */
 function isErrnoException(error: unknown): error is NodeJS.ErrnoException {
     return error instanceof Error;
+}
+
+declare module 'discord.js' {
+    interface BaseInteraction {
+        client: ExtendedClient
+    }
+
+    interface Component {
+        client: ExtendedClient
+    }
+
+    interface Message {
+        client: ExtendedClient
+    }
+
+    interface BaseChannel {
+        client: ExtendedClient
+    }
+
+    interface Role {
+		client: ExtendedClient
+	}
+
+    interface Guild {
+		client: ExtendedClient
+	}
+
+	interface User {
+		client: ExtendedClient
+	}
+
+	interface GuildMember {
+		client: ExtendedClient
+	}
 }

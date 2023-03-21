@@ -13,7 +13,7 @@ const command: ChatInputCommand = {
         .setDMPermission(true)
         .setDefaultMemberPermissions(PermissionsBitField.Flags.SendMessages),
     global: true,
-    async execute(_client, interaction) {
+    async execute(interaction) {
         interaction.reply({ content: ` ${i18n(interaction.locale, 'ping-reply')} 🏓`, components: [getPingButton(interaction.locale)], ephemeral: true });
     },
 };
