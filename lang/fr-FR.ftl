@@ -1,4 +1,4 @@
-# en-US
+# fr-FR
 ## Chat Commands
 ### Ping
 ping-name = ping
