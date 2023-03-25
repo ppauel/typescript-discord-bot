@@ -1,10 +1,10 @@
-import { ActionRowBuilder, MessageActionRowComponentBuilder, PermissionsBitField, SlashCommandBuilder, StringSelectMenuBuilder, StringSelectMenuOptionBuilder } from 'discord.js';
+import { ActionRowBuilder, MessageActionRowComponentBuilder, PermissionsBitField, StringSelectMenuBuilder, StringSelectMenuOptionBuilder } from 'discord.js';
+import { ChatInputCommand } from '../../classes/Command';
 import { fallback, i18n, localization } from '../../features/i18n';
-import { ChatInputCommand } from '../../interfaces';
 
 // Example slash command
-const command: ChatInputCommand = {
-    options: new SlashCommandBuilder()
+export default new ChatInputCommand()
+    .setBuilder((builder) => builder
         .setName(fallback('select-name'))
         .setNameLocalizations(localization('select-name'))
         .setDescription(fallback('select-menu-description'))
@@ -20,9 +20,9 @@ const command: ChatInputCommand = {
                 .setName(fallback('select-menu-string-name'))
                 .setNameLocalizations(localization('select-menu-string-name'))
                 .setDescription(fallback('select-menu-string-description'))
-                .setDescriptionLocalizations(localization('select-menu-string-description')))),
-    global: true,
-    async execute(interaction) {
+                .setDescriptionLocalizations(localization('select-menu-string-description')))))
+    .setGlobal(true)
+    .setExecute(async (interaction) => {
         let row:ActionRowBuilder<MessageActionRowComponentBuilder>;
         switch (interaction.options.getSubcommand(true)) {
         case fallback('select-menu-string-name'):
@@ -49,6 +49,4 @@ const command: ChatInputCommand = {
         default:
             break;
         }
-    },
-};
-export default command;
+    });

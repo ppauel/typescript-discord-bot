@@ -1,10 +1,10 @@
-import { EmbedBuilder } from 'discord.js';
+import { EmbedBuilder, ModalSubmitInteraction } from 'discord.js';
+import { Interaction } from '../../../classes/Interaction';
 import i18n from '../../../features/i18n';
-import { ModalSubmit } from '../../../interfaces';
 
-const modal: ModalSubmit = {
-    name: 'model',
-    async execute(interaction) {
+export default new Interaction<ModalSubmitInteraction>()
+    .setName('model')
+    .setExecute(async (interaction) => {
         interaction.reply({
             embeds:[new EmbedBuilder()
                 .setTitle(i18n(interaction.locale, 'modal-embed-title'))
@@ -21,7 +21,4 @@ const modal: ModalSubmit = {
                 )],
             ephemeral:true,
         });
-    },
-};
-
-export default modal;
+    });

@@ -1,11 +1,11 @@
-import { PermissionsBitField, SlashCommandBuilder } from 'discord.js';
+import { PermissionsBitField } from 'discord.js';
+import { ChatInputCommand } from '../../classes/Command';
 import { fruit } from '../../features/fruit';
 import { fallback, i18n, localization } from '../../features/i18n';
-import { ChatInputCommand } from '../../interfaces';
 
 // Example slash command
-const command: ChatInputCommand = {
-    options: new SlashCommandBuilder()
+export default new ChatInputCommand()
+    .setBuilder((builder) => builder
         .setName(fallback('autocomplete-name'))
         .setNameLocalizations(localization('autocomplete-name'))
         .setDescription(fallback('autocomplete-description'))
@@ -18,15 +18,15 @@ const command: ChatInputCommand = {
             .setDescription(fallback('autocomplete-option1-description'))
             .setDescriptionLocalizations(localization('autocomplete-option1-description'))
             .setRequired(true)
-            .setAutocomplete(true)),
-    global: true,
-    async execute(interaction) {
+            .setAutocomplete(true)))
+    .setGlobal(true)
+    .setExecute(async (interaction) => {
         interaction.reply({
             content: i18n(interaction.locale, 'autocomplete-reply', { fruit: interaction.options.getString(fallback('autocomplete-option1-name'), true) }),
             ephemeral:true,
         });
-    },
-    async autocomplete(interaction) {
+    })
+    .setAutocomplete(async (interaction) => {
         const focusedOption = interaction.options.getFocused(true);
         let choices:string[] | undefined = undefined;
 
@@ -39,6 +39,4 @@ const command: ChatInputCommand = {
         interaction.respond(
             filtered.map(choice => ({ name: choice, value:choice })).slice(0, 14),
         );
-    },
-};
-export default command;
+    });

@@ -1,18 +1,17 @@
 /* eslint-disable no-inline-comments */
-import { ApplicationCommandType, ContextMenuCommandBuilder, EmbedBuilder, GuildMember } from 'discord.js';
+import { ApplicationCommandType, EmbedBuilder, GuildMember, UserContextMenuCommandInteraction } from 'discord.js';
+import { ContextMenuCommand } from '../../classes/Command';
 import { i18n, fallback, localization } from '../../features/i18n';
-import { UserContextMenu } from '../../interfaces';
 
 // Example user context menu
-
-const contextMenu: UserContextMenu = {
-    options: new ContextMenuCommandBuilder()
+export default new ContextMenuCommand()
+    .setBuilder((builder) => builder
         .setName(fallback('avatar-name'))
         .setNameLocalizations(localization('avatar-name'))
         .setType(ApplicationCommandType.User) // Specify the context menu type
-        .setDMPermission(false),
-    global: true,
-    async execute(interaction) {
+        .setDMPermission(false))
+    .setGlobal(true)
+    .setExecute(async (interaction: UserContextMenuCommandInteraction) => {
         if (!interaction.inGuild()) return;
         const member = interaction.targetMember as GuildMember,
             embed = new EmbedBuilder()
@@ -21,7 +20,4 @@ const contextMenu: UserContextMenu = {
                 .setColor(interaction.client.config.colors.embed)
                 .setFooter({ text:`ID: ${member.id}` });
         interaction.reply({ embeds:[embed] });
-    },
-};
-
-export default contextMenu;
+    });

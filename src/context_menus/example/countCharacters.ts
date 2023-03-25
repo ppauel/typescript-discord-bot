@@ -1,18 +1,17 @@
 /* eslint-disable no-inline-comments */
-import { ApplicationCommandType, ContextMenuCommandBuilder } from 'discord.js';
+import { ApplicationCommandType, MessageContextMenuCommandInteraction } from 'discord.js';
+import { ContextMenuCommand } from '../../classes/Command';
 import { i18n, fallback, localization } from '../../features/i18n';
-import { MessageContextMenu } from '../../interfaces';
 
 // Example message context menu
-
-const contextMenu: MessageContextMenu = {
-    options: new ContextMenuCommandBuilder()
+export default new ContextMenuCommand()
+    .setBuilder((builder) => builder
         .setName(fallback('count-name'))
         .setNameLocalizations(localization('count-name'))
         .setType(ApplicationCommandType.Message) // Specify the context menu type
-        .setDMPermission(false),
-    global: false,
-    async execute(interaction) {
+        .setDMPermission(false))
+    .setGlobal(false)
+    .setExecute(async (interaction: MessageContextMenuCommandInteraction) => {
         const message = interaction.targetMessage,
             length = message.content.length;
         await interaction.reply(
@@ -20,6 +19,4 @@ const contextMenu: MessageContextMenu = {
                 content: i18n(interaction.locale, 'count-reply', { 'username':message.author.username, 'length':length.toString() }),
                 ephemeral: true,
             });
-    },
-};
-export default contextMenu;
+    });

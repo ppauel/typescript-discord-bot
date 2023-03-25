@@ -1,12 +1,12 @@
 import { DiscordjsError, DiscordjsErrorCodes, GatewayIntentBits as Intents, Partials } from 'discord.js';
+import path from 'path';
 import ExtendedClient, { ClientConfig } from './classes/Client';
 import { config } from 'dotenv';
 import configJSON from './config.json';
+import './features/i18n';
 
 // Load .env file contents
 config();
-import './features/i18n';
-import path from 'path';
 
 // Initialization (specify intents and partials)
 new ExtendedClient({
@@ -46,3 +46,4 @@ new ExtendedClient({
             throw err;
         }
     });
+
