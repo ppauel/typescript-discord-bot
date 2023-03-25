@@ -9,7 +9,7 @@ ping-button = Ping
 ### Example Modal
 modal-name = modal
 modal-description = Demonstration of modal
-modal-title = Model Window
+modal-title = Modal Window
 modal-short-label = Short text feild
 modal-short-placeholder = Short text
 modal-paragraph-label = Paragraph text feild
