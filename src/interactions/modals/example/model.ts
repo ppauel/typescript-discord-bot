@@ -3,7 +3,7 @@ import { Interaction } from '../../../classes/Interaction';
 import i18n from '../../../features/i18n';
 
 export default new Interaction<ModalSubmitInteraction>()
-    .setName('model')
+    .setName('modal')
     .setExecute(async (interaction) => {
         interaction.reply({
             embeds:[new EmbedBuilder()
