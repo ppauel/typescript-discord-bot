@@ -1,21 +1,30 @@
 /* eslint-disable no-inline-comments */
-import { ApplicationCommandType, ContextMenuCommandBuilder, Locale } from 'discord.js';
-import i18n, { localization } from '../../features/i18n';
-import { MessageContextMenu } from '../../interfaces';
+import { ApplicationCommandType, MessageContextMenuCommandInteraction } from 'discord.js';
+import { t, localization } from '../../i18n';
+import { ContextMenuCommand } from '../../Client';
+
+// Locale Namespace
+const ns = 'count';
 
 // Example message context menu
 
-const contextMenu: MessageContextMenu = {
-    options: new ContextMenuCommandBuilder()
-        .setName(i18n(Locale.EnglishUS, 'count-name'))
-        .setNameLocalizations(localization('count-name'))
+export default new ContextMenuCommand()
+    .setBuilder((builder) => builder
+        .setName(t({ key:'command-name', ns }))
+        .setNameLocalizations(localization('count-name', ns))
         .setType(ApplicationCommandType.Message) // Specify the context menu type
-        .setDMPermission(false),
-    global: false,
-    execute: async (_client, interaction) => {
+        .setDMPermission(false))
+    .setGlobal(false)
+    .setExecute(async (interaction: MessageContextMenuCommandInteraction) => {
         const message = interaction.targetMessage,
             length = message.content.length;
-        await interaction.reply({ content: i18n(interaction.locale, 'count-reply', { 'username':message.author.username, 'length':length.toString() }), ephemeral: true });
-    },
-};
-export default contextMenu;
+        return interaction.reply({ content: t({
+            locale: interaction.locale,
+            key: 'count-reply',
+            ns,
+            args: {
+                'username':message.author.username,
+                'length':length.toString(),
+            },
+        }), ephemeral: true });
+    });

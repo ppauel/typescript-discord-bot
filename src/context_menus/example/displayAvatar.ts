@@ -1,27 +1,32 @@
 /* eslint-disable no-inline-comments */
-import { ApplicationCommandType, ContextMenuCommandBuilder, EmbedBuilder, GuildMember, Locale } from 'discord.js';
-import i18n, { localization } from '../../features/i18n';
-import { UserContextMenu } from '../../interfaces';
+import { ApplicationCommandType, EmbedBuilder, GuildMember, UserContextMenuCommandInteraction } from 'discord.js';
+import { t, localization } from '../../i18n';
+import { ContextMenuCommand, ExtraColor } from '../../Client';
+
+// Locale Namespace
+const ns = 'avatar';
 
 // Example user context menu
 
-const contextMenu: UserContextMenu = {
-    options: new ContextMenuCommandBuilder()
-        .setName(i18n(Locale.EnglishUS, 'avatar-name'))
-        .setNameLocalizations(localization('avatar-name'))
+export default new ContextMenuCommand()
+    .setBuilder((builder) => builder
+        .setName(t({ key: 'command-name', ns }))
+        .setNameLocalizations(localization('command-name', ns))
         .setType(ApplicationCommandType.User) // Specify the context menu type
-        .setDMPermission(false),
-    global: true,
-    execute: async (client, interaction) => {
+        .setDMPermission(false))
+    .setGlobal(true)
+    .setExecute(async (interaction: UserContextMenuCommandInteraction) => {
         if (!interaction.inGuild()) return;
         const member = interaction.targetMember as GuildMember,
             embed = new EmbedBuilder()
-                .setTitle(i18n(interaction.guildLocale, 'avatar-embed', { 'username': member.displayName }))
+                .setTitle(t({
+                    locale: interaction.guildLocale,
+                    key: 'embed',
+                    ns,
+                    args: { 'username': member.displayName },
+                }))
                 .setImage(member.displayAvatarURL({ size:4096 }))
-                .setColor(client.config.colors.embed)
-                .setFooter({ text:`ID: ${member.id}` })
-        interaction.reply({ embeds:[embed] });
-    },
-};
-
-export default contextMenu;
+                .setColor(ExtraColor.EmbedGray)
+                .setFooter({ text:`ID: ${member.id}` });
+        return interaction.reply({ embeds:[embed] });
+    });

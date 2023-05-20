@@ -1,6 +1,6 @@
-### Global variables
+# Global variables
 
-### Formatting
+## Formatting
 # Italics markers, put these around text to italicize it
 -i = {"*"}
 # Bold markers, put these around text to bolden it
