@@ -1,13 +1,17 @@
-import { DiscordjsError, GatewayIntentBits as Intents, Partials } from 'discord.js';
-import ExtendedClient from './classes/Client';
+import { GatewayIntentBits as Intents, Locale, Partials } from 'discord.js';
+import { Client } from './Client';
 import { config } from 'dotenv';
+import { join } from 'path';
+import { init } from './i18n';
 
 // Load .env file contents
 config();
-import './features/i18n';
+
+// Load locales
+init(join(__dirname, '../locales'), { fallback: Locale.EnglishUS, hasGlobal: true });
 
 // Initialization (specify intents and partials)
-new ExtendedClient({
+const client = new Client({
     intents: [
         Intents.Guilds,
         Intents.GuildMessages,
@@ -20,14 +24,26 @@ new ExtendedClient({
         Partials.Reaction,
         Partials.GuildMember,
     ],
-}).login(process.env.TOKEN)
-    .catch((err:unknown) => {
-        if (err instanceof DiscordjsError) {
-            if (err.code == 'TokenMissing') console.warn(`\n[Error] ${err.name}: ${err.message} Did you create a .env file?\n`);
-            else if (err.code == 'TokenInvalid') console.warn(`\n[Error] ${err.name}: ${err.message} Check your .env file\n`);
-            else throw err;
-        }
-        else {
-            throw err;
+    receiveMessageComponents: true,
+    receiveModals: true,
+    receiveAutocomplete: true,
+    replyOnError: true,
+    splitCustomID: true,
+    splitCustomIDOn: '_',
+    useGuildCommands: false,
+});
+client.init({
+    eventPath: join(__dirname, 'events'),
+    commandPath: join(__dirname, 'commands'),
+    contextMenuPath: join(__dirname, 'context_menus'),
+    buttonPath: join(__dirname, 'interactions', 'buttons'),
+    selectMenuPath: join(__dirname, 'interactions', 'select_menus'),
+    modalPath: join(__dirname, 'interactions', 'modals'),
+}).then(() => {
+    client.login(process.env.TOKEN).then(async () => {
+        // Skip if no-deployment flag is set, else deploys commands
+        if (!process.argv.includes('--no-deployment')) {
+            await client.deploy();
         }
     });
+});
