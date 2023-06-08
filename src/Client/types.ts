@@ -5,24 +5,31 @@ export type Mutable<T> = { -readonly [P in keyof T]: T[P] };
 export type TimeCode = 'd' | 'D' | 't' | 'T' | 'f' | 'F' | 'R';
 
 export declare const TimeFormat: {
-	ShortDate: 'd',
-	LongDatez: 'D',
-	ShortTime: 't',
-	LongTime: 'T',
-	ShortDateTime: 'f',
-	LongDateTime: 'F',
-	RelativeTime: 'R'
+	ShortDate: 'd';
+	LongDatez: 'D';
+	ShortTime: 't';
+	LongTime: 'T';
+	ShortDateTime: 'f';
+	LongDateTime: 'F';
+	RelativeTime: 'R';
 };
 
 export declare const ExtraColor: {
-	EmbedGray: 0x2b2d31
+	EmbedGray: 0x2b2d31;
 };
 
 declare global {
 	interface Date {
-		toDiscordString(format?: TimeCode): string
+		toDiscordString(format?: TimeCode): string;
 	}
 }
+
+// eslint-disable-next-line func-names
+Date.prototype.toDiscordString = function(format?: TimeCode) {
+    const code = Math.floor(this.getTime() / 1000);
+    if (!format) return `<t:${code}`;
+    return `<t:${code}:${format}>`;
+};
 
 declare module 'discord.js' {
 	interface BaseInteraction {
@@ -50,9 +57,3 @@ declare module 'discord.js' {
 		client: ExtendedClient;
 	}
 }
-
-Date.prototype.toDiscordString = function(format?: TimeCode) {
-    const code = Math.floor(this.getTime() / 1000);
-    if (!format) return `<t:${code}`;
-    return `<t:${code}:${format}>`;
-};

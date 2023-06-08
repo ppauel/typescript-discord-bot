@@ -1,32 +1,30 @@
 /* eslint-disable no-console */
-import { join } from 'path';
-import { readdir } from 'fs/promises';
 import {
     AnySelectMenuInteraction,
+    ApplicationCommand,
     ButtonInteraction,
     Client,
     ClientOptions,
     Collection,
+    Interaction as DInteraction,
     DiscordjsError,
+    DiscordjsErrorCodes,
+    Events,
     ModalSubmitInteraction,
     REST,
     RESTPatchAPIApplicationCommandJSONBody,
     Routes,
     Snowflake,
-    Interaction as DInteraction,
-    ApplicationCommand,
-    Events,
-    DiscordjsErrorCodes,
 } from 'discord.js';
-
+import { readdir } from 'fs/promises';
+import { join } from 'path';
 import {
     ChatInputCommand, Command, ContextMenuCommand,
 } from './Command';
 import { Event } from './Event';
 import { Interaction } from './Interaction';
-
-import { Mutable } from './types';
 import { onInteractionCreate } from './interactionCreate';
+import { Mutable } from './types';
 
 // TypeScript or JavaScript environment (thanks to https://github.com/stijnvdkolk)
 export let tsNodeRun = false;
