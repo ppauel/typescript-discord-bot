@@ -1,7 +1,7 @@
 import { PermissionsBitField } from 'discord.js';
-import { getPingButton } from '../../features/ping';
-import { t, localization } from '../../i18n';
 import { ChatInputCommand } from '../../Client';
+import { getPingButton } from '../../features/ping';
+import { localization, t } from '../../i18n';
 
 // Locale Namespace
 const ns = 'ping';

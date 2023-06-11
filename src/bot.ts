@@ -47,6 +47,6 @@ const client = new Client({
 
     // Skip if no-deployment flag is set, else deploys commands
     if (!process.argv.includes('--no-deployment')) {
-        await client.deploy();
+        await client.deploy(process.env.GuildId);
     }
 })();

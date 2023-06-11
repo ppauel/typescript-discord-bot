@@ -7,6 +7,7 @@ import {
     ClientOptions,
     Collection,
     Interaction as DInteraction,
+    DiscordAPIError,
     DiscordjsError,
     DiscordjsErrorCodes,
     Events,
@@ -185,11 +186,6 @@ export class ExtendedClient extends Client {
     readonly splitCustomIDOn: string;
 
     /**
-     * Should bot push guild specific commands at start up
-     */
-    readonly useGuildCommands: boolean;
-
-    /**
      * Checks if the init function has run
      */
     private hasInitRun = false;
@@ -212,7 +208,6 @@ export class ExtendedClient extends Client {
             replyOnError,
             splitCustomID,
             splitCustomIDOn,
-            useGuildCommands,
         } = options;
 
         // MICS configuration
@@ -222,7 +217,6 @@ export class ExtendedClient extends Client {
         this.replyOnError = replyOnError === undefined ? false : replyOnError;
         this.splitCustomID = splitCustomID === undefined ? false : splitCustomID;
         this.splitCustomIDOn = splitCustomIDOn || '_';
-        this.useGuildCommands = useGuildCommands === undefined ? false : useGuildCommands;
 
         this.on(Events.InteractionCreate, onInteractionCreate);
         this.events.set(Events.InteractionCreate, new Event({ name: Events.InteractionCreate, execute: onInteractionCreate }));
@@ -296,34 +290,56 @@ export class ExtendedClient extends Client {
         (this as Mutable<ExtendedClient>).commands = await fileToCollection<ChatInputCommand>(path);
     }
 
-    // TODO: fix spelling
     /**
-	 * Deploy Application Commands to Discord
-	 * @param guild if commands debloys subset of commands that should only be deployed to a spific guild
-	 * @see https://discord.com/developers/docs/interactions/application-commands
-	 */
-    public async deploy(guild?: Snowflake) {
+ * Deploys the slash commands and context menu commands to Discord.
+ * @param guildId - The ID of the guild to deploy guild-specific commands to. If not provided, deploys global commands.
+ */
+    public async deploy(guildId?: Snowflake) {
+    // Check if the token is provided
         if (!this.token) {
             throw new DiscordjsError(DiscordjsErrorCodes.TokenMissing);
         }
 
         console.log('[INFO] Deploying commands...');
-        if (guild === undefined) {
-            // gets chat commands that are global
-            const globalDeploy: RESTPatchAPIApplicationCommandJSONBody[] = this.commands.filter((f) => f.isGlobal).map((m) => m.builder.toJSON());
 
-            // gets context menu commands that are global
-            globalDeploy.concat(this.contextMenus.filter((f) => f.isGlobal).map((m) => m.builder.toJSON()));
+        // Get the global chat input commands and convert them to JSON format
+        const globalDeploy: RESTPatchAPIApplicationCommandJSONBody[] = this.commands.filter((f) => f.isGlobal).map((m) => m.builder.toJSON());
 
-            // Put the JSON API object to the aplicationCommands endPoint
-            const pushedCommands = (await this.rest
-                .put(Routes.applicationCommands(this.user.id), { body: globalDeploy })
-                .catch(console.error)) as ApplicationCommand[];
+        // Get the global context menu commands and convert them to JSON format
+        globalDeploy.concat(this.contextMenus.filter((f) => f.isGlobal).map((m) => m.builder.toJSON()));
 
-            console.log(`[INFO] Deployed ${pushedCommands.length} global command(s)`);
-        }
-        else if (this.useGuildCommands) {
-            /** TODO: Guild commands */
+        // Deploy the global commands by sending a PUT request to the applicationCommands endpoint
+        const pushedCommands = (await this.rest
+            .put(Routes.applicationCommands(this.user.id), { body: globalDeploy })
+            .catch(console.error)) as ApplicationCommand[];
+
+        console.log(`[INFO] Deployed ${pushedCommands.length} global command(s)`);
+
+        // If guildId is provided, deploy guild-specific commands
+        if (guildId !== undefined) {
+        // Get the guild-specific chat input commands and convert them to JSON format
+            const guildDeploy: RESTPatchAPIApplicationCommandJSONBody[] = this.commands.filter((f) => !f.isGlobal).map((m) => m.builder.toJSON());
+            guildDeploy.concat(this.contextMenus.filter((f) => !f.isGlobal).map((m) => m.builder.toJSON()));
+
+            // Deploy the guild-specific commands by sending a PUT request to the applicationGuildCommands endpoint
+            const guildCommands = (await this.rest
+                .put(Routes.applicationGuildCommands(this.user.id, guildId), { body: guildDeploy })
+                .catch((err) => {
+                    if (!(err instanceof DiscordAPIError)) {
+                        console.error(err);
+                        return [];
+                    }
+                    else if (err.code === 50001) {
+                        console.error(`[Error] Bot is Missing Access to deploy guild commands to slected guild(${guildId})`);
+                        return [];
+                    }
+                    else {
+                        console.error(err);
+                        return [];
+                    }
+                })) as ApplicationCommand[];
+
+            console.log(`[INFO] Deployed ${guildCommands.length} guild command(s)`);
         }
     }
 
