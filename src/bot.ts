@@ -1,14 +1,22 @@
+import { FluentResource } from '@fluent/bundle';
 import { GatewayIntentBits as Intents, Locale, Partials } from 'discord.js';
 import { config } from 'dotenv';
+import { readFile } from 'fs';
 import { join } from 'path';
-import { Client } from './Client';
+import { Client } from './Classes/Client';
+import { i18n } from './Classes/i18n';
 import { init } from './i18n';
 
 // Load .env file contents
 config();
 
+readFile(join(__dirname, '../locales', 'global.ftl'), { encoding: 'ascii'})
 // Load locales
 init(join(__dirname, '../locales'), { fallback: Locale.EnglishUS, hasGlobal: true });
+const localize = new i18n({
+    fallbackLocale: Locale.EnglishUS,
+    globalResource: new FluentResource( )
+})
 
 // Initialization (specify intents and partials)
 const client = new Client({
@@ -47,6 +55,6 @@ const client = new Client({
 
     // Skip if no-deployment flag is set, else deploys commands
     if (!process.argv.includes('--no-deployment')) {
-        await client.deploy(process.env.GuildId);
+        await client.deploy(process.env.GUILDID);
     }
 })();

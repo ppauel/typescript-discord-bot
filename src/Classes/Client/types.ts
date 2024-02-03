@@ -1,7 +1,5 @@
 import { ExtendedClient } from './Client';
 
-export type Mutable<T> = { -readonly [P in keyof T]: T[P] };
-
 export type TimeCode = 'd' | 'D' | 't' | 'T' | 'f' | 'F' | 'R';
 
 export declare const TimeFormat: {
