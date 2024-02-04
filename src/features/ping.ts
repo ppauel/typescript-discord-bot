@@ -1,11 +1,11 @@
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, Locale, MessageActionRowComponentBuilder } from 'discord.js';
-import { t } from '../i18n';
+import { localize } from '../bot';
 
 // Example button (related to the /ping command)
 export function getPingButton(locale:Locale) {
     const pingButton = new ButtonBuilder()
         .setCustomId('ping')
-        .setLabel(t({ locale, key:'button', ns: 'ping' }))
+        .setLabel(localize.t('button', 'ping', locale))
         .setStyle(ButtonStyle.Primary)
         .setDisabled(false)
         .setEmoji('🏓');

@@ -1,21 +1,16 @@
 import { FluentResource } from '@fluent/bundle';
 import { GatewayIntentBits as Intents, Locale, Partials } from 'discord.js';
-import { config } from 'dotenv';
-import { readFile } from 'fs';
-import { join } from 'path';
+import { readFileSync } from 'fs';
 import { Client } from './Classes/Client';
 import { i18n } from './Classes/i18n';
-import { init } from './i18n';
+import * as commands from './commands';
+import * as events from './events';
+import { buttons, modals, selectMenus } from './interactions';
 
-// Load .env file contents
-config();
-
-readFile(join(__dirname, '../locales', 'global.ftl'), { encoding: 'ascii'})
 // Load locales
-init(join(__dirname, '../locales'), { fallback: Locale.EnglishUS, hasGlobal: true });
-const localize = new i18n({
+export const localize = new i18n({
     fallbackLocale: Locale.EnglishUS,
-    globalResource: new FluentResource( )
+    globalResource: new FluentResource(readFileSync('../locales/global.ftl', {encoding: 'utf-8'}))
 })
 
 // Initialization (specify intents and partials)
@@ -41,20 +36,30 @@ const client = new Client({
     useGuildCommands: false,
 });
 
-(async function start() {
-    await client.init({
-        eventPath: join(__dirname, 'events'),
-        commandPath: join(__dirname, 'commands'),
-        contextMenuPath: join(__dirname, 'context_menus'),
-        buttonPath: join(__dirname, 'interactions', 'buttons'),
-        selectMenuPath: join(__dirname, 'interactions', 'select_menus'),
-        modalPath: join(__dirname, 'interactions', 'modals'),
-    });
+for (const event of Object.values(events)) {
+    client.events.add(event)
+}
 
-    await client.login(process.env.TOKEN);
+for (const command of Object.values(commands)) {
+    client.commands.add(command);
+}
 
-    // Skip if no-deployment flag is set, else deploys commands
+for (const button of Object.values(buttons)) {
+    client.interactions.addButton(button)
+}
+
+for (const modal of Object.values(modals)) {
+    client.interactions.addButton(modal)
+}
+
+for (const selectMenu of Object.values(selectMenus)) {
+    client.interactions.addButton(selectMenu)
+}
+
+client.login(process.env.TOKEN)
+.then(() => {
+    // Skip if no-deployment flag is set, else deploys command
     if (!process.argv.includes('--no-deployment')) {
-        await client.deploy(process.env.GUILDID);
+        client.commands.register();
     }
-})();
+});

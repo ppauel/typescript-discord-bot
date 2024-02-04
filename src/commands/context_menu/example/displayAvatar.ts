@@ -1,7 +1,7 @@
 /* eslint-disable no-inline-comments */
 import { ApplicationCommandType, EmbedBuilder, GuildMember, UserContextMenuCommandInteraction } from 'discord.js';
-import { t, localization } from '../../i18n';
-import { ContextMenuCommand, ExtraColor } from '../../Client';
+import { ContextMenuCommand, ExtraColor } from '../../../Classes/Client';
+import { localize } from '../../../bot';
 
 // Locale Namespace
 const ns = 'avatar';
@@ -10,21 +10,15 @@ const ns = 'avatar';
 
 export default new ContextMenuCommand()
     .setBuilder((builder) => builder
-        .setName(t({ key: 'command-name', ns }))
-        .setNameLocalizations(localization('command-name', ns))
+        .setName('Display Avatar')
+        .setNameLocalizations(localize.DiscordlocalizationRecord('command-name', ns))
         .setType(ApplicationCommandType.User) // Specify the context menu type
         .setDMPermission(false))
-    .setGlobal(true)
     .setExecute(async (interaction: UserContextMenuCommandInteraction) => {
         if (!interaction.inGuild()) return;
         const member = interaction.targetMember as GuildMember,
             embed = new EmbedBuilder()
-                .setTitle(t({
-                    locale: interaction.guildLocale,
-                    key: 'embed',
-                    ns,
-                    args: { 'username': member.displayName },
-                }))
+                .setTitle(localize.t('embed',ns,interaction.locale,{'username': member.displayName }))
                 .setImage(member.displayAvatarURL({ size:4096 }))
                 .setColor(ExtraColor.EmbedGray)
                 .setFooter({ text:`ID: ${member.id}` });

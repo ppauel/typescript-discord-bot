@@ -1,13 +1,17 @@
 import {
-    AutocompleteInteraction, ChatInputCommandInteraction, Collection, ContextMenuCommandInteraction, REST
+    AutocompleteInteraction, ChatInputCommandInteraction, Collection, ContextMenuCommandInteraction,
+    REST,
+    RESTPostAPIChatInputApplicationCommandsJSONBody,
+    RESTPostAPIContextMenuApplicationCommandsJSONBody,
+    Snowflake
 } from 'discord.js';
 import assert from 'node:assert/strict';
-import { ExtendedClient } from '../../Client';
-import { ChatInputCommand, ContextMenuCommand } from '../Commands/Command';
+import { Client } from '../../Client';
+import { ChatInputCommand, ContextMenuCommand } from '../Commands';
 
 
 export class CommandHandler {
-	protected readonly client: ExtendedClient;
+	protected readonly client: Client;
 
 	protected readonly rest: REST;
 
@@ -56,19 +60,52 @@ export class CommandHandler {
 	 * Deploy Application Commands to Discord
 	 * @see https://discord.com/developers/docs/interactions/application-commands
 	 */
-	async register() {
+	register() {
 		if (!this.client.loggedIn) throw Error('Client cannot register commands before init');
 
-		this.client.emit('debug', 'Deploying commands...');
+		console.log('Deploying commands...');
+        return Promise.all([
+            // Gloabl commands deploy
+            async () => {
+                const globalCommandData = this.chatCommands.filter((f) => f.isGlobal === true).map((m) => m.toJSON())
+			        .concat(this.contextCommands.filter((f) => f.isGlobal === true).map((m) => m.toJSON()));
+                const sentCommands = await this.client.application.commands.set(globalCommandData)
+                console.log(`Deployed ${sentCommands.size} global command(s)`);
+                return globalCommandData;
+            },
+            // Guild commands deploy
+            async () => {
+                const guildCommandData = new Collection<Snowflake,(RESTPostAPIChatInputApplicationCommandsJSONBody | RESTPostAPIContextMenuApplicationCommandsJSONBody)[]>()
+                // Get guild chat commands menues
+                this.chatCommands.filter((f) => f.isGlobal === false).map((m) => {
+                    const json = m.toJSON();
+                    m.guildIds.forEach((guildId) => {
+                        if(guildCommandData.has(guildId)) {
+                            guildCommandData.get(guildId).concat(json)
+                        }
+                        else guildCommandData.set(guildId, [json])
+                    })
 
-		const commandData = this.chatCommands.filter((f) => f.isGlobal === true).map((m) => m.toJSON())
-			.concat(this.contextCommands.filter((f) => f.isGlobal === true).map((m) => m.toJSON()));
+                })
+                // Get guild context menues
+                this.contextCommands.filter((f) => f.isGlobal === false).map((m) => {
+                    const json = m.toJSON();
+                    m.guildIds.forEach((guildId) => {
+                        if(guildCommandData.has(guildId)) {
+                            guildCommandData.get(guildId).concat(json)
+                        }
+                        else guildCommandData.set(guildId, [json])
+                    })
+                })
 
-		const sentCommands = await this.client.application.commands.set(commandData);
-
-		this.client.emit('debug', `Deployed ${sentCommands.size} global command(s)`);
-
-		return sentCommands;
+                // Deploys commands buy guild
+                for (const [guildIds, json] of guildCommandData) {
+                    await this.client.application.commands.set(json,guildIds)
+                }
+                console.log(`Deployed commands to ${guildCommandData.size} guilds`);
+                return guildCommandData;
+            }
+        ]);
 	}
 
 	runChatCommand(interaction: ChatInputCommandInteraction) {
@@ -83,7 +120,7 @@ export class CommandHandler {
 		return this.contextCommands.get(interaction.commandName).execute(interaction);
 	}
 
-	constructor(client: ExtendedClient) {
+	constructor(client: Client) {
 		this.client = client;
 		this.rest = client.rest;
 	}

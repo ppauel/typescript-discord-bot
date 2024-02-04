@@ -1,9 +1,10 @@
 import { Events } from 'discord.js';
-import { Client, Event } from '../Client';
+import { Client, Event } from '../Classes/Client';
 
-export default new Event()
-    .setName(Events.ClientReady)
-    .setOnce(true)
-    .setExecute(async (client:Client) => {
+export default new Event({
+    name: Events.ClientReady,
+    once: true,
+    execute: async (client:Client) => {
         console.log(`\nReady! Logged in as ${client.user?.tag} (${client.user?.id})\n`);
-    });
+    }
+});

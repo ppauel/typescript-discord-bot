@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "prestart": "npm run build",
-    "start": "node ./dist/bot.js",
+    "start": "node --env-file=.env ./dist/bot.js",
     "build": "tsc --project tsconfig.json"
   },
   "repository": {
@@ -21,8 +21,7 @@
   "homepage": "https://github.com/ppauel/typescript-discord-bot#readme",
   "dependencies": {
     "@fluent/bundle": "^0.18.0",
-    "discord.js": "^14.14.1",
-    "dotenv": "^16.4.1"
+    "discord.js": "^14.14.1"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.0.0",

@@ -1,6 +1,7 @@
 import {
-    DiscordAPIError, Interaction, RepliableInteraction,
+    DiscordAPIError, Events, Interaction, RepliableInteraction,
 } from 'discord.js';
+import { Event } from '../Classes/Client';
 
 /**
  * Sends an error message in response to an interaction.
@@ -35,43 +36,32 @@ async function replyError(error: unknown, interaction: RepliableInteraction) {
  * @param {Interaction} interaction - The interaction object.
  * @returns {Promise<void>}
  */
-export async function onInteractionCreate(interaction: Interaction) {
-    let interactionName: string;
+async function onInteractionCreate(interaction: Interaction): Promise<void> {
     const { client } = interaction;
-
     try {
         if (interaction.isChatInputCommand()) {
             // If the interaction is a chat input command, execute the corresponding command
-            await client.commands.get(interaction.commandName)?.execute(interaction);
+            await client.commands.runChatCommand(interaction);
         }
         else if (interaction.isContextMenuCommand()) {
             // If the interaction is a context menu command, execute the corresponding command
-            await client.contextMenus.get(interaction.commandName)?.execute(interaction);
+            await client.commands.runContextCommand(interaction);
         }
         else if (interaction.isAutocomplete()) {
             // If the interaction is an autocomplete request, handle autocomplete
-            const autocomplete = client.commands.get(interaction.commandName)?.autocomplete;
-            if (!autocomplete) {
-                console.warn(`[Warning] Autocomplete for ${interactionName} was not set up`);
-            }
-            else {
-                await autocomplete(interaction);
-            }
+            await client.commands.runAutocomplete(interaction);
         }
         else if (interaction.isAnySelectMenu()) {
             // If the interaction is a select menu interaction, execute the corresponding select menu handler
-            interactionName = client.splitCustomID ? interaction.customId.split(client.splitCustomIDOn)[0] : interaction.customId;
-            await client.selectMenus.get(interactionName)?.execute(interaction);
+            await client.interactions.runSelectMenus(interaction);
         }
         else if (interaction.isButton()) {
             // If the interaction is a button interaction, execute the corresponding button handler
-            interactionName = client.splitCustomID ? interaction.customId.split(client.splitCustomIDOn)[0] : interaction.customId;
-            await client.buttons.get(interactionName)?.execute(interaction);
+            await client.interactions.runButton(interaction);
         }
         else if (interaction.isModalSubmit()) {
             // If the interaction is a modal submit interaction, execute the corresponding modal submit handler
-            interactionName = client.splitCustomID ? interaction.customId.split(client.splitCustomIDOn)[0] : interaction.customId;
-            await client.modals.get(interactionName)?.execute(interaction);
+            await client.interactions.runModal(interaction);
         }
     }
     catch (error) {
@@ -85,3 +75,8 @@ export async function onInteractionCreate(interaction: Interaction) {
         }
     }
 }
+
+export default new Event({
+    name: Events.InteractionCreate,
+    execute: onInteractionCreate
+})
