@@ -2,14 +2,14 @@ import { Collection } from '@discordjs/collection';
 import {
     FluentBundle,
     FluentResource
-} from "@fluent/bundle";
+} from '@fluent/bundle';
 import { readFile, readdir } from 'fs/promises';
 import { join } from 'path';
 import { i18nOptions } from './interface';
-import { LocaleBundle } from "./locale";
+import { LocaleBundle } from './locale';
 import {
     Locale, LocalizationMap, fluentVariables
-} from "./types";
+} from './types';
 
 export class i18n {
     /**
@@ -28,7 +28,7 @@ export class i18n {
     private locales = new Collection<Locale, LocaleBundle>();
 
     constructor(options?: i18nOptions) {
-        const {fallbackLocale, globalResource} = options
+        const { fallbackLocale, globalResource } = options;
         if (fallbackLocale) this._fallbackLocale = fallbackLocale;
         if (globalResource) this.global = globalResource;
     }
@@ -63,7 +63,7 @@ export class i18n {
         const files = (await readdir(filePath))
             .filter((file) => file.endsWith('.ftl'));
 
-        const local = new LocaleBundle(this,locale);
+        const local = new LocaleBundle(this, locale);
 
         // for each of the files creates a new FluentBundle
         for (const file of files) {
@@ -106,20 +106,24 @@ export class i18n {
         let returnLocale:Locale;
 
         // Return requested locale
-        if (hasLocale) 
+        if (hasLocale) {
             returnLocale = locale;
+        }
         
         // Return fallback locale
-        else if (this._fallbackLocale && hasFallbackLocale) 
+        else if (this._fallbackLocale && hasFallbackLocale) {
             returnLocale = this._fallbackLocale;
+        }
         
         // Throw if fallback is not set
-        else if (!this._fallbackLocale) 
+        else if (!this._fallbackLocale) {
             throw Error('Fallback Locale not set');
+        }
         
         // Throw if fallback is present but not added
-        else 
+        else {
             throw Error('Fallback Locale not added to i18n');
+        }
         
 
         return this.locales.get(returnLocale);
@@ -135,7 +139,7 @@ export class i18n {
      * @returns The traslated and formated string
      */
     t(key:string, bundleName:string, locale:Locale, options?: fluentVariables) {
-        return this.getLocale(locale).t(key,bundleName,options);
+        return this.getLocale(locale).t(key, bundleName, options);
     }
 
     /**
@@ -147,8 +151,9 @@ export class i18n {
      */
     DiscordlocalizationRecord(key: string, bundleName: string): LocalizationMap {
         const res: LocalizationMap = {};
-        for (const [ locale, obj ] of this.locales) 
+        for (const [ locale, obj ] of this.locales) {
             res[locale] = obj.t(key, bundleName);
+        }
         return res;
     }
 }

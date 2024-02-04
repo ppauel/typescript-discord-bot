@@ -3,23 +3,23 @@ import { ExtendedClient } from './Client';
 export type TimeCode = 'd' | 'D' | 't' | 'T' | 'f' | 'F' | 'R';
 
 export declare const TimeFormat: {
-	ShortDate: 'd';
-	LongDatez: 'D';
-	ShortTime: 't';
-	LongTime: 'T';
-	ShortDateTime: 'f';
-	LongDateTime: 'F';
-	RelativeTime: 'R';
+    ShortDate: 'd';
+    LongDatez: 'D';
+    ShortTime: 't';
+    LongTime: 'T';
+    ShortDateTime: 'f';
+    LongDateTime: 'F';
+    RelativeTime: 'R';
 };
 
 export declare const ExtraColor: {
-	EmbedGray: 0x2b2d31;
+    EmbedGray: 0x2b2d31;
 };
 
 declare global {
-	interface Date {
-		toDiscordString(format?: TimeCode): string;
-	}
+    interface Date {
+        toDiscordString(format?: TimeCode): string;
+    }
 }
 
 // eslint-disable-next-line func-names
@@ -30,42 +30,41 @@ Date.prototype.toDiscordString = function(format?: TimeCode) {
 };
 
 // TypeScript or JavaScript environment (thanks to https://github.com/stijnvdkolk)
-// eslint-disable-next-line import/no-mutable-exports
 export let tsNodeRun = false;
 try {
-	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-	// @ts-ignore
-	if (process[Symbol.for('ts-node.register.instance')]) {
-		tsNodeRun = true;
-	}
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    if (process[Symbol.for('ts-node.register.instance')]) {
+        tsNodeRun = true;
+    }
 }
 catch (e) {
-	/* empty */
+    /* empty */
 }
 
 declare module 'discord.js' {
-	interface BaseInteraction {
-		client: ExtendedClient;
-	}
-	interface Component {
-		client: ExtendedClient;
-	}
-	interface Message {
-		client: ExtendedClient;
-	}
-	interface BaseChannel {
-		client: ExtendedClient;
-	}
-	interface Role {
-		client: ExtendedClient;
-	}
-	interface Guild {
-		client: ExtendedClient;
-	}
-	interface User {
-		client: ExtendedClient;
-	}
-	interface GuildMember {
-		client: ExtendedClient;
-	}
+    interface BaseInteraction {
+        client: ExtendedClient;
+    }
+    interface Component {
+        client: ExtendedClient;
+    }
+    interface Message {
+        client: ExtendedClient;
+    }
+    interface BaseChannel {
+        client: ExtendedClient;
+    }
+    interface Role {
+        client: ExtendedClient;
+    }
+    interface Guild {
+        client: ExtendedClient;
+    }
+    interface User {
+        client: ExtendedClient;
+    }
+    interface GuildMember {
+        client: ExtendedClient;
+    }
 }

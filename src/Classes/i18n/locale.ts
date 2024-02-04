@@ -35,7 +35,7 @@ export class LocaleBundle {
     constructor(i18n: i18n, locale:Locale) {
         this.locale = locale;
         this.i18n = i18n;
-        if(this.locale === i18n.fallbacklLocale) this.isFallback = true;
+        if (this.locale === i18n.fallbacklLocale) this.isFallback = true;
     }
 
     /**
@@ -55,7 +55,7 @@ export class LocaleBundle {
      * @returns The LocaleBundle
      */
     setCommonBundle(bundle:FluentBundle) {
-        this.bundles.set(common,bundle);
+        this.bundles.set(common, bundle);
         return this;
     }
 
@@ -71,46 +71,50 @@ export class LocaleBundle {
         // Checks for the bundle with the provided name
         if (this.has(bundleName)) {
             bundle = this.get(bundleName);
-            if(bundle.hasMessage(key)) 
+            if (bundle.hasMessage(key)) {
                 return {
                     bundle,
                     message: bundle.getMessage(key)
                 };
+            }
             
         }
 
         // Checks comman file of this Locale
-        if(this.has(common)){
+        if (this.has(common)) {
             bundle = this.get(common);
-            if(bundle.hasMessage(key)) 
+            if (bundle.hasMessage(key)) {
                 return {
                     bundle,
                     message: bundle.getMessage(key)
                 };
+            }
             
         }
 
         const fallback = this.i18n.getFallbackLocale();
 
         // Checks if the fallback has a bundle of the fallback locale
-        if(fallback.has(bundleName)) {
+        if (fallback.has(bundleName)) {
             bundle = fallback.get(bundleName);
-            if(bundle.hasMessage(key)) 
+            if (bundle.hasMessage(key)) {
                 return {
                     bundle,
                     message: bundle.getMessage(key)
                 };
+            }
             
         }
 
         // Checks fallback common file
-        if(fallback.has(common)){
+        if (fallback.has(common)) {
             bundle = fallback.get(common);
-            if(bundle.hasMessage(key)) 
+            if (bundle.hasMessage(key)) {
                 return {
                     bundle,
                     message: bundle.getMessage(key)
                 };
+            }
             
         }
         throw Error(`${key} not found in common in fallback locale`);
@@ -144,7 +148,7 @@ export class LocaleBundle {
     t(key:string, bundleName:string, options?: fluentVariables) {
 
         // finds the message and retuens it with the budle where it was found
-        const { bundle, message } = this.getMessageBundle(key,bundleName);
+        const { bundle, message } = this.getMessageBundle(key, bundleName);
 
         const errors: Error[] = [];
 
@@ -152,8 +156,9 @@ export class LocaleBundle {
         const res = bundle.formatPattern(message.value, options, errors);
 
         // Returns if any errors occured
-        if (errors.length) 
+        if (errors.length) {
             throw Error(`i18n - Errors with ${key}`, { cause: errors });
+        }
         
         return res;
     }

@@ -1,4 +1,4 @@
-import { FluentVariable } from "@fluent/bundle";
+import { FluentVariable } from '@fluent/bundle';
 
 export type fluentVariables = Record<string, FluentVariable>;
 

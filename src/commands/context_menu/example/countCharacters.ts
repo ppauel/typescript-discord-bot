@@ -23,8 +23,9 @@ export default new ContextMenuCommand()
                 ns,
                 interaction.locale,
                 {
-                    'username':message.author.username,
-                    'length':length.toString(),
+                    'username': message.author.username,
+                    'length': length.toString()
                 }),
-            ephemeral: true });
+            ephemeral: true 
+        });
     });

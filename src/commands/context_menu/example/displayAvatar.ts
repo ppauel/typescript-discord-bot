@@ -1,5 +1,7 @@
 /* eslint-disable no-inline-comments */
-import { ApplicationCommandType, EmbedBuilder, GuildMember, UserContextMenuCommandInteraction } from 'discord.js';
+import {
+    ApplicationCommandType, EmbedBuilder, GuildMember, UserContextMenuCommandInteraction
+} from 'discord.js';
 import { ContextMenuCommand, ExtraColor } from '../../../Classes/Client';
 import { localize } from '../../../bot';
 
@@ -18,9 +20,9 @@ export default new ContextMenuCommand()
         if (!interaction.inGuild()) return;
         const member = interaction.targetMember as GuildMember,
             embed = new EmbedBuilder()
-                .setTitle(localize.t('embed',ns,interaction.locale,{'username': member.displayName }))
-                .setImage(member.displayAvatarURL({ size:4096 }))
+                .setTitle(localize.t('embed', ns, interaction.locale, { 'username': member.displayName }))
+                .setImage(member.displayAvatarURL({ size: 4096 }))
                 .setColor(ExtraColor.EmbedGray)
-                .setFooter({ text:`ID: ${member.id}` });
-        return interaction.reply({ embeds:[embed] });
+                .setFooter({ text: `ID: ${member.id}` });
+        return interaction.reply({ embeds: [embed] });
     });

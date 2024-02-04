@@ -1,4 +1,6 @@
-import { ActionRowBuilder, MessageActionRowComponentBuilder, PermissionsBitField, SlashCommandBuilder, StringSelectMenuBuilder, StringSelectMenuOptionBuilder } from 'discord.js';
+import {
+    ActionRowBuilder, MessageActionRowComponentBuilder, PermissionsBitField, SlashCommandBuilder, StringSelectMenuBuilder, StringSelectMenuOptionBuilder
+} from 'discord.js';
 import { ChatInputCommand } from '../../../Classes/Client';
 import { localize } from '../../../bot';
 
@@ -20,33 +22,33 @@ export default new ChatInputCommand({
             .setName('string')
             .setDescription('Example of a String Select Menu')
             .setNameLocalizations(localize.DiscordlocalizationRecord('menu-string-name', ns))
-            .setDescriptionLocalizations(localize.DiscordlocalizationRecord('menu-string-description', ns))),
+            .setDescriptionLocalizations(localize.DiscordlocalizationRecord('menu-string-description', ns)))
 })
-.setExecute(async (interaction) => {
+    .setExecute(async (interaction) => {
         let row:ActionRowBuilder<MessageActionRowComponentBuilder>;
         const locale = localize.getLocale(interaction.locale);
         switch (interaction.options.getSubcommand(true)) {
-        case 'string':
-            row = new ActionRowBuilder<MessageActionRowComponentBuilder>()
-                .addComponents(
-                    new StringSelectMenuBuilder()
-                        .setCustomId('string')
-                        .setPlaceholder(locale.t('menu-string-placeholder', ns ))
-                        .addOptions(
-                            new StringSelectMenuOptionBuilder()
-                                .setLabel(locale.t('menu-string-first-label', ns ))
-                                .setDescription(locale.t('menu-string-first-description', ns ))
-                                .setValue('first_option')
-                                .setEmoji('1️⃣'),
-                            new StringSelectMenuOptionBuilder()
-                                .setLabel(locale.t('menu-string-second-label', ns ))
-                                .setDescription(locale.t('menu-string-second-description', ns ))
-                                .setValue('second_option')
-                                .setEmoji('2️⃣'),
-                        ));
+            case 'string':
+                row = new ActionRowBuilder<MessageActionRowComponentBuilder>()
+                    .addComponents(
+                        new StringSelectMenuBuilder()
+                            .setCustomId('string')
+                            .setPlaceholder(locale.t('menu-string-placeholder', ns))
+                            .addOptions(
+                                new StringSelectMenuOptionBuilder()
+                                    .setLabel(locale.t('menu-string-first-label', ns))
+                                    .setDescription(locale.t('menu-string-first-description', ns))
+                                    .setValue('first_option')
+                                    .setEmoji('1️⃣'),
+                                new StringSelectMenuOptionBuilder()
+                                    .setLabel(locale.t('menu-string-second-label', ns))
+                                    .setDescription(locale.t('menu-string-second-description', ns))
+                                    .setValue('second_option')
+                                    .setEmoji('2️⃣')
+                            ));
 
-            return interaction.reply({ components: [row], ephemeral:true });
-        default:
-            break;
+                return interaction.reply({ components: [row], ephemeral: true });
+            default:
+                break;
         }
     });

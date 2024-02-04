@@ -1,6 +1,6 @@
 import { EmbedBuilder, ModalSubmitInteraction } from 'discord.js';
-import { ExtraColor, Interaction } from '../../../Client';
-import { t } from '../../../i18n';
+import { ExtraColor, Interaction } from '../../../Classes/Client';
+import { localize } from '../../../bot';
 
 const ns = 'modal';
 
@@ -8,21 +8,21 @@ const ns = 'modal';
 export default new Interaction<ModalSubmitInteraction>()
     .setName('modal')
     .setExecute(async (interaction) => {
-        const locale = interaction.locale;
+        const locale = localize.getLocale(interaction.locale);
         interaction.reply({
-            embeds:[new EmbedBuilder()
-                .setTitle(t({ locale, key: 'embed-title', ns }))
+            embeds: [new EmbedBuilder()
+                .setTitle(locale.t('embed-title', ns))
                 .setColor(ExtraColor.EmbedGray)
                 .setFields(
                     {
-                        name: t({ locale, key: 'embed-short', ns }),
-                        value: interaction.fields.getTextInputValue('short'),
+                        name: locale.t('embed-short', ns),
+                        value: interaction.fields.getTextInputValue('short')
                     },
                     {
-                        name: t({ locale, key: 'embed-paragraph', ns }),
-                        value: interaction.fields.getTextInputValue('paragraph') || '`N/A`',
-                    },
+                        name: locale.t('embed-paragraph', ns),
+                        value: interaction.fields.getTextInputValue('paragraph') || '`N/A`'
+                    }
                 )],
-            ephemeral:true,
+            ephemeral: true
         });
     });

@@ -1,5 +1,5 @@
 import {
-    DiscordAPIError, Events, Interaction, RepliableInteraction,
+    DiscordAPIError, Events, Interaction, RepliableInteraction
 } from 'discord.js';
 import { Event } from '../Classes/Client';
 
@@ -33,10 +33,9 @@ async function replyError(error: unknown, interaction: RepliableInteraction) {
 
 /**
  * Handles the creation of a new interaction.
- * @param {Interaction} interaction - The interaction object.
- * @returns {Promise<void>}
+ * @param interaction - The interaction object.
  */
-async function onInteractionCreate(interaction: Interaction): Promise<void> {
+async function onInteractionCreate(interaction: Interaction) {
     const { client } = interaction;
     try {
         if (interaction.isChatInputCommand()) {
@@ -79,4 +78,4 @@ async function onInteractionCreate(interaction: Interaction): Promise<void> {
 export default new Event({
     name: Events.InteractionCreate,
     execute: onInteractionCreate
-})
+});

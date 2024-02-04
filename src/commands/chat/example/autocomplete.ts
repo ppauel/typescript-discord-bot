@@ -5,6 +5,11 @@ import { localize } from '../../../bot';
 
 const ns = 'auto';
 
+/**
+ * get arry of localized fruit names
+ * @param locale the requested local
+ * @returns string array of friut names
+ */
 function fruit(locale:LocaleBundle) {
     return [
         locale.t('oranges', ns),
@@ -38,15 +43,13 @@ export default new ChatInputCommand()
                 'reply',
                 ns,
                 interaction.locale,
-                {
-                    fruit: interaction.options.getString('option', true)
-                }),
-            ephemeral:true,
-        })
+                { fruit: interaction.options.getString('option', true) }),
+            ephemeral: true
+        });
     })
     .setAutocomplete(async (interaction) => {
         const focusedOption = interaction.options.getFocused(true);
-        const locale = localize.getLocale(interaction.locale)
+        const locale = localize.getLocale(interaction.locale);
         let choices:string[] | undefined = undefined;
 
         if (focusedOption.name == 'option') {
@@ -56,6 +59,6 @@ export default new ChatInputCommand()
         if (!choices) return;
         const filtered = choices.filter(choice => choice.toLowerCase().startsWith(focusedOption.value.toLowerCase()));
         interaction.respond(
-            filtered.map(choice => ({ name: choice, value:choice })).slice(0, 14),
+            filtered.map(choice => ({ name: choice, value: choice })).slice(0, 14)
         );
     });

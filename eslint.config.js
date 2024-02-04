@@ -1,28 +1,23 @@
 import { FlatCompat } from '@eslint/eslintrc';
 import stylistic from '@stylistic/eslint-plugin';
-import tsParser from '@typescript-eslint/parser';
 import jsdoc from 'eslint-plugin-jsdoc';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
-const compat = new FlatCompat({ resolvePluginsRelativeTo: './' });
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+const compat = new FlatCompat({ resolvePluginsRelativeTo: __dirname });
 
 export default [
-    compat.extends('plugin:@typescript-eslint/recommended'),
+    ...compat.env({
+        'es2021': true,
+        'node': true
+    }),
+    ...compat.extends('plugin:@typescript-eslint/recommended'),
     jsdoc.configs['flat/recommended-typescript'],
     {
-        files: [ '**/*.ts', '**/*.js' ],
-        ignores: ['**/dist/*'],
-        languageOptions: {
-            parser: tsParser,
-            parserOptions: {
-                ecmaFeatures: { modules: true },
-                ecmaVersion: 'latest',
-                project: './tsconfig.json'
-            }
-        },
-        plugins: {
-            '@stylistic': stylistic,
-            jsdoc: jsdoc
-        },
+        plugins: { '@stylistic': stylistic },
         rules: {
             '@stylistic/arrow-spacing': [
                 'warn',
@@ -127,7 +122,7 @@ export default [
             ],
             'no-await-in-loop': 'off',
             'no-bitwise': 'off',
-            'no-console': 'error',
+            'no-console': 'off',
             'no-continue': 'off',
             'no-tabs': 'off',
             'no-param-reassign': 0,

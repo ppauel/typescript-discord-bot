@@ -1,7 +1,14 @@
-import { ActionRowBuilder, ButtonBuilder, ButtonStyle, Locale, MessageActionRowComponentBuilder } from 'discord.js';
+import {
+    ActionRowBuilder, ButtonBuilder, ButtonStyle, Locale, MessageActionRowComponentBuilder
+} from 'discord.js';
 import { localize } from '../bot';
 
 // Example button (related to the /ping command)
+/**
+ * Creates the ping response button
+ * @param locale the locale of the interation where the button was requested
+ * @returns Button builder object
+ */
 export function getPingButton(locale:Locale) {
     const pingButton = new ButtonBuilder()
         .setCustomId('ping')

@@ -15,7 +15,9 @@ export default new ChatInputCommand({
         .setDescriptionLocalizations(localize.DiscordlocalizationRecord('command-description', ns))
         .setDMPermission(true)
         .setDefaultMemberPermissions(PermissionsBitField.Flags.SendMessages),
-    execute:async (interaction) => {
-        return interaction.reply({ content: ` ${localize.t('reply', ns, interaction.locale)} 🏓`, components: [getPingButton(interaction.locale)], ephemeral: true });
+    execute: async (interaction) => {
+        return interaction.reply({
+            content: ` ${localize.t('reply', ns, interaction.locale)} 🏓`, components: [getPingButton(interaction.locale)], ephemeral: true 
+        });
     }
 });
