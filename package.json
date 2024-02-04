@@ -4,6 +4,9 @@
   "description": "A TypeScript Discord bot template",
   "main": "dist/bot.js",
   "type": "module",
+  "engines": {
+    "node": ">=20.6.0"
+  },
   "scripts": {
     "prestart": "npm run build",
     "start": "node --env-file=.env ./dist/bot.js",
@@ -31,7 +34,6 @@
     "@typescript-eslint/parser": "^6.19.1",
     "eslint": "^8.56.0",
     "eslint-plugin-jsdoc": "^48.0.4",
-    "eslint-plugin-markdown": "^3.0.1",
     "typescript": "^5.3.3"
   }
 }
