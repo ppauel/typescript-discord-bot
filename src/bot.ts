@@ -53,11 +53,11 @@ for (const button of Object.values(buttons)) {
 }
 
 for (const modal of Object.values(modals)) {
-    client.interactions.addButton(modal);
+    client.interactions.addModal(modal);
 }
 
 for (const selectMenu of Object.values(selectMenus)) {
-    client.interactions.addButton(selectMenu);
+    client.interactions.addSelectMenu(selectMenu);
 }
 
 client.login(process.env.TOKEN)
