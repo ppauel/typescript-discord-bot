@@ -1,7 +1,8 @@
 import { Client } from 'discord.js';
 import {
     CommandHandler, EventHandler, InteractionHandler
-} from './handlers';
+} from '../Handlers';
+import onInteractionCreate from './interactionCreate';
 import { ExtendedClientOptions } from './interfaces';
 
 /**
@@ -33,6 +34,9 @@ export class ExtendedClient extends Client<true> {
 
     // The sting that is used to split the custom id
     readonly splitCustomIDOn: string;
+
+    // shoult the bot use the provided InteractionCreate event 
+    readonly useDefaultInterctionEvent: boolean = true;
 
     // Should bot push guild specific commands at start up
     readonly useGuildCommands: boolean;
@@ -74,10 +78,18 @@ export class ExtendedClient extends Client<true> {
             replyOnError,
             splitCustomID,
             splitCustomIDOn,
-            useGuildCommands 
+            useDefaultInterctionEvent,
+            useGuildCommands
         } = options;
 
         // Misc configuration
+
+        if (useDefaultInterctionEvent) {
+            this.events.add(onInteractionCreate);
+        }
+        else {
+            this.useDefaultInterctionEvent = false;
+        }
         this.receiveMessageComponents = receiveMessageComponents === undefined ? false : receiveMessageComponents;
         this.receiveModals = receiveModals === undefined ? false : receiveModals;
         this.receiveAutocomplete = receiveAutocomplete === undefined ? false : receiveAutocomplete;
@@ -93,17 +105,9 @@ export class ExtendedClient extends Client<true> {
      * @returns string response
      */
     public async login(token?: string) {
-        this.emit('debug', 'Start of login called');
-
-        if (!this._hasInitRun) {
-            throw Error('[ERROR] client.init() has not been completed');
-        }
-
         if (!token) {
             throw new Error('[ERROR] Missing token');
         }
-
-        this.emit('debug', 'Initializing login');
 
         return super.login(token);
     }

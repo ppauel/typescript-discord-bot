@@ -1,4 +1,5 @@
 import {
+    ApplicationCommandType,
     AutocompleteInteraction, ChatInputCommandInteraction, SlashCommandBuilder, SlashCommandSubcommandsOnlyBuilder
 } from 'discord.js';
 import { BaseCommand } from './BaseCommand';
@@ -22,6 +23,10 @@ export class ChatInputCommand extends BaseCommand<SlashCommandBuilder | SlashCom
         this._autocomplete = autocomplete;
     }
 
+    get type() {
+        return ApplicationCommandType.ChatInput;
+    }
+    
     /**
      * Set the command builder method
      * @param input Slah command builder or callback

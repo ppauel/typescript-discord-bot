@@ -1,46 +1,58 @@
 import {
     AnySelectMenuInteraction, ButtonInteraction, Collection, ModalSubmitInteraction
 } from 'discord.js';
-import { Client } from '../../Client';
+import { Client } from '../Client';
 import { Interaction } from '../Interaction';
 
 export class InteractionHandler {
     protected readonly client: Client;
 
     // Collection of Button Interactions
-    protected _buttons: Collection<string, Interaction<ButtonInteraction>> = new Collection();
+    protected _buttons = new Collection<string, Interaction<ButtonInteraction>>();
 
     // Collection of Select Menu Interactions
-    protected _selectMenus: Collection<string, Interaction<AnySelectMenuInteraction>> = new Collection();
+    protected _selectMenus = new Collection<string, Interaction<AnySelectMenuInteraction>>();
 
     // Collection of Modal Submit Interactions
-    protected _modals: Collection<string, Interaction<ModalSubmitInteraction>> = new Collection();
+    protected _modals = new Collection<string, Interaction<ModalSubmitInteraction>>();
 
     get buttons() {
         return this._buttons;
+    }
+
+    private set buttons(buttons:Collection<string, Interaction<ButtonInteraction>>) {
+        this._buttons = buttons;
     }
 
     get selectMenus() {
         return this._selectMenus;
     }
 
+    private set selectMenus(buttons:Collection<string, Interaction<AnySelectMenuInteraction>>) {
+        this._selectMenus = buttons;
+    }
+
     get modals() {
         return this._modals;
     }
 
+    private set modals(buttons:Collection<string, Interaction<ModalSubmitInteraction>>) {
+        this._modals = buttons;
+    }
+
     addButton(interaction: Interaction<ButtonInteraction>) {
-        this._buttons.set(interaction.name, interaction);
+        this.buttons.set(interaction.name, interaction);
         return this;
     }
 
     addButtons(collection: Collection<string, Interaction<ButtonInteraction>>) {
-        this._buttons = this._buttons.concat(collection);
+        this.buttons = this.buttons.concat(collection);
         return this;
     }
 
     runButton(interaction: ButtonInteraction) {
         const interactionName = this.client.splitCustomID ? interaction.customId.split(this.client.splitCustomIDOn)[0] : interaction.customId;
-        return this._buttons.get(interactionName).execute(interaction);
+        return this.buttons.get(interactionName).execute(interaction);
     }
 
     addModal(interaction: Interaction<ModalSubmitInteraction>) {

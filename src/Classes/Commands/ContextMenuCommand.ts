@@ -1,4 +1,7 @@
-import { ContextMenuCommandBuilder, ContextMenuCommandInteraction } from 'discord.js';
+import {
+    ContextMenuCommandBuilder, ContextMenuCommandInteraction,
+    ContextMenuCommandType
+} from 'discord.js';
 import { BaseCommand } from './BaseCommand';
 
 export class ContextMenuCommand extends BaseCommand<ContextMenuCommandBuilder, ContextMenuCommandInteraction> {
@@ -17,5 +20,9 @@ export class ContextMenuCommand extends BaseCommand<ContextMenuCommandBuilder, C
             this._builder = input;
         }
         return this;
+    }
+
+    get type(): ContextMenuCommandType {
+        return this.builder.type;
     }
 }
