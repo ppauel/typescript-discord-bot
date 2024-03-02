@@ -16,7 +16,6 @@ This is the successor of the [djs-template](https://github.com/ppauel/djs-templa
 - Context Menu Handler (global / guild)
 - Interaction Handler (Message Components, Modals)
 - Event Handler
-- Sharding
 - Localizations
 - Customizable configuration
 - [Examples](#demo-files)
@@ -78,29 +77,13 @@ The bot can be started as a single instance or in processes intended for shardin
 To build & start the bot without sharding run
 
 ```bash
-npm run start:bot
+npm run start
 ```
 
 or just
 
 ```bash
 npm run start
-```
-
-To build & start the sharding manager run
-
-```bash
-npm run start:manager
-```
-
-During development, it is a good idea not to deploy all commands every time you restart. You can use the following command to disable automatic deployment and run the uncompiled bot / manager.
-
-```bash
-npm run dev:bot
-```
-
-```bash
-npm run dev:manager
 ```
 
 To only compile a JavaScript build of your bot, run this command.
