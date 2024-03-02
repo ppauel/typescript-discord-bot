@@ -1,6 +1,6 @@
 /* eslint-disable no-inline-comments */
 import { ApplicationCommandType, MessageContextMenuCommandInteraction } from 'discord.js';
-import { ContextMenuCommand } from '../../../Classes/Client';
+import { ContextMenuCommand } from '../../../Classes';
 import { localize } from '../../../bot';
 
 // Locale Namespace

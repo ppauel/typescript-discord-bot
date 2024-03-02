@@ -12,18 +12,18 @@ import { ChatInputCommand, ContextMenuCommand } from '../Commands';
 
 
 export class CommandHandler {
-    protected readonly client: Client;
+    readonly client: Client;
 
     protected readonly rest: REST;
 
     protected _chatCommands = new Collection<string, ChatInputCommand>();
 
-    protected _contextUserMenus = new Collection<string, ContextMenuCommand>();
+    protected _userContextMenus = new Collection<string, ContextMenuCommand>();
 
-    protected _contextMessageMenus = new Collection<string, ContextMenuCommand>();
+    protected _messageContextMenus = new Collection<string, ContextMenuCommand>();
 
     get userContexMenus() {
-        return this._contextUserMenus;
+        return this._userContextMenus;
     }
 
     get chatCommands() {
@@ -46,10 +46,10 @@ export class CommandHandler {
                 this._chatCommands.set(command.builder.name, command);
                 break;
             case ApplicationCommandType.Message:
-                this._contextMessageMenus.set(command.builder.name, command as ContextMenuCommand);
+                this._messageContextMenus.set(command.builder.name, command as ContextMenuCommand);
                 break;
             case ApplicationCommandType.User:
-                this._contextUserMenus.set(command.builder.name, command as ContextMenuCommand);
+                this._userContextMenus.set(command.builder.name, command as ContextMenuCommand);
                 break;
             default:
                 break;
@@ -70,11 +70,11 @@ export class CommandHandler {
         return this;
     }
 
-    addContextUserMenus(commands: Collection<string, ContextMenuCommand>) {
+    addUserContextMenus(commands: Collection<string, ContextMenuCommand>) {
         for (const [ name, command ] of commands) {
             try {
                 this.validateAplicationCommand(command, ApplicationCommandType.User);
-                this._contextUserMenus.set(name, command);
+                this._userContextMenus.set(name, command);
             }
             catch (error) {
                 console.error(`Command "${name}" had an error: ${error}`);
@@ -83,11 +83,11 @@ export class CommandHandler {
         return this;
     }
 
-    addContextMessageMenus(commands: Collection<string, ContextMenuCommand>) {
+    addMessageContextMenus(commands: Collection<string, ContextMenuCommand>) {
         for (const [ name, command ] of commands) {
             try {
                 this.validateAplicationCommand(command, ApplicationCommandType.User);
-                this._contextMessageMenus.set(name, command);
+                this._messageContextMenus.set(name, command);
             }
             catch (error) {
                 console.error(`Command "${name}" had an error: ${error}`);
@@ -108,8 +108,8 @@ export class CommandHandler {
             // Gloabl commands deploy
             async () => {
                 const globalCommandData = this.chatCommands.filter((f) => f.isGlobal === true).map((m) => m.toJSON())
-			        .concat(this._contextUserMenus.filter((f) => f.isGlobal === true).map((m) => m.toJSON()))
-                    .concat(this._contextMessageMenus.filter((f) => f.isGlobal === true).map((m) => m.toJSON()));
+			        .concat(this._userContextMenus.filter((f) => f.isGlobal === true).map((m) => m.toJSON()))
+                    .concat(this._messageContextMenus.filter((f) => f.isGlobal === true).map((m) => m.toJSON()));
                 const sentCommands = await this.client.application.commands.set(globalCommandData);
                 console.log(`Deployed ${sentCommands.size} global command(s)`);
                 return globalCommandData;
@@ -134,7 +134,7 @@ export class CommandHandler {
 
                 });
                 // Get guild context menues
-                this._contextUserMenus.filter((f) => f.isGlobal === false).map((m) => {
+                this._userContextMenus.filter((f) => f.isGlobal === false).map((m) => {
                     const json = m.toJSON();
                     m.guildIds.forEach((guildId) => {
                         if (guildCommandData.has(guildId)) {
@@ -146,7 +146,7 @@ export class CommandHandler {
                     });
                 });
 
-                this._contextMessageMenus.filter((f) => f.isGlobal === false).map((m) => {
+                this._messageContextMenus.filter((f) => f.isGlobal === false).map((m) => {
                     const json = m.toJSON();
                     m.guildIds.forEach((guildId) => {
                         if (guildCommandData.has(guildId)) {
@@ -175,12 +175,12 @@ export class CommandHandler {
         return this.chatCommands.get(interaction.commandName).autocomplete(interaction);
     }
 
-    runUserMenus(interaction: ContextMenuCommandInteraction) {
-        return this._contextUserMenus.get(interaction.commandName).execute(interaction);
+    runUserContextMenus(interaction: ContextMenuCommandInteraction) {
+        return this._userContextMenus.get(interaction.commandName).execute(interaction);
     }
 
-    runContextMessageMenus(interaction: ContextMenuCommandInteraction) {
-        return this._contextMessageMenus.get(interaction.commandName).execute(interaction);
+    runMessageContextMenus(interaction: ContextMenuCommandInteraction) {
+        return this._messageContextMenus.get(interaction.commandName).execute(interaction);
     }
     constructor(client: Client) {
         this.client = client;

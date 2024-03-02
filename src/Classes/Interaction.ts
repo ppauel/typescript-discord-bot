@@ -64,7 +64,7 @@ export class Interaction<E extends DiscordInteraction> {
      * @param customId Name of interaction
      * @returns The modified object
      */
-    public setCustomId(customId: string) {
+    public setCustomIdPrefix(customId: string) {
         this.customIdPrefix = customId;
         return this;
     }

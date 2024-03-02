@@ -1,5 +1,5 @@
 import { PermissionsBitField, SlashCommandBuilder } from 'discord.js';
-import { ChatInputCommand } from '../../../Classes/Client';
+import { ChatInputCommand } from '../../../Classes';
 import { localize } from '../../../bot';
 import { getPingButton } from '../../../features/ping';
 

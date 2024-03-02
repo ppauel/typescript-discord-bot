@@ -1,5 +1,5 @@
 import { Events } from 'discord.js';
-import { Client, Event } from '../Classes/Client';
+import { Client, Event } from '../Classes';
 
 export default new Event({
     name: Events.ClientReady,

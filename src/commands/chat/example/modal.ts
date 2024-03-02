@@ -1,7 +1,7 @@
 import {
     ActionRowBuilder, ChatInputCommandInteraction, ModalBuilder, PermissionsBitField, SlashCommandBuilder, TextInputBuilder, TextInputStyle
 } from 'discord.js';
-import { ChatInputCommand } from '../../../Classes/Client';
+import { ChatInputCommand } from '../../../Classes';
 import { localize } from '../../../bot';
 
 // Locale Namespace

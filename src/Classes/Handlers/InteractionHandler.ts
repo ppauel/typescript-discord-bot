@@ -5,7 +5,7 @@ import { Client } from '../Client';
 import { Interaction } from '../Interaction';
 
 export class InteractionHandler {
-    protected readonly client: Client;
+    readonly client: Client;
 
     // Collection of Button Interactions
     protected _buttons = new Collection<string, Interaction<ButtonInteraction>>();

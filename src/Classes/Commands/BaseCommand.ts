@@ -1,7 +1,8 @@
 import {
-    ChatInputCommandInteraction, ContextMenuCommandBuilder, ContextMenuCommandInteraction, SlashCommandBuilder, SlashCommandSubcommandsOnlyBuilder, Snowflake
+    ChatInputCommandInteraction, ContextMenuCommandBuilder, ContextMenuCommandInteraction, SlashCommandBuilder,
+    Snowflake
 } from 'discord.js';
-import { ReturnableInteraction } from './types';
+import { ReturnableInteraction, SlashCommandBuilders } from './types';
 
 SlashCommandBuilder;
 
@@ -9,7 +10,7 @@ SlashCommandBuilder;
  * Slash command or context command
  */
 export class BaseCommand<
-    TypeBuilder extends SlashCommandBuilder | SlashCommandSubcommandsOnlyBuilder | ContextMenuCommandBuilder | Omit<SlashCommandBuilder, 'addSubcommand' | 'addSubcommandGroup'>,
+    TypeBuilder extends SlashCommandBuilders | ContextMenuCommandBuilder,
     TypeInteraction extends ChatInputCommandInteraction | ContextMenuCommandInteraction
 > {
     // The constructor for the registration for the command
@@ -19,6 +20,10 @@ export class BaseCommand<
 
     // Method that is run when command is executed
     protected _execute: (interaction: TypeInteraction) => Promise<ReturnableInteraction> | ReturnableInteraction;
+
+    get name() {
+        return this._builder.name;
+    }
 
     get isGlobal() {
         return this._guildIds.length == 0;

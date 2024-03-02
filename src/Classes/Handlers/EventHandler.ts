@@ -3,11 +3,11 @@ import assert from 'node:assert/strict';
 import { Event } from '../Event';
 
 export class EventHandler {
-    private client: Client;
+    readonly client: Client;
 
-    private events: Collection<string, Event> = new Collection();
+    protected events: Collection<string, Event> = new Collection();
 
-    private validateEvent(event: Event) {
+    protected validateEvent(event: Event) {
         assert(typeof event.name !== 'undefined');
         assert(typeof event.execute !== 'undefined');
     }

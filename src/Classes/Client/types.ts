@@ -14,6 +14,7 @@ export declare const TimeFormat: {
 
 export declare const ExtraColor: {
     EmbedGray: 0x2b2d31;
+    EmbedWhite: 0xf2f3f5;
 };
 
 declare global {

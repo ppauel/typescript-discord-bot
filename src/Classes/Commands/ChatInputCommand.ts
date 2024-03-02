@@ -3,11 +3,12 @@ import {
     AutocompleteInteraction, ChatInputCommandInteraction, SlashCommandBuilder, SlashCommandSubcommandsOnlyBuilder
 } from 'discord.js';
 import { BaseCommand } from './BaseCommand';
+import { SlashCommandBuilders } from './types';
 
 /**
  * Slash command
  */
-export class ChatInputCommand extends BaseCommand<SlashCommandBuilder | SlashCommandSubcommandsOnlyBuilder | Omit<SlashCommandBuilder, 'addSubcommand' | 'addSubcommandGroup'>, ChatInputCommandInteraction> {
+export class ChatInputCommand extends BaseCommand<SlashCommandBuilders, ChatInputCommandInteraction> {
 
     /**
      * Runs when client receives and Autocomplete interaction

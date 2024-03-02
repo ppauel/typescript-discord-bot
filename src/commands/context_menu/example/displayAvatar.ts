@@ -2,7 +2,7 @@
 import {
     ApplicationCommandType, EmbedBuilder, GuildMember, UserContextMenuCommandInteraction
 } from 'discord.js';
-import { ContextMenuCommand, ExtraColor } from '../../../Classes/Client';
+import { ContextMenuCommand, ExtraColor } from '../../../Classes';
 import { localize } from '../../../bot';
 
 // Locale Namespace

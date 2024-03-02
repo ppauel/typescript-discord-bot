@@ -3,7 +3,7 @@ import {
     FluentBundle,
     FluentResource
 } from '@fluent/bundle';
-import { readFile, readdir } from 'fs/promises';
+import { readFileSync, readdirSync } from 'fs';
 import { join } from 'path';
 import { i18nOptions } from './interface';
 import { LocaleBundle } from './locale';
@@ -50,17 +50,17 @@ export class i18n {
      * @param filePath file path to the file in question
      * @returns the i18n object
      */
-    async setGlobalResource(filePath:string) {
+    setGlobalResource(filePath:string) {
         // get file
-        const file = await readFile(join(filePath, 'global.ftl'), { encoding: 'utf-8' });
+        const file = readFileSync(join(filePath, 'global.ftl'), { encoding: 'utf-8' });
         // resovle file
         this.global = new FluentResource(file);
         return this;
     }
 
-    async setLocale(filePath:string, locale: Locale) {
+    setLocale(filePath:string, locale: Locale) {
         // get files
-        const files = (await readdir(filePath))
+        const files = (readdirSync(filePath))
             .filter((file) => file.endsWith('.ftl'));
 
         const local = new LocaleBundle(this, locale);
@@ -68,7 +68,7 @@ export class i18n {
         // for each of the files creates a new FluentBundle
         for (const file of files) {
             const bundle = new FluentBundle(locale);
-            const resource = new FluentResource(await readFile(join(filePath, file), { encoding: 'utf-8' }));
+            const resource = new FluentResource(readFileSync(join(filePath, file), { encoding: 'utf-8' }));
             // gets bundle's name from file name
             const bundleName = file.slice(0, -4);
 

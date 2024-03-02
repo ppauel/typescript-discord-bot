@@ -29,6 +29,9 @@ export class ExtendedClient extends Client<true> {
     // Whether the bot should responded to autocomplete
     readonly replyOnError: boolean;
 
+    // Message for errors in the interactionCreate
+    readonly errorMessage: string = 'There was an error while executing this interaction.';
+
     // Whether the bot should split interactions' custom ids (Recommended `true`)
     readonly splitCustomID: boolean;
 
@@ -76,6 +79,7 @@ export class ExtendedClient extends Client<true> {
             receiveModals,
             receiveAutocomplete,
             replyOnError,
+            replyMessageOnError,
             splitCustomID,
             splitCustomIDOn,
             useDefaultInterctionEvent,
@@ -97,6 +101,7 @@ export class ExtendedClient extends Client<true> {
         this.splitCustomID = splitCustomID === undefined ? false : splitCustomID;
         this.useGuildCommands = useGuildCommands === undefined ? false : useGuildCommands;
         this.splitCustomIDOn = splitCustomIDOn || '_';
+        if (replyMessageOnError) this.errorMessage = replyMessageOnError;
     }
 
     /**
