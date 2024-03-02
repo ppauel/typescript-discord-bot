@@ -27,13 +27,13 @@
     "discord.js": "^14.14.1"
   },
   "devDependencies": {
-    "@eslint/eslintrc": "^3.0.0",
-    "@stylistic/eslint-plugin": "^1.5.4",
-    "@types/node": "^20.11.10",
-    "@typescript-eslint/eslint-plugin": "^6.19.1",
-    "@typescript-eslint/parser": "^6.19.1",
-    "eslint": "^8.56.0",
-    "eslint-plugin-jsdoc": "^48.0.4",
+    "@eslint/eslintrc": "^3.0.2",
+    "@stylistic/eslint-plugin": "^1.6.3",
+    "@types/node": "^20.11.24",
+    "@typescript-eslint/eslint-plugin": "^7.1.0",
+    "@typescript-eslint/parser": "^7.1.0",
+    "eslint": "^8.57.0",
+    "eslint-plugin-jsdoc": "^48.2.0",
     "typescript": "^5.3.3"
   }
 }
