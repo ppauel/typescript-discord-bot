@@ -84,7 +84,7 @@ export class i18n {
 
         // Adds locale to  collection
         this.locales.set(locale, local);
-        return this;
+        return this as Omit<i18n, 'setGlobalResource'>;
     }
 
     /**
