@@ -1,7 +1,6 @@
 import { EmbedBuilder, ModalSubmitInteraction } from 'discord.js';
-import { ExtraColor, Interaction } from '../../../Classes';
-import { } from '../../../Classes/Interaction';
-import { localize } from '../../../bot';
+import { ExtraColor, Interaction } from '../../../Classes/index.js';
+import { localize } from '../../../bot.js';
 
 const ns = 'modal';
 

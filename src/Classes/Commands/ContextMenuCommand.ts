@@ -2,7 +2,7 @@ import {
     ContextMenuCommandBuilder, ContextMenuCommandInteraction,
     ContextMenuCommandType
 } from 'discord.js';
-import { BaseCommand } from './BaseCommand';
+import { BaseCommand } from './BaseCommand.js';
 
 export class ContextMenuCommand extends BaseCommand<ContextMenuCommandBuilder, ContextMenuCommandInteraction> {
     /**

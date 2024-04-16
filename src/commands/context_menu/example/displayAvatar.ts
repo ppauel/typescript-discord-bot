@@ -2,8 +2,8 @@
 import {
     ApplicationCommandType, EmbedBuilder, GuildMember, UserContextMenuCommandInteraction
 } from 'discord.js';
-import { ContextMenuCommand, ExtraColor } from '../../../Classes';
-import { localize } from '../../../bot';
+import { ContextMenuCommand, ExtraColor } from '../../../Classes/index.js';
+import { localize } from '../../../bot.js';
 
 // Locale Namespace
 const ns = 'avatar';

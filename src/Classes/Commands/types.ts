@@ -3,7 +3,7 @@ import {
     ContextMenuCommandInteraction, InteractionResponse,
     Message, SlashCommandBuilder, SlashCommandSubcommandsOnlyBuilder
 } from 'discord.js';
-import { BaseCommand } from './BaseCommand';
+import { BaseCommand } from './BaseCommand.js';
 
 export type builders = SlashCommandBuilder | ContextMenuCommandBuilder;
 

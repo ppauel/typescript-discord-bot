@@ -1,6 +1,6 @@
 import { StringSelectMenuInteraction } from 'discord.js';
-import { Interaction } from '../../../Classes';
-import { localize } from '../../../bot';
+import { Interaction } from '../../../Classes/index.js';
+import { localize } from '../../../bot.js';
 
 const ns = 'select';
 

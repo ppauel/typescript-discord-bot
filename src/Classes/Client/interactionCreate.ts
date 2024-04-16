@@ -3,7 +3,7 @@ import {
     DiscordAPIError, Events, Interaction,
     InteractionType
 } from 'discord.js';
-import { Event } from '../Event';
+import { Event } from '../Event.js';
 
 /**
  * Handles the creation of a new interaction.

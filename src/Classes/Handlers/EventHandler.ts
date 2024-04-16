@@ -1,6 +1,6 @@
 import { Client, Collection } from 'discord.js';
 import assert from 'node:assert/strict';
-import { Event } from '../Event';
+import { Event } from '../Event.js';
 
 export class EventHandler {
     readonly client: Client;

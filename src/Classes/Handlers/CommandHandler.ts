@@ -7,8 +7,8 @@ import {
     Snowflake
 } from 'discord.js';
 import assert from 'node:assert/strict';
-import { Client } from '../Client';
-import { ChatInputCommand, ContextMenuCommand } from '../Commands';
+import { Client } from '../Client/index.js';
+import { ChatInputCommand, ContextMenuCommand } from '../Commands/index.js';
 
 
 export class CommandHandler {

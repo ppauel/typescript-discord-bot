@@ -2,8 +2,8 @@ import {
     ApplicationCommandType,
     AutocompleteInteraction, ChatInputCommandInteraction, SlashCommandBuilder, SlashCommandSubcommandsOnlyBuilder
 } from 'discord.js';
-import { BaseCommand } from './BaseCommand';
-import { SlashCommandBuilders } from './types';
+import { BaseCommand } from './BaseCommand.js';
+import { SlashCommandBuilders } from './types.js';
 
 /**
  * Slash command

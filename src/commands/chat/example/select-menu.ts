@@ -1,8 +1,8 @@
 import {
     ActionRowBuilder, MessageActionRowComponentBuilder, PermissionsBitField, SlashCommandBuilder, StringSelectMenuBuilder, StringSelectMenuOptionBuilder
 } from 'discord.js';
-import { ChatInputCommand } from '../../../Classes';
-import { localize } from '../../../bot';
+import { ChatInputCommand } from '../../../Classes/index.js';
+import { localize } from '../../../bot.js';
 
 // Locale Namespace
 const ns = 'select';

@@ -1,7 +1,7 @@
 /* eslint-disable no-inline-comments */
 import { ApplicationCommandType, MessageContextMenuCommandInteraction } from 'discord.js';
-import { ContextMenuCommand } from '../../../Classes';
-import { localize } from '../../../bot';
+import { ContextMenuCommand } from '../../../Classes/index.js';
+import { localize } from '../../../bot.js';
 
 // Locale Namespace
 const ns = 'count';

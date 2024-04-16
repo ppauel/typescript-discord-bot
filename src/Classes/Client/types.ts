@@ -1,20 +1,20 @@
-import { ExtendedClient } from './Client';
+import { ExtendedClient } from './Client.js';
 
 export type TimeCode = 'd' | 'D' | 't' | 'T' | 'f' | 'F' | 'R';
 
-export declare const TimeFormat: {
-    ShortDate: 'd';
-    LongDatez: 'D';
-    ShortTime: 't';
-    LongTime: 'T';
-    ShortDateTime: 'f';
-    LongDateTime: 'F';
-    RelativeTime: 'R';
+export const TimeFormat = {
+    ShortDate: 'd',
+    LongDatez: 'D',
+    ShortTime: 't',
+    LongTime: 'T',
+    ShortDateTime: 'f',
+    LongDateTime: 'F',
+    RelativeTime: 'R'
 };
 
-export declare const ExtraColor: {
-    EmbedGray: 0x2b2d31;
-    EmbedWhite: 0xf2f3f5;
+export const ExtraColor = {
+    EmbedGray: 0x2b2d31,
+    EmbedWhite: 0xf2f3f5
 };
 
 declare global {

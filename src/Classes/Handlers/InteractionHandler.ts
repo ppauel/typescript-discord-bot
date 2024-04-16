@@ -1,8 +1,8 @@
 import {
     AnySelectMenuInteraction, ButtonInteraction, Collection, ModalSubmitInteraction
 } from 'discord.js';
-import { Client } from '../Client';
-import { Interaction } from '../Interaction';
+import { Client } from '../Client/index.js';
+import { Interaction } from '../Interaction.js';
 
 export class InteractionHandler {
     readonly client: Client;

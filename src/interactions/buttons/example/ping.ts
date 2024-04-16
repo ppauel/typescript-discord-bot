@@ -1,7 +1,7 @@
 import { ButtonInteraction } from 'discord.js';
-import { Interaction } from '../../../Classes';
-import { localize } from '../../../bot';
-import { getPingButton } from '../../../features/ping';
+import { Interaction } from '../../../Classes/index.js';
+import { localize } from '../../../bot.js';
+import { getPingButton } from '../../../features/ping.js';
 
 
 // Example interaction (related to the /ping command)

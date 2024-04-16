@@ -1,7 +1,7 @@
 import {
     ActionRowBuilder, ButtonBuilder, ButtonStyle, Locale, MessageActionRowComponentBuilder
 } from 'discord.js';
-import { localize } from '../bot';
+import { localize } from '../bot.js';
 
 // Example button (related to the /ping command)
 /**

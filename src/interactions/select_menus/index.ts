@@ -1,1 +1,2 @@
-export { default as string } from './example/string';
+export { default as string } from './example/string.js';
+

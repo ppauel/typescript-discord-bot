@@ -5,11 +5,11 @@ import {
 } from '@fluent/bundle';
 import { readFileSync, readdirSync } from 'fs';
 import { join } from 'path';
-import { i18nOptions } from './interface';
-import { LocaleBundle } from './locale';
+import { i18nOptions } from './interface.js';
+import { LocaleBundle } from './locale.js';
 import {
     Locale, LocalizationMap, fluentVariables
-} from './types';
+} from './types.js';
 
 export class i18n {
     /**

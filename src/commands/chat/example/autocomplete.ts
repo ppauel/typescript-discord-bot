@@ -1,6 +1,6 @@
 import { PermissionsBitField } from 'discord.js';
-import { ChatInputCommand, LocaleBundle } from '../../../Classes';
-import { localize } from '../../../bot';
+import { ChatInputCommand, LocaleBundle } from '../../../Classes/index.js';
+import { localize } from '../../../bot.js';
 
 const ns = 'auto';
 

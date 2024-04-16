@@ -1,9 +1,9 @@
 import { Collection } from '@discordjs/collection';
 import { FluentBundle, Message } from '@fluent/bundle';
-import { i18n } from './i18n';
+import { i18n } from './i18n.js';
 import {
     Locale, common, fluentVariables
-} from './types';
+} from './types.js';
 
 export class LocaleBundle {
 

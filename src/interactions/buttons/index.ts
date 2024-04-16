@@ -1,1 +1,2 @@
-export { default as ping } from './example/ping';
+export { default as ping } from './example/ping.js';
+

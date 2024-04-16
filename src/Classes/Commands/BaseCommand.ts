@@ -2,7 +2,7 @@ import {
     ChatInputCommandInteraction, ContextMenuCommandBuilder, ContextMenuCommandInteraction, SlashCommandBuilder,
     Snowflake
 } from 'discord.js';
-import { ReturnableInteraction, SlashCommandBuilders } from './types';
+import { ReturnableInteraction, SlashCommandBuilders } from './types.js';
 
 SlashCommandBuilder;
 

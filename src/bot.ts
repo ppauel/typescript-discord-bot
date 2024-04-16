@@ -1,12 +1,12 @@
 import {
     GatewayIntentBits as Intents, Locale, Partials
 } from 'discord.js';
-import { Client, i18n } from './Classes';
-import * as commands from './commands';
-import * as events from './events';
+import { Client, i18n } from './Classes/index.js';
+import * as commands from './commands/index.js';
+import * as events from './events/index.js';
 import {
     buttons, modals, selectMenus
-} from './interactions';
+} from './interactions/index.js';
 
 // Load locales
 export const localize = new i18n()
