@@ -10,10 +10,11 @@
 A multi-purpose discord.js v14 bot template.
 This is the successor of the [djs-template](https://github.com/ppauel/djs-template) repository.
 
+This template is still 🚧 under development 🚧 and will be constantly extended, for example when changes are made to the Discord API.
+
 ## Features
 
-- Slash Command Handler (global / guild)
-- Context Menu Handler (global / guild)
+- Command Handler (global / guild)
 - Interaction Handler (Message Components, Modals)
 - Event Handler
 - Localizations
@@ -22,72 +23,64 @@ This is the successor of the [djs-template](https://github.com/ppauel/djs-templa
 
 ## Installation
 
-Install the required `npm` modules.
+Intsall Node.js 20.6.0 or later. The latest version of Node.js can be installed from [here](https://nodejs.org/en/download/current)
+
+Cone the repo then install the required `npm` modules.
 
 ```bash
+git clone https://github.com/ppauel/typescript-discord-bot.git new_bot
 npm install
 ```
+In the root of the project create a copy of `example.env` then rename it to `.env` this file contains all environmental variables for the project. replace the `TOKEN` with your Application's [Bot Token](https://discord.com/developers/docs/quick-start/getting-started#configuring-your-bot).
 
-Create a new file called `.env` in the root directory and insert your bot token as shown in the `example.env` file.
+**Optional:** Replace `GUILDID` if you wish to deploy commands to a Spific guild
 
 ### Configuration
+The `.env` only contains information which you may want to keep private like your bots token.
+To configure the bot is done in `src/bot.ts` with the client options. Extended from the [discord.js ClientOptions](https://old.discordjs.dev/#/docs/discord.js/14.14.1/typedef/ClientOptions).
 
-Apart from the token, the configuration takes place in the `config.json` file located in the `src/` folder.
-
-Specify a **guild ID** to which the guild commands will be deployed. Make sure that the bot is a member of this server and has sufficient permissions to create commands.
-
+Choose witch thyes of interaction you want your bot to interact with
+- **[message components](https://discord.com/developers/docs/interactions/overview#message-components)** - buttons and select menus.
+- **[modals](https://discord.com/developers/docs/interactions/overview#message-components)** -  Pop up windows for text entry
+- **[Autocomplete](https://discord.com/developers/docs/interactions/application-commands#autocomplete)** - Aoto complete options in slash commands
 ```json
-"guild": "your_guild_id"
+receiveMessageComponents: true,
+receiveModals: true,
+receiveAutocomplete: true
 ```
 
-Choose if you want to receive **message components** and **modals** using the interaction handler.
+Select whether to reply with a meassage if an error occurs whilst executing an interaction. 
 
+Optional: You may provided a customised message
 ```json
-"receiveMessageComponents": true,
-"receiveModals": true
+replyOnError: true,
+replyMessageOnError: "Error message here"
 ```
 
-Select whether to reply with a warning if an error occurs whilst executing an interaction.
-
-```json
-"replyOnError": true
-```
-
-Choose whether you want to split the custom ID of an interaction by **underscores** (_). In this case, the interaction handler uses only the string **before the first underscore** (if any).
-This system makes sense if you want to use the custom ID to convey additional information.
+When using interactions you may wish to included information in the custom ID of an interaction.
 
 For example `report_527814442746904591` is treated as `report`.
 
+By adding this option the interaction hadaler will parse custom IDs using the charicter
 ```json
-"splitCustomId": false
+splitCustomIDOn: "_"
 ```
 
-If you want to use global commands only, you can disable guild commands. The `global` attribute must still be `true`.
-
+Optional: if you would like to write your own `onInteractionCreate` event handling set this option to `false`.
 ```json
-"useGuildCommands": true
+useDefaultInterctionEvent: true
 ```
 
 **Done!** You can now experiment with some examples. For that, you just need to start your bot...
 
 ## Scripts
 
-The bot can be started as a single instance or in processes intended for sharding. For smaller bots, the first variant should be sufficient.
-
-To build & start the bot without sharding run
-
-```bash
-npm run start
-```
-
-or just
-
+To run the bot use the following command. this will both build and then run the bot
 ```bash
 npm run start
 ```
 
 To only compile a JavaScript build of your bot, run this command.
-
 ```bash
 npm run build
 ```
@@ -114,17 +107,11 @@ This template contains some sample commands and interactions so you understand h
 
 To make it easier to access the client's config and collections, the template includes the `ExtendedClient` class. It allows to access these properties directly from the client without importing them.
 
-```javascript
-const client = new ExtendedClient();
-const guildId = client.config.guild;
+```typescript
+const client = new ExtendedClient({splitCustomIDOn: '_'});
+const splitCustomID = client.splitCustomIDOn;
 ```
-
-However, the `ExtendedClient` cannot be accessed through an API object such as message or an interaction. The included handlers pass the `_client` as its own parameter, so you don't have to worry about that.
-
+Note: `ExtendedClient` my not be accesable every where client is as it is not part of the discord.js package.
 ### Localizations
 
-By default, this project supports translations. These are managed in the `lang/` folder. The configuration is located in `src/features/i18n.ts`. Examples of usage can be found in the demo files.
-
-## About this template
-
-This template is still under development and will be constantly extended, for example when changes are made to the Discord API.
+By default, this project supports translations. These are managed in the `locales/` folder. The configuration is located in `src/classes/i18n`. Examples of usage can be found in the demo files.
