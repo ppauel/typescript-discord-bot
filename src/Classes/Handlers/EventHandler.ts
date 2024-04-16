@@ -12,6 +12,10 @@ export class EventHandler {
         assert(typeof event.execute !== 'undefined');
     }
 
+    /**
+     * Add Event to Event handler
+     * @param event event to add to handler
+     */
     add(event: Event) {
         this.validateEvent(event);
         if (event.once) this.client.once(event.name, event.execute);

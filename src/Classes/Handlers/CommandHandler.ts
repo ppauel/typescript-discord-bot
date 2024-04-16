@@ -158,6 +158,10 @@ export class CommandHandler {
         console.log(`Deployed commands to ${guildCommandData.size} guilds`);
         console.log('Commands registered');
     }
+    /**
+     * Deregiser commands for one or more guilds
+     * @param guildId optional Id to only remove commands from on guild
+     */
     async deregisterGuildCommands(guildId?: string) {
         try {
             if (guildId) {

@@ -15,6 +15,8 @@ export default new ChatInputCommand({
         .setDescriptionLocalizations(localize.discordLocalizationRecord('command-description', ns))
         .setDMPermission(true)
         .setDefaultMemberPermissions(PermissionsBitField.Flags.SendMessages),
+    // Uncomment the below line to only have the ping command in the specified guild
+    // guildIds: [process.env.GUILDID],
     execute: async (interaction) => {
         return interaction.reply({
             content: ` ${localize.t('reply', ns, interaction.locale)} 🏓`, components: [getPingButton(interaction.locale)], ephemeral: true 
