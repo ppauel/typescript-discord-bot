@@ -47,7 +47,7 @@ Choose witch thyes of interaction you want your bot to interact with
 - **[message components](https://discord.com/developers/docs/interactions/overview#message-components)** - buttons and select menus.
 - **[modals](https://discord.com/developers/docs/interactions/overview#message-components)** -  Pop up windows for text entry
 - **[Autocomplete](https://discord.com/developers/docs/interactions/application-commands#autocomplete)** - Aoto complete options in slash commands
-```json
+```typescript
 receiveMessageComponents: true,
 receiveModals: true,
 receiveAutocomplete: true
@@ -56,7 +56,7 @@ receiveAutocomplete: true
 Select whether to reply with a meassage if an error occurs whilst executing an interaction. 
 
 Optional: You may provided a customised message
-```json
+```typescript
 replyOnError: true,
 replyMessageOnError: "Error message here"
 ```
@@ -66,12 +66,12 @@ When using interactions you may wish to included information in the custom ID of
 For example `report_527814442746904591` is treated as `report`.
 
 By adding this option the interaction hadaler will parse custom IDs using the charicter
-```json
+```typescript
 splitCustomIDOn: "_"
 ```
 
 Optional: if you would like to write your own `onInteractionCreate` event handling set this option to `false`.
-```json
+```typescript
 useDefaultInterctionEvent: true
 ```
 

@@ -6,5 +6,6 @@ import { i18n } from './Classes/index.js';
 export const localize = new i18n()
     .setGlobalResource('./locales')
     .setLocale('./locales/de', Locale.German)
+    .setLocale('./locales/fr', Locale.French)
     .setLocale('./locales/en-US', Locale.EnglishUS)
     .setFallbackLocale(Locale.EnglishUS);
