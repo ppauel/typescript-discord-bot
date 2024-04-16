@@ -2,7 +2,7 @@ import {
     ActionRowBuilder, ChatInputCommandInteraction, ModalBuilder, PermissionsBitField, SlashCommandBuilder, TextInputBuilder, TextInputStyle
 } from 'discord.js';
 import { ChatInputCommand } from '../../../Classes/index.js';
-import { localize } from '../../../bot.js';
+import { localize } from '../../../i18n.js';
 
 // Locale Namespace
 const ns = 'modal';
@@ -13,8 +13,8 @@ export default new ChatInputCommand({
     builder: new SlashCommandBuilder()
         .setName('modal')
         .setDescription('Demonstration of modal')
-        .setNameLocalizations(localize.DiscordlocalizationRecord('command-name', ns))
-        .setDescriptionLocalizations(localize.DiscordlocalizationRecord('command-description', ns))
+        .setNameLocalizations(localize.discordLocalizationRecord('command-name', ns))
+        .setDescriptionLocalizations(localize.discordLocalizationRecord('command-description', ns))
         .setDMPermission(true)
         .setDefaultMemberPermissions(PermissionsBitField.Flags.SendMessages),
     execute

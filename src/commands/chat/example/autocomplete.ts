@@ -1,6 +1,6 @@
 import { PermissionsBitField } from 'discord.js';
 import { ChatInputCommand, LocaleBundle } from '../../../Classes/index.js';
-import { localize } from '../../../bot.js';
+import { localize } from '../../../i18n.js';
 
 const ns = 'auto';
 
@@ -25,15 +25,15 @@ export default new ChatInputCommand()
     .setBuilder((builder) => builder
         .setName('autocomplete')
         .setDescription('Demonstration of Autocomplete')
-        .setNameLocalizations(localize.DiscordlocalizationRecord('command-name', ns))
-        .setDescriptionLocalizations(localize.DiscordlocalizationRecord('command-description', ns))
+        .setNameLocalizations(localize.discordLocalizationRecord('command-name', ns))
+        .setDescriptionLocalizations(localize.discordLocalizationRecord('command-description', ns))
         .setDMPermission(true)
         .setDefaultMemberPermissions(PermissionsBitField.Flags.SendMessages)
         .addStringOption(option => option
             .setName('option1-name')
             .setDescription('option1-description')
-            .setNameLocalizations(localize.DiscordlocalizationRecord('option1-name', ns))
-            .setDescriptionLocalizations(localize.DiscordlocalizationRecord('option1-description', ns))
+            .setNameLocalizations(localize.discordLocalizationRecord('option1-name', ns))
+            .setDescriptionLocalizations(localize.discordLocalizationRecord('option1-description', ns))
             .setRequired(true)
             .setAutocomplete(true)))
     .setExecute(async (interaction) => {

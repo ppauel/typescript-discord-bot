@@ -17,6 +17,8 @@ export default [
     ...compat.extends('plugin:@typescript-eslint/recommended'),
     jsdoc.configs['flat/recommended-typescript'],
     {
+        files: [ 'src/**/*.ts', 'src/**/*.js', 'eslint.config.js' ],
+        ignores: ['**/dist/*'],
         plugins: { '@stylistic': stylistic },
         rules: {
             '@stylistic/arrow-spacing': [

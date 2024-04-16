@@ -1,7 +1,7 @@
 import { PermissionsBitField, SlashCommandBuilder } from 'discord.js';
 import { ChatInputCommand } from '../../../Classes/index.js';
-import { localize } from '../../../bot.js';
 import { getPingButton } from '../../../features/ping.js';
+import { localize } from '../../../i18n.js';
 
 // Locale Namespace
 const ns = 'ping';
@@ -11,8 +11,8 @@ export default new ChatInputCommand({
     builder: new SlashCommandBuilder()
         .setName('ping')
         .setDescription('Replies with Pong')
-        .setNameLocalizations(localize.DiscordlocalizationRecord('command-name', ns))
-        .setDescriptionLocalizations(localize.DiscordlocalizationRecord('command-description', ns))
+        .setNameLocalizations(localize.discordLocalizationRecord('command-name', ns))
+        .setDescriptionLocalizations(localize.discordLocalizationRecord('command-description', ns))
         .setDMPermission(true)
         .setDefaultMemberPermissions(PermissionsBitField.Flags.SendMessages),
     execute: async (interaction) => {

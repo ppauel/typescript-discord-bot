@@ -28,9 +28,11 @@ export class i18n {
     private locales = new Collection<Locale, LocaleBundle>();
 
     constructor(options?: i18nOptions) {
-        const { fallbackLocale, globalResource } = options;
-        if (fallbackLocale) this._fallbackLocale = fallbackLocale;
-        if (globalResource) this.global = globalResource;
+        if (options) {
+            if (options.fallbackLocale) this._fallbackLocale = options.fallbackLocale;
+            if (options.globalResource) this.global = options.globalResource;
+        }
+        
     }
 
     get fallbacklLocale() {
@@ -149,7 +151,7 @@ export class i18n {
      * @returns A map of the with the values of all added locale
      * @see {@link https://discord-api-types.dev/api/discord-api-types-payloads/common#LocalizationMap}
      */
-    DiscordlocalizationRecord(key: string, bundleName: string): LocalizationMap {
+    discordLocalizationRecord(key: string, bundleName: string): LocalizationMap {
         const res: LocalizationMap = {};
         for (const [ locale, obj ] of this.locales) {
             res[locale] = obj.t(key, bundleName);

@@ -2,7 +2,7 @@ import {
     ActionRowBuilder, MessageActionRowComponentBuilder, PermissionsBitField, SlashCommandBuilder, StringSelectMenuBuilder, StringSelectMenuOptionBuilder
 } from 'discord.js';
 import { ChatInputCommand } from '../../../Classes/index.js';
-import { localize } from '../../../bot.js';
+import { localize } from '../../../i18n.js';
 
 // Locale Namespace
 const ns = 'select';
@@ -14,15 +14,15 @@ export default new ChatInputCommand({
     builder: new SlashCommandBuilder()
         .setName('select-menu')
         .setDescription('Select Menu Example')
-        .setNameLocalizations(localize.DiscordlocalizationRecord('command-name', ns))
-        .setDescriptionLocalizations(localize.DiscordlocalizationRecord('command-description', ns))
+        .setNameLocalizations(localize.discordLocalizationRecord('command-name', ns))
+        .setDescriptionLocalizations(localize.discordLocalizationRecord('command-description', ns))
         .setDMPermission(true)
         .setDefaultMemberPermissions(PermissionsBitField.Flags.SendMessages)
         .addSubcommand(subcommand => subcommand
             .setName('string')
             .setDescription('Example of a String Select Menu')
-            .setNameLocalizations(localize.DiscordlocalizationRecord('menu-string-name', ns))
-            .setDescriptionLocalizations(localize.DiscordlocalizationRecord('menu-string-description', ns)))
+            .setNameLocalizations(localize.discordLocalizationRecord('menu-string-name', ns))
+            .setDescriptionLocalizations(localize.discordLocalizationRecord('menu-string-description', ns)))
 })
     .setExecute(async (interaction) => {
         let row:ActionRowBuilder<MessageActionRowComponentBuilder>;

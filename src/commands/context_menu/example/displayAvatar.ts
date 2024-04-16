@@ -3,7 +3,7 @@ import {
     ApplicationCommandType, EmbedBuilder, GuildMember, UserContextMenuCommandInteraction
 } from 'discord.js';
 import { ContextMenuCommand, ExtraColor } from '../../../Classes/index.js';
-import { localize } from '../../../bot.js';
+import { localize } from '../../../i18n.js';
 
 // Locale Namespace
 const ns = 'avatar';
@@ -13,7 +13,7 @@ const ns = 'avatar';
 export default new ContextMenuCommand()
     .setBuilder((builder) => builder
         .setName('Display Avatar')
-        .setNameLocalizations(localize.DiscordlocalizationRecord('command-name', ns))
+        .setNameLocalizations(localize.discordLocalizationRecord('command-name', ns))
         .setType(ApplicationCommandType.User) // Specify the context menu type
         .setDMPermission(false))
     .setExecute(async (interaction: UserContextMenuCommandInteraction) => {

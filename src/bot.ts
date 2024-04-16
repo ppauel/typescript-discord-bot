@@ -1,19 +1,13 @@
 import {
-    GatewayIntentBits as Intents, Locale, Partials
+    GatewayIntentBits as Intents,
+    Partials
 } from 'discord.js';
-import { Client, i18n } from './Classes/index.js';
+import { Client } from './Classes/index.js';
 import * as commands from './commands/index.js';
 import * as events from './events/index.js';
 import {
     buttons, modals, selectMenus
 } from './interactions/index.js';
-
-// Load locales
-export const localize = new i18n()
-    .setLocale('../locales/de', Locale.German)
-    .setLocale('../locales/en-US', Locale.EnglishUS)
-    .setFallbackLocale(Locale.EnglishUS)
-    .setGlobalResource('../locales/global.ftl');
 
 // Initialization (specify intents and partials)
 const client = new Client({

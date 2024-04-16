@@ -1,7 +1,7 @@
 /* eslint-disable no-inline-comments */
 import { ApplicationCommandType, MessageContextMenuCommandInteraction } from 'discord.js';
 import { ContextMenuCommand } from '../../../Classes/index.js';
-import { localize } from '../../../bot.js';
+import { localize } from '../../../i18n.js';
 
 // Locale Namespace
 const ns = 'count';
@@ -11,7 +11,7 @@ const ns = 'count';
 export default new ContextMenuCommand()
     .setBuilder((builder) => builder
         .setName('Count characters')
-        .setNameLocalizations(localize.DiscordlocalizationRecord('count-name', ns))
+        .setNameLocalizations(localize.discordLocalizationRecord('count-name', ns))
         .setType(ApplicationCommandType.Message) // Specify the context menu type
         .setDMPermission(false))
     .setExecute(async (interaction: MessageContextMenuCommandInteraction) => {
