@@ -113,7 +113,7 @@ export class ExtendedClient extends Client<true> {
         if (!token) {
             throw new Error('[ERROR] Missing token');
         }
-
+        this._hasInitRun = true;
         return super.login(token);
     }
 }

@@ -100,71 +100,62 @@ export class CommandHandler {
      * Deploy Application Commands to Discord
      * @see https://discord.com/developers/docs/interactions/application-commands
      */
-    register() {
+    async register() {
         if (!this.client.loggedIn) throw Error('Client cannot register commands before init');
 
         console.log('Deploying commands...');
-        Promise.all([
-            // Gloabl commands deploy
-            async () => {
-                const globalCommandData = this.chatCommands.filter((f) => f.isGlobal === true).map((m) => m.toJSON())
-			        .concat(this._userContextMenus.filter((f) => f.isGlobal === true).map((m) => m.toJSON()))
-                    .concat(this._messageContextMenus.filter((f) => f.isGlobal === true).map((m) => m.toJSON()));
-                const sentCommands = await this.client.application.commands.set(globalCommandData);
-                console.log(`Deployed ${sentCommands.size} global command(s)`);
-                return globalCommandData;
-            },
-            // Guild commands deploy
-            async () => {
-                const guildCommandData = new Collection<
-                    Snowflake,
-                    (RESTPostAPIChatInputApplicationCommandsJSONBody | RESTPostAPIContextMenuApplicationCommandsJSONBody)[]
-                >();
-                // Get guild chat commands menues
-                this.chatCommands.filter((f) => f.isGlobal === false).map((m) => {
-                    const json = m.toJSON();
-                    m.guildIds.forEach((guildId) => {
-                        if (guildCommandData.has(guildId)) {
-                            guildCommandData.get(guildId).concat(json);
-                        }
-                        else {
-                            guildCommandData.set(guildId, [json]);
-                        }
-                    });
-
-                });
-                // Get guild context menues
-                this._userContextMenus.filter((f) => f.isGlobal === false).map((m) => {
-                    const json = m.toJSON();
-                    m.guildIds.forEach((guildId) => {
-                        if (guildCommandData.has(guildId)) {
-                            guildCommandData.get(guildId).concat(json);
-                        }
-                        else {
-                            guildCommandData.set(guildId, [json]);
-                        }
-                    });
-                });
-
-                this._messageContextMenus.filter((f) => f.isGlobal === false).map((m) => {
-                    const json = m.toJSON();
-                    m.guildIds.forEach((guildId) => {
-                        if (guildCommandData.has(guildId)) {
-                            guildCommandData.get(guildId).concat(json);
-                        }
-                        else {
-                            guildCommandData.set(guildId, [json]);
-                        }
-                    });
-                });
-                // Deploys commands buy guild
-                for (const [ guildIds, json ] of guildCommandData) {
-                    await this.client.application.commands.set(json, guildIds);
+        const globalCommandData = this.chatCommands.filter((f) => f.isGlobal === true).map((m) => m.toJSON())
+            .concat(this._userContextMenus.filter((f) => f.isGlobal === true).map((m) => m.toJSON()))
+            .concat(this._messageContextMenus.filter((f) => f.isGlobal === true).map((m) => m.toJSON()));
+        const sentCommands = await this.client.application.commands.set(globalCommandData);
+        console.log(`Deployed ${sentCommands.size} global command(s)`);
+        const guildCommandData = new Collection<
+            Snowflake,
+            (RESTPostAPIChatInputApplicationCommandsJSONBody | RESTPostAPIContextMenuApplicationCommandsJSONBody)[]
+        >();
+        // Get guild chat commands menues
+        this.chatCommands.filter((f) => f.isGlobal === false).map((m) => {
+            const json = m.toJSON();
+            m.guildIds.forEach((guildId) => {
+                if (guildCommandData.has(guildId)) {
+                    guildCommandData.get(guildId).concat(json);
                 }
-                console.log(`Deployed commands to ${guildCommandData.size} guilds`);
-                return guildCommandData;
-            }
-        ]);
+                else {
+                    guildCommandData.set(guildId, [json]);
+                }
+            });
+
+        });
+        // Get guild context menues
+        this._userContextMenus.filter((f) => f.isGlobal === false).map((m) => {
+            const json = m.toJSON();
+            m.guildIds.forEach((guildId) => {
+                if (guildCommandData.has(guildId)) {
+                    guildCommandData.get(guildId).concat(json);
+                }
+                else {
+                    guildCommandData.set(guildId, [json]);
+                }
+            });
+        });
+
+        this._messageContextMenus.filter((f) => f.isGlobal === false).map((m) => {
+            const json = m.toJSON();
+            m.guildIds.forEach((guildId) => {
+                if (guildCommandData.has(guildId)) {
+                    guildCommandData.get(guildId).concat(json);
+                }
+                else {
+                    guildCommandData.set(guildId, [json]);
+                }
+            });
+        });
+        // Deploys commands buy guild
+        for (const [ guildIds, json ] of guildCommandData) {
+            await this.client.application.commands.set(json, guildIds);
+        }
+        console.log(`Deployed commands to ${guildCommandData.size} guilds`);
+        console.log('Commands registered');
     }
 
     runChatCommand(interaction: ChatInputCommandInteraction) {

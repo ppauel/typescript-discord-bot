@@ -14,6 +14,7 @@ async function onInteractionCreate(interaction: Interaction) {
     const {
         commands, interactions, errorMessage, replyOnError
     } = client;
+    // console.log(interaction);
     try {
         switch (type) {
             case InteractionType.ApplicationCommandAutocomplete:

@@ -30,7 +30,8 @@ const client = new Client({
     // replyMessageOnError: 'message on comand error',
     splitCustomID: true,
     splitCustomIDOn: '_',
-    useGuildCommands: false
+    useGuildCommands: false,
+    useDefaultInterctionEvent: true
 });
 
 // Load Events

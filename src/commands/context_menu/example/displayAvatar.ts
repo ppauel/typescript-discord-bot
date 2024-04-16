@@ -17,12 +17,11 @@ export default new ContextMenuCommand()
         .setType(ApplicationCommandType.User) // Specify the context menu type
         .setDMPermission(false))
     .setExecute(async (interaction: UserContextMenuCommandInteraction) => {
-        if (!interaction.inGuild()) return;
-        const member = interaction.targetMember as GuildMember,
-            embed = new EmbedBuilder()
-                .setTitle(localize.t('embed', ns, interaction.locale, { 'username': member.displayName }))
-                .setImage(member.displayAvatarURL({ size: 4096 }))
-                .setColor(ExtraColor.EmbedGray)
-                .setFooter({ text: `ID: ${member.id}` });
+        const member = interaction.targetMember as GuildMember;
+        const embed = new EmbedBuilder()
+            .setTitle(localize.t('embed', ns, interaction.locale, { 'username': member.displayName }))
+            .setImage(member.displayAvatarURL({ size: 4096 }))
+            .setColor(ExtraColor.EmbedGray)
+            .setFooter({ text: `ID: ${member.id}` });
         return interaction.reply({ embeds: [embed] });
     });
