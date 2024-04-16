@@ -4,6 +4,7 @@ import {
     REST,
     RESTPostAPIChatInputApplicationCommandsJSONBody,
     RESTPostAPIContextMenuApplicationCommandsJSONBody,
+    Routes,
     Snowflake
 } from 'discord.js';
 import assert from 'node:assert/strict';
@@ -156,6 +157,26 @@ export class CommandHandler {
         }
         console.log(`Deployed commands to ${guildCommandData.size} guilds`);
         console.log('Commands registered');
+    }
+    async deregisterGuildCommands(guildId?: string) {
+        try {
+            if (guildId) {
+                await this.rest.put(Routes.applicationGuildCommands(this.client.user.id, guildId), { body: [] })
+                    .then(() => console.log(`Successfully deleted all guild commands in ${guildId}.`))
+                    .catch(console.error);
+            }
+            else {
+                for ([guildId] of await (this.client.guilds.fetch())) {
+                    await this.rest.put(Routes.applicationGuildCommands(this.client.user.id, guildId), { body: [] })
+                        .catch(console.error);
+                }
+                console.log(`Successfully deleted all guild commands.`);
+            }
+        }
+        catch (error) {
+            console.error(error);
+        }
+        
     }
 
     runChatCommand(interaction: ChatInputCommandInteraction) {
