@@ -32,17 +32,11 @@ export class ExtendedClient extends Client<true> {
     // Message for errors in the interactionCreate
     readonly errorMessage: string = 'There was an error while executing this interaction.';
 
-    // Whether the bot should split interactions' custom ids (Recommended `true`)
-    readonly splitCustomID: boolean;
-
     // The sting that is used to split the custom id
-    readonly splitCustomIDOn: string;
+    readonly splitCustomIDOn?: string;
 
     // shoult the bot use the provided InteractionCreate event 
     readonly useDefaultInterctionEvent: boolean = true;
-
-    // Should bot push guild specific commands at start up
-    readonly useGuildCommands: boolean;
 
     // Checks if the init function has run
     private _hasInitRun = false;
@@ -80,10 +74,8 @@ export class ExtendedClient extends Client<true> {
             receiveAutocomplete,
             replyOnError,
             replyMessageOnError,
-            splitCustomID,
             splitCustomIDOn,
-            useDefaultInterctionEvent,
-            useGuildCommands
+            useDefaultInterctionEvent
         } = options;
 
         // Misc configuration
@@ -98,9 +90,7 @@ export class ExtendedClient extends Client<true> {
         this.receiveModals = receiveModals === undefined ? false : receiveModals;
         this.receiveAutocomplete = receiveAutocomplete === undefined ? false : receiveAutocomplete;
         this.replyOnError = replyOnError === undefined ? false : replyOnError;
-        this.splitCustomID = splitCustomID === undefined ? false : splitCustomID;
-        this.useGuildCommands = useGuildCommands === undefined ? false : useGuildCommands;
-        this.splitCustomIDOn = splitCustomIDOn || '_';
+        this.splitCustomIDOn = splitCustomIDOn || undefined;
         if (replyMessageOnError) this.errorMessage = replyMessageOnError;
     }
 

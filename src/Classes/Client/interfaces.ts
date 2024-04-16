@@ -6,8 +6,6 @@ export interface ExtendedClientOptions extends ClientOptions {
     receiveAutocomplete?: boolean;
     replyOnError?: boolean;
     replyMessageOnError?: string;
-    splitCustomID?: boolean;
     splitCustomIDOn?: string;
     useDefaultInterctionEvent?: boolean;
-    useGuildCommands?: boolean;
 }

@@ -51,7 +51,7 @@ export class InteractionHandler {
     }
 
     runButton(interaction: ButtonInteraction) {
-        const interactionName = this.client.splitCustomID ? interaction.customId.split(this.client.splitCustomIDOn)[0] : interaction.customId;
+        const interactionName = this.client.splitCustomIDOn ? interaction.customId.split(this.client.splitCustomIDOn)[0] : interaction.customId;
         return this.buttons.get(interactionName).execute(interaction);
     }
 
@@ -66,7 +66,7 @@ export class InteractionHandler {
     }
 
     runModal(interaction: ModalSubmitInteraction) {
-        const interactionName = this.client.splitCustomID ? interaction.customId.split(this.client.splitCustomIDOn)[0] : interaction.customId;
+        const interactionName = this.client.splitCustomIDOn ? interaction.customId.split(this.client.splitCustomIDOn)[0] : interaction.customId;
         return this._modals.get(interactionName).execute(interaction);
     }
 
@@ -81,7 +81,7 @@ export class InteractionHandler {
     }
 
     runSelectMenus(interaction: AnySelectMenuInteraction) {
-        const interactionName = this.client.splitCustomID ? interaction.customId.split(this.client.splitCustomIDOn)[0] : interaction.customId;
+        const interactionName = this.client.splitCustomIDOn ? interaction.customId.split(this.client.splitCustomIDOn)[0] : interaction.customId;
         return this._selectMenus.get(interactionName).execute(interaction);
     }
 

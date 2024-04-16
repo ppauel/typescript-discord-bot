@@ -28,9 +28,7 @@ const client = new Client({
     receiveAutocomplete: true,
     replyOnError: true,
     // replyMessageOnError: 'message on comand error',
-    splitCustomID: true,
     splitCustomIDOn: '_',
-    useGuildCommands: false,
     useDefaultInterctionEvent: true
 });
 
@@ -65,7 +63,11 @@ client.login(process.env.TOKEN)
         
         // Skip if no-deployment flag is set, else deploys command
         if (!process.argv.includes('--no-deployment')) {
+            // removes guild command from set guild
             client.commands.deregisterGuildCommands(process.env.GUILDID);
+            // deploys commands
             client.commands.register();
         }
     });
+
+    
