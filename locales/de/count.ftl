@@ -1,2 +1,2 @@
 count-name = Zeichenanzahl zählen
-reply = {-b}{$username}{-b}'s Nachricht enthält {-cl}{$length}{-cl} Zeichen.
+count-reply = {-b}{$username}{-b}'s Nachricht enthält {-cl}{$length}{-cl} Zeichen.
