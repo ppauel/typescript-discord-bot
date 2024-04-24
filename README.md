@@ -105,7 +105,7 @@ This template contains some sample commands and interactions so you understand h
 
 - `src/context_menus/example/displayAvatar.ts` *User Context Menu*
 
-**Hint:** *Commands, Context Menus and Interactions have to be located in a subfolder.*
+**Hint:** *Commands, Context Menus and Interactions can be located in a subfolder.*
 
 ### ExtendedClient class
 
