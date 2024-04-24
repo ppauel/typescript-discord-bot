@@ -1,4 +1,4 @@
-import { Client } from 'discord.js';
+import { Client, Events } from 'discord.js';
 import {
     CommandHandler, EventHandler, InteractionHandler
 } from '../Handlers/index.js';
@@ -65,7 +65,7 @@ export class ExtendedClient extends Client<true> {
     constructor(options: ExtendedClientOptions) {
         super(options);
 
-        this.emit('debug', 'Client starting up...');
+        this.emit(Events.Debug, 'Client starting up...');
 
         // Paths
         const {
@@ -83,9 +83,11 @@ export class ExtendedClient extends Client<true> {
         if (useDefaultInterctionEvent) {
             this.events.add(onInteractionCreate);
         }
+        
         else {
             this.useDefaultInterctionEvent = false;
         }
+        
         this.receiveMessageComponents = receiveMessageComponents === undefined ? false : receiveMessageComponents;
         this.receiveModals = receiveModals === undefined ? false : receiveModals;
         this.receiveAutocomplete = receiveAutocomplete === undefined ? false : receiveAutocomplete;
@@ -103,6 +105,7 @@ export class ExtendedClient extends Client<true> {
         if (!token) {
             throw new Error('[ERROR] Missing token');
         }
+        
         this._hasInitRun = true;
         return super.login(token);
     }

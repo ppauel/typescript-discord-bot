@@ -14,7 +14,7 @@ async function onInteractionCreate(interaction: Interaction) {
     const {
         commands, interactions, errorMessage, replyOnError
     } = client;
-    // console.log(interaction);
+    // client.emit(Events.Debug, interaction.toString());
     try {
         switch (type) {
             case InteractionType.ApplicationCommandAutocomplete:
@@ -53,7 +53,7 @@ async function onInteractionCreate(interaction: Interaction) {
                 else if (interaction.isAnySelectMenu()) {
                     // If the interaction is a select menu interaction, execute the corresponding select menu handler
                     await interactions.runSelectMenus(interaction);
-                }
+                }   
                 break;
 
             default:
@@ -64,26 +64,26 @@ async function onInteractionCreate(interaction: Interaction) {
         if (interaction.isRepliable()) {
             // If the interaction is repliable, handle the error with a reply
             if (error instanceof DiscordAPIError) {
-                console.error(error);
+                client.emit(Events.Error, error); 
             }
             else if (error instanceof Error) {
-                console.error(error);
+                client.emit(Events.Error, error);
         
                 if (!replyOnError) return;
         
                 if (interaction.deferred) {
                     // If the interaction is deferred, follow up with an ephemeral error message
-                    await interaction.followUp({ content: errorMessage, ephemeral: true }).catch((e) => console.error(e));
+                    await interaction.followUp({ content: errorMessage, ephemeral: true }).catch((e) => client.emit(Events.Error, e));
                 }
                 else {
                     // If the interaction is not deferred, reply with an ephemeral error message
-                    await interaction.reply({ content: errorMessage, ephemeral: true }).catch((e) => console.error(e));
-                }
+                    await interaction.reply({ content: errorMessage, ephemeral: true }).catch((e) => client.emit(Events.Error, e));
+                }       
             }
         }
         else {
             // If the interaction is not repliable, simply log the error
-            console.error(error);
+            client.emit(Events.Error, error);
         }
     }
 }

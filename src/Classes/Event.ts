@@ -12,7 +12,7 @@ export class Event {
     private _once: boolean;
 
     // Method to be run when the event occurs
-    private _execute?: (...args: any[]) => Promise<void>;
+    private _execute?: (...args: any[]) => Promise<void> | void;
 
     get name() {
         return this._name;

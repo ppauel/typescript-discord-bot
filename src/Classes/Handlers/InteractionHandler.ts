@@ -20,7 +20,7 @@ export class InteractionHandler {
         return this._buttons;
     }
 
-    private set buttons(buttons:Collection<string, Interaction<ButtonInteraction>>) {
+    private set buttons(buttons: Collection<string, Interaction<ButtonInteraction>>) {
         this._buttons = buttons;
     }
 
@@ -28,7 +28,7 @@ export class InteractionHandler {
         return this._selectMenus;
     }
 
-    private set selectMenus(buttons:Collection<string, Interaction<AnySelectMenuInteraction>>) {
+    private set selectMenus(buttons: Collection<string, Interaction<AnySelectMenuInteraction>>) {
         this._selectMenus = buttons;
     }
 
@@ -36,7 +36,7 @@ export class InteractionHandler {
         return this._modals;
     }
 
-    private set modals(buttons:Collection<string, Interaction<ModalSubmitInteraction>>) {
+    private set modals(buttons: Collection<string, Interaction<ModalSubmitInteraction>>) {
         this._modals = buttons;
     }
 

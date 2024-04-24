@@ -1,7 +1,7 @@
 import {
     ApplicationCommandType,
     AutocompleteInteraction, ChatInputCommandInteraction, Collection, ContextMenuCommandInteraction,
-    REST,
+    Events,
     RESTPostAPIChatInputApplicationCommandsJSONBody,
     RESTPostAPIContextMenuApplicationCommandsJSONBody,
     Routes,
@@ -13,14 +13,17 @@ import { ChatInputCommand, ContextMenuCommand } from '../Commands/index.js';
 
 
 export class CommandHandler {
+
+    // Parent client of the handler
     readonly client: Client;
 
-    protected readonly rest: REST;
-
+    // Slash commands in the handler
     protected _chatCommands = new Collection<string, ChatInputCommand>();
 
+    // User context commands in the handler
     protected _userContextMenus = new Collection<string, ContextMenuCommand>();
 
+    // Message context commands in the handler
     protected _messageContextMenus = new Collection<string, ContextMenuCommand>();
 
     get userContexMenus() {
@@ -31,17 +34,35 @@ export class CommandHandler {
         return this._chatCommands;
     }
 
-    private validateAplicationCommand(AplicationCommand:ContextMenuCommand | ChatInputCommand, type: ApplicationCommandType) {
-        assert(typeof AplicationCommand.execute !== 'undefined', 'excute function not present');
-        assert(typeof AplicationCommand.builder !== 'undefined', 'builder is not present');
-        if (AplicationCommand.type !== type) new Error('Command Type does not match Exspected');
+    get rest() {
+        return this.client.rest;
     }
 
+    /**
+     * Commandvalidates that exspected values are present
+     * @param AplicationCommand the command being inspected
+     * @param type type of aplication command to be exspected
+     */
+    private validateAplicationCommand(AplicationCommand: ContextMenuCommand | ChatInputCommand, type: ApplicationCommandType) {
+        assert(typeof AplicationCommand.execute !== 'undefined', 'excute function not present');
+        assert(typeof AplicationCommand.builder !== 'undefined', 'builder is not present');
+        if (AplicationCommand.type !== type) new Error('Command Type does not match Expected');
+    }
+
+    /**
+     * Add command to command handler
+     * @param command Command to add
+     * @returns the command handler
+     */
     add(command: ChatInputCommand | ContextMenuCommand) {
         const { type } = command;
-
-        this.validateAplicationCommand(command, type);
-
+        try {
+            this.validateAplicationCommand(command, type);
+        }
+        catch (error) {
+            this.client.emit(Events.Error, error);
+        }
+		
         switch (type) {
             case ApplicationCommandType.ChatInput:
                 this._chatCommands.set(command.builder.name, command);
@@ -58,6 +79,11 @@ export class CommandHandler {
         return this;
     }
 
+    /**
+     * Add a collection of chat commands to the handler
+     * @param commands Collections of chat commands
+     * @returns The command handler
+     */
     addChatCommands(commands: Collection<string, ChatInputCommand>) {
         for (const [ name, command ] of commands) {
             try {
@@ -65,12 +91,18 @@ export class CommandHandler {
                 this._chatCommands.set(name, command);
             }
             catch (error) {
-                console.error(`Command "${name}" had an error: ${error}`);
+                this.client.emit(Events.Error, new Error(`Command "${name}" had an error: {error}`));
             }
         }
+        
         return this;
     }
 
+    /**
+     * Add a collection of user context commands to the handler
+     * @param commands Collections of user context commands
+     * @returns The command handler
+     */
     addUserContextMenus(commands: Collection<string, ContextMenuCommand>) {
         for (const [ name, command ] of commands) {
             try {
@@ -78,12 +110,17 @@ export class CommandHandler {
                 this._userContextMenus.set(name, command);
             }
             catch (error) {
-                console.error(`Command "${name}" had an error: ${error}`);
+                this.client.emit(Events.Error, new Error(`Command "${name}" had an error: {error}`));
             }
         }
         return this;
     }
 
+    /**
+     * Add a collection of message context commands to the handler
+     * @param commands Collections of message context commands
+     * @returns the command handler
+     */
     addMessageContextMenus(commands: Collection<string, ContextMenuCommand>) {
         for (const [ name, command ] of commands) {
             try {
@@ -91,9 +128,10 @@ export class CommandHandler {
                 this._messageContextMenus.set(name, command);
             }
             catch (error) {
-                console.error(`Command "${name}" had an error: ${error}`);
+                this.client.emit(Events.Error, new Error(`Command "${name}" had an error: {error}`));
             }
         }
+        
         return this;
     }
 
@@ -104,12 +142,12 @@ export class CommandHandler {
     async register() {
         if (!this.client.loggedIn) throw Error('Client cannot register commands before init');
 
-        console.log('Deploying commands...');
+        this.client.emit(Events.Debug, 'Deploying commands...');
         const globalCommandData = this.chatCommands.filter((f) => f.isGlobal === true).map((m) => m.toJSON())
             .concat(this._userContextMenus.filter((f) => f.isGlobal === true).map((m) => m.toJSON()))
             .concat(this._messageContextMenus.filter((f) => f.isGlobal === true).map((m) => m.toJSON()));
         const sentCommands = await this.client.application.commands.set(globalCommandData);
-        console.log(`Deployed ${sentCommands.size} global command(s)`);
+        this.client.emit(Events.Debug, `Deployed ${sentCommands.size} global command(s)`);
         const guildCommandData = new Collection<
             Snowflake,
             (RESTPostAPIChatInputApplicationCommandsJSONBody | RESTPostAPIContextMenuApplicationCommandsJSONBody)[]
@@ -121,9 +159,11 @@ export class CommandHandler {
                 if (guildCommandData.has(guildId)) {
                     guildCommandData.get(guildId).concat(json);
                 }
+                
                 else {
                     guildCommandData.set(guildId, [json]);
                 }
+                
             });
 
         });
@@ -134,9 +174,11 @@ export class CommandHandler {
                 if (guildCommandData.has(guildId)) {
                     guildCommandData.get(guildId).concat(json);
                 }
+                
                 else {
                     guildCommandData.set(guildId, [json]);
                 }
+                
             });
         });
 
@@ -146,17 +188,20 @@ export class CommandHandler {
                 if (guildCommandData.has(guildId)) {
                     guildCommandData.get(guildId).concat(json);
                 }
+                
                 else {
                     guildCommandData.set(guildId, [json]);
                 }
+                
             });
         });
         // Deploys commands buy guild
         for (const [ guildIds, json ] of guildCommandData) {
             await this.client.application.commands.set(json, guildIds);
         }
-        console.log(`Deployed commands to ${guildCommandData.size} guilds`);
-        console.log('Commands registered');
+        
+        this.client.emit(Events.Debug, `Deployed commands to ${guildCommandData.size} guilds`);
+        this.client.emit(Events.Debug, 'Commands registered');
     }
     /**
      * Deregiser commands for one or more guilds
@@ -166,40 +211,65 @@ export class CommandHandler {
         try {
             if (guildId) {
                 await this.rest.put(Routes.applicationGuildCommands(this.client.user.id, guildId), { body: [] })
-                    .then(() => console.log(`Successfully deleted all guild commands in ${guildId}.`))
-                    .catch(console.error);
+                    .then(() => this.client.emit(Events.Debug, `Successfully deleted all guild commands in ${guildId}.`))
+                    .catch((e) => this.client.emit(Events.Error, e));
             }
+            
             else {
                 for ([guildId] of await (this.client.guilds.fetch())) {
                     await this.rest.put(Routes.applicationGuildCommands(this.client.user.id, guildId), { body: [] })
-                        .catch(console.error);
+                        .catch((e) => this.client.emit(Events.Error, e));
                 }
-                console.log(`Successfully deleted all guild commands.`);
+                
+                this.client.emit(Events.Debug, `Successfully deleted all guild commands.`);
             }
         }
         catch (error) {
-            console.error(error);
+            this.client.emit(Events.Error, error);
         }
         
     }
 
+    /**
+     * Run function for a chat command in handler
+     * @param interaction recived interaction
+     * @returns The function for the interaction
+     */
     runChatCommand(interaction: ChatInputCommandInteraction) {
         return this.chatCommands.get(interaction.commandName).execute(interaction);
     }
 
+    /**
+     * Run function for an autocompete interaction in handler
+     * @param interaction recived interaction
+     * @returns The function for the interaction
+     */
     runAutocomplete(interaction: AutocompleteInteraction) {
         return this.chatCommands.get(interaction.commandName).autocomplete(interaction);
     }
 
+    /**
+     * Run function for a user context command in handler
+     * @param interaction recived interaction
+     * @returns The function for the interaction
+     */
     runUserContextMenus(interaction: ContextMenuCommandInteraction) {
         return this._userContextMenus.get(interaction.commandName).execute(interaction);
     }
 
+    /**
+     * Run function for a message context command in handler
+     * @param interaction recived interaction
+     * @returns The function for the interaction
+     */
     runMessageContextMenus(interaction: ContextMenuCommandInteraction) {
         return this._messageContextMenus.get(interaction.commandName).execute(interaction);
     }
+    /**
+     * create a command handler
+     * @param client parent client
+     */
     constructor(client: Client) {
         this.client = client;
-        this.rest = client.rest;
     }
 }
