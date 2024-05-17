@@ -1,0 +1,11 @@
+{
+	"recommendations": [
+		"dbaeumer.vscode-eslint",
+		"ms-vscode.vscode-typescript-next",
+		"christian-kohler.path-intellisense",
+		"macabeus.vscode-fluent",
+		"visualstudioexptteam.vscodeintellicode",
+		"visualstudioexptteam.intellicode-api-usage-examples",
+		"christian-kohler.npm-intellisense"
+	]
+}

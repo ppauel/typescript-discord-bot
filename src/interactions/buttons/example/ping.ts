@@ -1,14 +1,16 @@
-import { getPingButton } from '../../../features/ping';
-import i18n from '../../../features/i18n';
-import { Button } from '../../../interfaces';
+import { ButtonInteraction } from 'discord.js';
+import { Interaction } from '../../../Classes/index.js';
+import { getPingButton } from '../../../features/ping.js';
+import { localize } from '../../../i18n.js';
+
 
 // Example interaction (related to the /ping command)
-
-const button: Button = {
-    name: 'ping',
-    execute: async (_client, interaction) => {
-        interaction.reply({ content: `${i18n(interaction.locale, 'ping-button')} 🏓`, components: [getPingButton(interaction.locale)], ephemeral: true });
-    },
-};
-
-export default button;
+export default new Interaction<ButtonInteraction>()
+    .setCustomIdPrefix('ping')
+    .setRun(async (interaction) => {
+        interaction.reply({
+            content: `${localize.t('button', 'ping', interaction.locale)} 🏓`,
+            components: [getPingButton(interaction.locale)],
+            ephemeral: true
+        });
+    });
