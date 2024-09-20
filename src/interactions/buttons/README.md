@@ -2,9 +2,9 @@
 [Buttons](https://discordjs.guide/interactions/modals.html) are a [message component](https://discordjs.guide/message-components/interactions.html#responding-to-component-interactions) interaction that can be used to create an interaction event
 
 ### Creating an Interaction
-Interactions start with the bot [sending the button](https://discordjs.guide/message-components/buttons.html), to recive this interaction opon it being used follow the below steps:
+Interactions start with the bot [sending the button](https://discordjs.guide/message-components/buttons.html), to receive this interaction upon it being used follow the below steps:
 1. Create an interaction object
-	- `customIdPrefix` - Is used to identify the wich interactions should trigered
+	- `customIdPrefix` - Is used to identify the which interactions should triggered
 	- `run` - The functions which is called on the occurrence of the interaction
 ```ts
 // src/interactions/button/button.ts
@@ -31,7 +31,7 @@ import * as buttons from './interactions/buttons/index.js'
 
 export const client = new Client({
 	receiveMessageComponents: true, // enables the uses of message components
-	splitCustomIDOn: '_', // allows the inclustions of additional incomation in a custom ID `prefix_arg1_arg2` conversts [prefix, arg1, arg2]
+	splitCustomIDOn: '_', // allows the inclusions of additional arguments in a custom ID `prefix_arg1_arg2` is converted [prefix, arg1, arg2]
 });
 
 // Load buttons

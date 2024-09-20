@@ -27,9 +27,9 @@ const client = new Client({
     receiveModals: true,
     receiveAutocomplete: true,
     replyOnError: true,
-    // replyMessageOnError: 'message on comand error',
+    // replyMessageOnError: 'message on command error',
     splitCustomIDOn: '_',
-    useDefaultInterctionEvent: true
+    useDefaultInteractionEvent: true
 });
 
 // Load Events

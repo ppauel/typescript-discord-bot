@@ -7,5 +7,5 @@ export interface ExtendedClientOptions extends ClientOptions {
     replyOnError?: boolean;
     replyMessageOnError?: string;
     splitCustomIDOn?: string;
-    useDefaultInterctionEvent?: boolean;
+    useDefaultInteractionEvent?: boolean;
 }

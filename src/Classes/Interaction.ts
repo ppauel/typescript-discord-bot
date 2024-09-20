@@ -6,17 +6,17 @@ import { Interaction as DiscordInteraction } from 'discord.js';
 export class Interaction<E extends DiscordInteraction> {
     
     // Name of Interaction
-    private _customIdPefix: string;
+    private _customIdPrefix: string;
 
     // Method that to run when interaction happens
     private _run: (interaction: E) => Promise<void>;
 
     get customIdPrefix() {
-        return this._customIdPefix;
+        return this._customIdPrefix;
     }
 
     private  set customIdPrefix(id:string) {
-        this._customIdPefix = id;
+        this._customIdPrefix = id;
     }
 
     // eslint-disable-next-line jsdoc/require-returns
@@ -24,7 +24,7 @@ export class Interaction<E extends DiscordInteraction> {
      * @deprecated Use `customId`
      */
     get name() {
-        return this._customIdPefix;
+        return this._customIdPrefix;
     }
 
     // eslint-disable-next-line jsdoc/require-returns

@@ -35,7 +35,7 @@ export class LocaleBundle {
     constructor(i18n: i18n, locale:Locale) {
         this.locale = locale;
         this.i18n = i18n;
-        if (this.locale === i18n.fallbacklLocale) this.isFallback = true;
+        if (this.locale === i18n.fallbackLocale) this.isFallback = true;
     }
 
     /**

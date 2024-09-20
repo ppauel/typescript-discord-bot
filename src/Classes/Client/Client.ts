@@ -36,7 +36,7 @@ export class ExtendedClient extends Client<true> {
     readonly splitCustomIDOn?: string;
 
     // shoult the bot use the provided InteractionCreate event 
-    readonly useDefaultInterctionEvent: boolean = true;
+    readonly useDefaultInteractionEvent: boolean = true;
 
     // Checks if the init function has run
     private _hasInitRun = false;
@@ -75,7 +75,7 @@ export class ExtendedClient extends Client<true> {
             replyOnError,
             replyMessageOnError,
             splitCustomIDOn,
-            useDefaultInterctionEvent
+            useDefaultInteractionEvent: useDefaultInterctionEvent
         } = options;
 
         // Misc configuration
@@ -85,7 +85,7 @@ export class ExtendedClient extends Client<true> {
         }
         
         else {
-            this.useDefaultInterctionEvent = false;
+            this.useDefaultInteractionEvent = false;
         }
         
         this.receiveMessageComponents = receiveMessageComponents === undefined ? false : receiveMessageComponents;

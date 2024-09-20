@@ -2,7 +2,7 @@ import {
     ChatInputCommandInteraction, ContextMenuCommandBuilder, ContextMenuCommandInteraction, SlashCommandBuilder,
     Snowflake
 } from 'discord.js';
-import { ReturnableInteraction, SlashCommandBuilders } from './types.js';
+import { AnySlashCommandBuilder, ReturnableInteraction } from './types.js';
 
 SlashCommandBuilder;
 
@@ -10,7 +10,7 @@ SlashCommandBuilder;
  * Slash command or context command
  */
 export class BaseCommand<
-    TypeBuilder extends SlashCommandBuilders | ContextMenuCommandBuilder,
+    TypeBuilder extends AnySlashCommandBuilder | ContextMenuCommandBuilder,
     TypeInteraction extends ChatInputCommandInteraction | ContextMenuCommandInteraction
 > {
     // The constructor for the registration for the command

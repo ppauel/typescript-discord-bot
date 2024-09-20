@@ -2,12 +2,12 @@ import {
     ApplicationCommandType, AutocompleteInteraction, ChatInputCommandInteraction, SlashCommandBuilder
 } from 'discord.js';
 import { BaseCommand } from './BaseCommand.js';
-import { SlashCommandBuilders } from './types.js';
+import { AnySlashCommandBuilder } from './types.js';
 
 /**
  * Slash command
  */
-export class ChatInputCommand extends BaseCommand<SlashCommandBuilders, ChatInputCommandInteraction> {
+export class ChatInputCommand extends BaseCommand<AnySlashCommandBuilder, ChatInputCommandInteraction> {
 
     /**
      * Runs when client receives and Autocomplete interaction
@@ -29,10 +29,10 @@ export class ChatInputCommand extends BaseCommand<SlashCommandBuilders, ChatInpu
     
     /**
      * Set the command builder method
-     * @param input Slah command builder or callback
+     * @param input Slash command builder or callback
      * @returns The modified object
      */
-    setBuilder(input: SlashCommandBuilder | ((commandBuilder: SlashCommandBuilder) => SlashCommandBuilders)): this {
+    setBuilder(input: SlashCommandBuilder | ((commandBuilder: SlashCommandBuilder) => AnySlashCommandBuilder)): this {
         if (typeof input === 'function') {
             this._builder = input(new SlashCommandBuilder());
         }

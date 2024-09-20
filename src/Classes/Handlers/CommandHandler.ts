@@ -26,7 +26,7 @@ export class CommandHandler {
     // Message context commands in the handler
     protected _messageContextMenus = new Collection<string, ContextMenuCommand>();
 
-    get userContexMenus() {
+    get userContextMenus() {
         return this._userContextMenus;
     }
 
@@ -39,14 +39,14 @@ export class CommandHandler {
     }
 
     /**
-     * Commandvalidates that exspected values are present
-     * @param AplicationCommand the command being inspected
-     * @param type type of aplication command to be exspected
+     * Command validation test that expected values are present
+     * @param ApplicationCommand the command being inspected
+     * @param type type of application command to be expected
      */
-    private validateAplicationCommand(AplicationCommand: ContextMenuCommand | ChatInputCommand, type: ApplicationCommandType) {
-        assert(typeof AplicationCommand.execute !== 'undefined', 'excute function not present');
-        assert(typeof AplicationCommand.builder !== 'undefined', 'builder is not present');
-        if (AplicationCommand.type !== type) new Error('Command Type does not match Expected');
+    private validateApplicationCommand(ApplicationCommand: ContextMenuCommand | ChatInputCommand, type: ApplicationCommandType) {
+        assert(typeof ApplicationCommand.execute !== 'undefined', 'execute function not present');
+        assert(typeof ApplicationCommand.builder !== 'undefined', 'builder is not present');
+        if (ApplicationCommand.type !== type) new Error('Command Type does not match Expected');
     }
 
     /**
@@ -57,7 +57,7 @@ export class CommandHandler {
     add(command: ChatInputCommand | ContextMenuCommand) {
         const { type } = command;
         try {
-            this.validateAplicationCommand(command, type);
+            this.validateApplicationCommand(command, type);
         }
         catch (error) {
             this.client.emit(Events.Error, error);
@@ -87,7 +87,7 @@ export class CommandHandler {
     addChatCommands(commands: Collection<string, ChatInputCommand>) {
         for (const [ name, command ] of commands) {
             try {
-                this.validateAplicationCommand(command, ApplicationCommandType.ChatInput);
+                this.validateApplicationCommand(command, ApplicationCommandType.ChatInput);
                 this._chatCommands.set(name, command);
             }
             catch (error) {
@@ -106,7 +106,7 @@ export class CommandHandler {
     addUserContextMenus(commands: Collection<string, ContextMenuCommand>) {
         for (const [ name, command ] of commands) {
             try {
-                this.validateAplicationCommand(command, ApplicationCommandType.User);
+                this.validateApplicationCommand(command, ApplicationCommandType.User);
                 this._userContextMenus.set(name, command);
             }
             catch (error) {
@@ -124,7 +124,7 @@ export class CommandHandler {
     addMessageContextMenus(commands: Collection<string, ContextMenuCommand>) {
         for (const [ name, command ] of commands) {
             try {
-                this.validateAplicationCommand(command, ApplicationCommandType.User);
+                this.validateApplicationCommand(command, ApplicationCommandType.User);
                 this._messageContextMenus.set(name, command);
             }
             catch (error) {
@@ -152,7 +152,7 @@ export class CommandHandler {
             Snowflake,
             (RESTPostAPIChatInputApplicationCommandsJSONBody | RESTPostAPIContextMenuApplicationCommandsJSONBody)[]
         >();
-        // Get guild chat commands menues
+        // Get guild chat commands
         this.chatCommands.filter((f) => f.isGlobal === false).map((m) => {
             const json = m.toJSON();
             m.guildIds.forEach((guildId) => {
@@ -167,7 +167,7 @@ export class CommandHandler {
             });
 
         });
-        // Get guild context menues
+        // Get guild context
         this._userContextMenus.filter((f) => f.isGlobal === false).map((m) => {
             const json = m.toJSON();
             m.guildIds.forEach((guildId) => {
@@ -204,7 +204,7 @@ export class CommandHandler {
         this.client.emit(Events.Debug, 'Commands registered');
     }
     /**
-     * Deregiser commands for one or more guilds
+     * Deregister commands for one or more guilds
      * @param guildId optional Id to only remove commands from on guild
      */
     async deregisterGuildCommands(guildId?: string) {
@@ -232,7 +232,7 @@ export class CommandHandler {
 
     /**
      * Run function for a chat command in handler
-     * @param interaction recived interaction
+     * @param interaction received interaction
      * @returns The function for the interaction
      */
     runChatCommand(interaction: ChatInputCommandInteraction) {
@@ -240,8 +240,8 @@ export class CommandHandler {
     }
 
     /**
-     * Run function for an autocompete interaction in handler
-     * @param interaction recived interaction
+     * Run function for an autocomplete interaction in handler
+     * @param interaction received interaction
      * @returns The function for the interaction
      */
     runAutocomplete(interaction: AutocompleteInteraction) {
@@ -250,7 +250,7 @@ export class CommandHandler {
 
     /**
      * Run function for a user context command in handler
-     * @param interaction recived interaction
+     * @param interaction received interaction
      * @returns The function for the interaction
      */
     runUserContextMenus(interaction: ContextMenuCommandInteraction) {
@@ -259,7 +259,7 @@ export class CommandHandler {
 
     /**
      * Run function for a message context command in handler
-     * @param interaction recived interaction
+     * @param interaction received interaction
      * @returns The function for the interaction
      */
     runMessageContextMenus(interaction: ContextMenuCommandInteraction) {

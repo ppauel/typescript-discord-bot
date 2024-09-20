@@ -41,7 +41,7 @@ export class InteractionHandler {
     }
 
     addButton(interaction: Interaction<ButtonInteraction>) {
-        this.buttons.set(interaction.name, interaction);
+        this.buttons.set(interaction.customIdPrefix, interaction);
         return this;
     }
 
@@ -52,11 +52,11 @@ export class InteractionHandler {
 
     runButton(interaction: ButtonInteraction) {
         const interactionName = this.client.splitCustomIDOn ? interaction.customId.split(this.client.splitCustomIDOn)[0] : interaction.customId;
-        return this.buttons.get(interactionName).execute(interaction);
+        return this.buttons.get(interactionName).run(interaction);
     }
 
     addModal(interaction: Interaction<ModalSubmitInteraction>) {
-        this._modals.set(interaction.name, interaction);
+        this._modals.set(interaction.customIdPrefix, interaction);
         return this;
     }
 
@@ -67,11 +67,11 @@ export class InteractionHandler {
 
     runModal(interaction: ModalSubmitInteraction) {
         const interactionName = this.client.splitCustomIDOn ? interaction.customId.split(this.client.splitCustomIDOn)[0] : interaction.customId;
-        return this._modals.get(interactionName).execute(interaction);
+        return this._modals.get(interactionName).run(interaction);
     }
 
     addSelectMenu(interaction: Interaction<AnySelectMenuInteraction>) {
-        this._selectMenus.set(interaction.name, interaction);
+        this._selectMenus.set(interaction.customIdPrefix, interaction);
         return this;
     }
 
@@ -82,7 +82,7 @@ export class InteractionHandler {
 
     runSelectMenus(interaction: AnySelectMenuInteraction) {
         const interactionName = this.client.splitCustomIDOn ? interaction.customId.split(this.client.splitCustomIDOn)[0] : interaction.customId;
-        return this._selectMenus.get(interactionName).execute(interaction);
+        return this._selectMenus.get(interactionName).run(interaction);
     }
 
     constructor(client: Client) {

@@ -4,5 +4,5 @@ export { ChatInputCommand } from './ChatInputCommand.js';
 
 export { ContextMenuCommand } from './ContextMenuCommand.js';
 
-export type { ReturnableInteraction, SlashCommandBuilders, TypeCommand, builders } from './types.js';
+export type { AnySlashCommandBuilder, ReturnableInteraction, TypeCommand, builders } from './types.js';
 

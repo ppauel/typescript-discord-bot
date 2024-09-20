@@ -2,9 +2,9 @@
 [Modals](https://discordjs.guide/interactions/modals.html) interactions create a pop up window in the Discord client for form like text entry
 
 ### Creating an Interaction
-Interactions start with the bot [sending the modal](https://discordjs.guide/interactions/modals.html#building-and-responding-with-modals), to recive this interaction opon it being used follow the below steps:
+Interactions start with the bot [sending the modal](https://discordjs.guide/interactions/modals.html#building-and-responding-with-modals), to receive this interaction upon it being used follow the below steps:
 1. Create an interaction object
-	- `customIdPrefix` - Is used to identify the wich interactions should trigered
+	- `customIdPrefix` - Is used to identify the which interactions should triggered
 	- `run` - The functions which is called on the occurrence of the interaction
 ```ts
 // src/interactions/modals/modal.ts
@@ -31,7 +31,7 @@ import * as modals from './interactions/modals/index.js'
 
 export const client = new Client({
 	receiveModals: true, // enables the uses of modals
-	splitCustomIDOn: '_', // allows the inclustions of additional incomation in a custom ID `prefix_arg1_arg2` conversts [prefix, arg1, arg2]
+	splitCustomIDOn: '_', // allows the inclusions of additional arguments in a custom ID `prefix_arg1_arg2`  is converted [prefix, arg1, arg2]
 });
 
 // Load modals

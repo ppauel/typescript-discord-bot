@@ -1,5 +1,5 @@
 # Select Menus
-[Select menus](https://discordjs.guide/message-components/select-menus.html) are a [message component](https://discordjs.guide/message-components/interactions.html#responding-to-component-interactions) interaction that creats a dropdown allowing the user to select one or more items in the menu.
+[Select menus](https://discordjs.guide/message-components/select-menus.html) are a [message component](https://discordjs.guide/message-components/interactions.html#responding-to-component-interactions) interaction that creates a dropdown allowing the user to select one or more items in the menu.
 
 ### Types
 The main type of select menu is a `String` select menu how ever Discord allows for four Auto-populating types
@@ -9,9 +9,9 @@ The main type of select menu is a `String` select menu how ever Discord allows f
 - Channel - channels
 
 ### Creating an Interaction
-Interactions start with the bot [sending the select menu](https://discordjs.guide/message-components/select-menus.html#building-string-select-menus), to recive this interaction opon it being used follow the below steps:
+Interactions start with the bot [sending the select menu](https://discordjs.guide/message-components/select-menus.html#building-string-select-menus), to receive this interaction upon it being used follow the below steps:
 1. Create an interaction object
-	- `customIdPrefix` - Is used to identify the wich interactions should trigered
+	- `customIdPrefix` - Is used to identify the which interactions should triggered
 	- `run` - The functions which is called on the occurrence of the interaction
 ```ts
 // src/interactions/select_menus/string.ts
@@ -38,7 +38,7 @@ import * as selectMenus from './interactions/select_menus/index.js'
 
 export const client = new Client({
 	receiveMessageComponents: true, // enables the uses of message components
-	splitCustomIDOn: '_', // allows the inclustions of additional incomation in a custom ID `prefix_arg1_arg2` conversts [prefix, arg1, arg2]
+	splitCustomIDOn: '_', // allows the inclusions of additional arguments in a custom ID `prefix_arg1_arg2` converts [prefix, arg1, arg2]
 });
 
 // Load selectMenus

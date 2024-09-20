@@ -4,7 +4,7 @@ export type TimeCode = 'd' | 'D' | 't' | 'T' | 'f' | 'F' | 'R';
 
 export const TimeFormat = {
     ShortDate: 'd',
-    LongDatez: 'D',
+    LongDate: 'D',
     ShortTime: 't',
     LongTime: 'T',
     ShortDateTime: 'f',
