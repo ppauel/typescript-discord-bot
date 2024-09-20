@@ -1,7 +1,11 @@
-import { PermissionsBitField, SlashCommandBuilder } from 'discord.js';
+import {
+    InteractionContextType,
+    PermissionsBitField,
+    SlashCommandBuilder
+} from 'discord.js';
+import { localize } from '../../../bot.js';
 import { ChatInputCommand } from '../../../Classes/index.js';
 import { getPingButton } from '../../../features/ping.js';
-import { localize } from '../../../i18n.js';
 
 // Locale Namespace
 const ns = 'ping';
@@ -13,7 +17,8 @@ export default new ChatInputCommand({
         .setDescription('Replies with Pong')
         .setNameLocalizations(localize.discordLocalizationRecord('command-name', ns))
         .setDescriptionLocalizations(localize.discordLocalizationRecord('command-description', ns))
-        .setDMPermission(true)
+        // Allows command to be used in DMs, servers and group DMs
+        .setContexts(InteractionContextType.BotDM, InteractionContextType.Guild, InteractionContextType.PrivateChannel)
         .setDefaultMemberPermissions(PermissionsBitField.Flags.SendMessages),
     // Uncomment the below line to only have the ping command in the specified guild
     // guildIds: [process.env.GUILDID],

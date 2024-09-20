@@ -1,9 +1,13 @@
-/* eslint-disable no-inline-comments */
+ 
 import {
-    ApplicationCommandType, EmbedBuilder, GuildMember, UserContextMenuCommandInteraction
+    ApplicationCommandType,
+    EmbedBuilder,
+    GuildMember,
+    InteractionContextType,
+    UserContextMenuCommandInteraction
 } from 'discord.js';
 import { ContextMenuCommand, ExtraColor } from '../../../Classes/index.js';
-import { localize } from '../../../i18n.js';
+import { localize } from '../../../bot.js';
 
 // Locale Namespace
 const ns = 'avatar';
@@ -15,7 +19,8 @@ export default new ContextMenuCommand()
         .setName('Display Avatar')
         .setNameLocalizations(localize.discordLocalizationRecord('command-name', ns))
         .setType(ApplicationCommandType.User) // Specify the context menu type
-        .setDMPermission(false))
+        // Allows command to be used in DMs, servers and group DMs
+        .setContexts(InteractionContextType.Guild))
     .setExecute(async (interaction: UserContextMenuCommandInteraction) => {
         const member = interaction.targetMember as GuildMember;
         const embed = new EmbedBuilder()

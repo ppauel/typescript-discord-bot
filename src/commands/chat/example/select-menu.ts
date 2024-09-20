@@ -1,13 +1,19 @@
 import {
-    ActionRowBuilder, MessageActionRowComponentBuilder, PermissionsBitField, SlashCommandBuilder, StringSelectMenuBuilder, StringSelectMenuOptionBuilder
+    ActionRowBuilder,
+    InteractionContextType,
+    MessageActionRowComponentBuilder,
+    PermissionsBitField,
+    SlashCommandBuilder,
+    StringSelectMenuBuilder,
+    StringSelectMenuOptionBuilder
 } from 'discord.js';
 import { ChatInputCommand } from '../../../Classes/index.js';
-import { localize } from '../../../i18n.js';
+import { localize } from '../../../bot.js';
 
 // Locale Namespace
 const ns = 'select';
 
-/** TODO: add exsamples of more select menus */
+/** TODO: add examples of more select menus */
 
 // Example slash command
 export default new ChatInputCommand({
@@ -16,7 +22,8 @@ export default new ChatInputCommand({
         .setDescription('Select Menu Example')
         .setNameLocalizations(localize.discordLocalizationRecord('command-name', ns))
         .setDescriptionLocalizations(localize.discordLocalizationRecord('command-description', ns))
-        .setDMPermission(true)
+        // Allows command to be used in DMs, servers and group DMs
+        .setContexts(InteractionContextType.BotDM, InteractionContextType.Guild, InteractionContextType.PrivateChannel)
         .setDefaultMemberPermissions(PermissionsBitField.Flags.SendMessages)
         .addSubcommand(subcommand => subcommand
             .setName('string')

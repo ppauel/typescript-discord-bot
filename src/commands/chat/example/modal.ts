@@ -1,8 +1,15 @@
 import {
-    ActionRowBuilder, ChatInputCommandInteraction, ModalBuilder, PermissionsBitField, SlashCommandBuilder, TextInputBuilder, TextInputStyle
+    ActionRowBuilder,
+    ChatInputCommandInteraction,
+    InteractionContextType,
+    ModalBuilder,
+    PermissionsBitField,
+    SlashCommandBuilder,
+    TextInputBuilder,
+    TextInputStyle
 } from 'discord.js';
 import { ChatInputCommand } from '../../../Classes/index.js';
-import { localize } from '../../../i18n.js';
+import { localize } from '../../../bot.js';
 
 // Locale Namespace
 const ns = 'modal';
@@ -15,7 +22,8 @@ export default new ChatInputCommand({
         .setDescription('Demonstration of modal')
         .setNameLocalizations(localize.discordLocalizationRecord('command-name', ns))
         .setDescriptionLocalizations(localize.discordLocalizationRecord('command-description', ns))
-        .setDMPermission(true)
+    // Allows command to be used in DMs, servers and group DMs
+        .setContexts(InteractionContextType.BotDM, InteractionContextType.Guild, InteractionContextType.PrivateChannel)
         .setDefaultMemberPermissions(PermissionsBitField.Flags.SendMessages),
     execute
 });

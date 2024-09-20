@@ -1,13 +1,13 @@
-import { PermissionsBitField } from 'discord.js';
+import { InteractionContextType, PermissionsBitField } from 'discord.js';
 import { ChatInputCommand, LocaleBundle } from '../../../Classes/index.js';
-import { localize } from '../../../i18n.js';
+import { localize } from '../../../bot.js';
 
 const ns = 'auto';
 
 /**
- * get arry of localized fruit names
+ * get array of localized fruit names
  * @param locale the requested local
- * @returns string array of friut names
+ * @returns string array of fruit names
  */
 function fruit(locale:LocaleBundle) {
     return [
@@ -27,7 +27,8 @@ export default new ChatInputCommand()
         .setDescription('Demonstration of Autocomplete')
         .setNameLocalizations(localize.discordLocalizationRecord('command-name', ns))
         .setDescriptionLocalizations(localize.discordLocalizationRecord('command-description', ns))
-        .setDMPermission(true)
+        // Allows command to be used in DMs, servers and group DMs
+        .setContexts(InteractionContextType.BotDM, InteractionContextType.Guild, InteractionContextType.PrivateChannel)
         .setDefaultMemberPermissions(PermissionsBitField.Flags.SendMessages)
         .addStringOption(option => option
             .setName('option1-name')
