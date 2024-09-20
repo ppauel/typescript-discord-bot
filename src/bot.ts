@@ -1,8 +1,9 @@
 import {
     GatewayIntentBits as Intents,
+    Locale,
     Partials
 } from 'discord.js';
-import { Client } from './Classes/index.js';
+import { Client, i18n } from './Classes/index.js';
 import * as commands from './commands/index.js';
 import * as events from './events/index.js';
 import {
@@ -70,4 +71,11 @@ client.login(process.env.TOKEN)
         }
     });
 
-    
+// Load locales
+// Note: setGlobalResource should always be set first
+export const localize = new i18n()
+    .setGlobalResource('./locales')
+    .setLocale('./locales/de', Locale.German)
+    .setLocale('./locales/fr', Locale.French)
+    .setLocale('./locales/en-US', Locale.EnglishUS)
+    .setFallbackLocale(Locale.EnglishUS);
